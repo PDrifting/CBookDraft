@@ -24,15 +24,15 @@ This document exists for the sole purpose of furthing a dialogue on modern progr
 
 [jump to index](#index)
 
-Chapter 1: A Tutorial Introduction (edited)
-Part 1: Data Types (edited)
-Avatar
-PDrifting 09-Apr-21 12:00 AM
-These refer to specific ways that C stores data.  Data has a specific storage size or memory footprint that it consumes.  The type associated with data determines how it be stored and interpreted in memory.  C Data Types are broken up into 4 types.  However, we are not going to discuss Enumerated Types in any other context than -- avoid using them. (edited)
+Chapter 1: A Tutorial Introduction
+Part 1: Data Types
+
+These refer to specific ways that C stores data.  Data has a specific storage size or memory footprint that it consumes.  The type associated with data determines how it be stored and interpreted in memory.  C Data Types are broken up into 4 types.  However, we are not going to discuss Enumerated Types in any other context than -- avoid using them.
+
 Basic Types
+
 These are the general arithmetic types that are broken down into integer and floating point. (edited)
-Avatar
-PDrifting 09-Apr-21 12:16 AM
+
 Integer Types
 
 Keyword             Storage Size                       Value Range
@@ -46,9 +46,9 @@ int                 32-Bits / 4 bytes        -2,147,483,648 to 2,147,483,647
 unsigned int        32-Bits / 4 bytes                     0 to 4,294,967,295
 long long           64-Bits / 8 bytes  -9223372036854775808 to 9223372036854775807
 unsigned long long  64-Bits / 8 bytes                     0 to 18446744073709551615
-NOTE: GCC on Linux typically defaults to 64-bit.  On Windows, MinGW defaults to 32-bit.  For compatibility of code between 32-bit and 64-bit to make sure your long Data Types are 64-bit, use long long instead.  In 32-bit environments this will make long 64-bit, and in 64-bit environments it will treat long long as 64-bit long. (edited)
-Avatar
-PDrifting 09-Apr-21 12:46 AM
+
+NOTE: GCC on Linux typically defaults to 64-bit.  On Windows, MinGW defaults to 32-bit.  For compatibility of code between 32-bit and 64-bit to make sure your long Data Types are 64-bit, use long long instead.  In 32-bit environments this will make long 64-bit, and in 64-bit environments it will treat long long as 64-bit long.
+
 Floating Point Types
 
 Keyword         Storage Size              Value Range       Precision
@@ -56,12 +56,9 @@ Keyword         Storage Size              Value Range       Precision
 float           32-Bits /  4 bytes    1.2E-38 to 3.4E+38     6 decimal places
 double          64-Bits /  8 bytes   2.3E-308 to 1.7E+308   15 decimal places
 long double     80-Bits / 10 bytes  3.4E-4932 to 1.1E+4932  19 decimal places
-(edited)
-Avatar
-PDrifting 09-Apr-21 12:59 AM
-Next we have Enumerated Types.  These are typically regarded as another arithmetic type used to define named variables that are assigned discrete integer values.  They are used in place of magic numbers or hard coded values that can have arbitrary meaning.  The general modern view is to avoid using them. (edited)
-Avatar
-PDrifting 09-Apr-21 03:09 AM
+
+Next we have Enumerated Types.  These are typically regarded as another arithmetic type used to define named variables that are assigned discrete integer values.  They are used in place of magic numbers or hard coded values that can have arbitrary meaning.  The general modern view is to avoid using them.
+
 1. They are not really integer values, but GCC does treat them as such.
 2. Code written using Enums is not treated the same by all C compilers.
 3. They do not provide any type safety.
@@ -76,79 +73,76 @@ PDrifting 09-Apr-21 03:09 AM
 12. Has a tendency to force state driven coding.
 13. They violate Data Oriented Design and Don't Repeat Yourself principles.
 14. Use a #define declaration instead.  We are not C++ coders.
-(edited)
+
 Let's talk about Derived Types.  These include Arrays, Pointers, Structures, Unions, Functions, and Type Definitions. (edited)
+
 Arrays
-Avatar
-PDrifting 09-Apr-21 03:21 AM
+
 An Array is created from a Data Type that is used to store multiple elements of the same data.  They are zero indexed and you declare them by specifying the total number of elements needed.  To access the last element in an Array use the total number of elements minus one.  Arrays, once declared, cannot change size.  Elements are accessed by unique integer based indices.  Data stored inside an Array, provided Pointers are not involved with the data stored in each element, will generally create a single block of contiguous memory.  Most off by one errors in your code will be created by trying to access information inside Arrays. You do not need to pass an Array by reference to a function as an argument in most cases when using them as they are treated under the hood as pointers or referenced as such. (edited)
+
 Pointers
-Avatar
-PDrifting 09-Apr-21 03:37 AM
+
 Regarded as one of the single hardest concepts to learn in programming, and the reason most people avoid coding in C.  A Pointer is a variable that uses the address of another variable for storage.  It uses represents an address to a specific location in memory.  You must declare pointers like any other variable declaration.  Confusingly Pointers use the asterisk for dereferencing.  This simply means, to get the value stored at the location of memory the Pointer is pointing at.  The asterisk is also used as the multiplication maths operator.  Pointers have many problems associated with their use, but they are a staple in many of the advanced C language syntax.  To pass variables to a function by reference you must use a pointer for all Data Types, except Arrays in some cases.
 
 C has a special kind of Pointer called the Function Pointer.  This allows creating a Pointer that will point at the address of a specific Function that has been declared.  There are some rules they must follow, but can be very useful when you are writing sorting or other types of algorithms that may have a comparator or some other piece of the algorithm that could change based on requirements.  Instead of creating unique Functions for each specific task of sorting ascending or descending you can pass in a Function that can be used to address this.  There are other more complicated scenarios when working with graphics engines where you may have to substitute an optional chunk of your code that runs if an equivalent feature is not available on a given platforms.
 
-Other uses of Pointers and Function Pointers exist to form bridges tying certain portions of an Operating System, or to make a call inside a specific library accessing a foreign piece of code. (edited)
-Avatar
-PDrifting 10-Apr-21 01:40 AM
-Structures and Unions (edited)
-Avatar
-PDrifting 10-Apr-21 04:06 AM
+Other uses of Pointers and Function Pointers exist to form bridges tying certain portions of an Operating System, or to make a call inside a specific library accessing a foreign piece of code.
+
+Structures and Unions
+
 These are your user defined record types.  Useful when you need to combine groups of items, fields, or members of different data types that can be referenced by name to create a single type.  C doesn't have classes, or support object oriented coding methods for the most part.  All members of a Structure and Union are publicly declared.  Defined Structures and Unions are not assigned memory until declared, and will always be stored in contiguous memory.  Alignment, packing, and padding are compiler implementation specific.  Let's discuss how GCC manages these aspects of Structures. The only real difference between a Structure and Union is how they are stored in memory.  Structure members are have unique allotments memory, where Union members all share the same memory region. (edited)
-Avatar
-PDrifting 10-Apr-21 04:26 AM
+
 Alignment - This tells the compiler to attempt a specific alignment during allocation to specific boundaries. Alignment can only be used to increase member boundaries. These are determined by the linker and the platform you are compiling on.  GCC by default will optimise for the platform you are compiling on.  
 
 Packing - Specifies to the compiler that it should use the minimum footprint of memory required to represent the type.  All members of the Structure will have the same equivalent packed attribute applied to them.  This will almost always affect performance negatively.
 
 Padding - Is required, and can be manipulated by alignment and packing attributes. Overriding the default padding performed by GCC is likely to slow down access to members, but can save memory. Padding will only be inserted when a Structure member is followed by another Structure member that requires a larger alignment or at the end of the Structure to align it to a specific boundary. GCC by default is not allowed to reorder any Structure members to achieve optimal alignment, so programmers should be mindful of their member layouts inside their Structure definitions.
-Avatar
-PDrifting 10-Apr-21 04:42 PM
+
 Functions
-Avatar
-PDrifting 10-Apr-21 05:00 PM
+
 This is another very hard concept for programmers to grasp -- code reuse.  Functions make this possible.  They are a block of syntax statements put together to perform a specific task.  Learning when to use Functions takes a lot of practice.  When you declare a Function you can provide a Return Type, and Argument Types that you want to pass to the Function to be used by the statements inside it.  Functions can call other Functions, and use other Data Types to declare variables.  
 
 The C Standard Library provides numerous Functions that you can call.  These often require using the correct #include statement before they can be used.    We will discuss this in detail when going over the preprocessor and the side-effects associated with including and creating headers in your code.
 
-There is one Function that must be present in all programs called main.  This is your entry point to your program.  When you execute programs this will be where the main portion of the controlling code exists.  It is required to be present.  Your main Function should always return an int type.  It can optionally have no arguments or a pair of arguments to accept information being passed to it from the command line. (edited)
-Avatar
-PDrifting 10-Apr-21 05:16 PM
+There is one Function that must be present in all programs called main.  This is your entry point to your program.  When you execute programs this will be where the main portion of the controlling code exists.  It is required to be present.  Your main Function should always return an int type.  It can optionally have no arguments or a pair of arguments to accept information being passed to it from the command line.
+
 The return value from main is used by the Operating System to determine how the program terminated.  You are expected to return 0 if execution exit was normal, or a non-zero based value to report abnormal termination.  You will see many tutorials and examples that exclude the return value from main.  This was common many decades ago, but modern Operating Systems, especially Linux, expect the return result.  Many languages that are not C, still declare Function main as Return Type void.  Any Function with Return Types declared as void cannot return any value once the Function has completed executing its statements.
 
 C does not support Function Overloading, so all Function names must be unique.  Functions can also  be invoked from almost anywhere in your source code for your program.  Once a Function is created you can use it over and over.  Functions are extremely useful, practical, and required to keep moderate to large code bases tidy. (edited)
-Avatar
-PDrifting 10-Apr-21 05:26 PM
+
 Function Overloading - The ability to create multiple Functions with the same name declaration and different arguments.  In modern programming, this is a major drawback that C has not added the ability to use this feature of coding.  This drives many C programmers to write C in C++.  This has a host of other drawbacks.  Despite missing this syntax feature, you can still write robust and useful programs in a meaningful way with C.  A later standard has implemented Generics into C with Macros that can emulate Function Overloading.  When discussing the preprocessor, we will cover this feature.
-(edited)
-Avatar
-PDrifting 10-Apr-21 06:41 PM
+
 Type Definitions
+
 To implement a Type Definition you must use the typedef keyword.  This allows you to give meaningful names to things, and stop having to type the typical longer syntax required by C.   It also allows forward declarations of things.  Many libraries have custom Type Definitions to keep track of what specific parts of the library belongs to what.  OpenGL comes to mind, or even just having the desire to shorten unsigned long long int to u64.  This has excellent utility when used meaningfully.  Many C purists discourage using Type Definitions, but you cannot overlook the modern desire to keep your code clean, readable, and maintainable.
 
 There are many good discussions between Linus Torvalds and the rest of the internet on his views on programmers that abuse the typedef keyword.  It can certainly be agreed that this is a completely abusable feature of C.  But like the goto keyword, there are some places where it is useful.  You will be urged to ignore a feature of the language because many programmers never learn when to use it in proper context.
 
 Most projects and coding firms you will write code for have Style Guides.  Each guide will usually include a section on Type Definitions.  Along with other restrictions on how code should be written for the given project.  In general, if it makes things easier for you to write code, is generally self-documenting, helps with maintenance of the code base, then use it regardless of the opinions of other coders. (edited)
-Avatar
-PDrifting 17-Apr-21 08:51 PM
+
 Void
+
 Despite this being a Data Type which can be used in various scenarios, there are some restrictions on void that should be discussed.  When dealing with void, it generally means different things contextually. There are also problems with void conversions and data loss. Opportunities to create Undefined Behaviour are also in abundance. 
 
 Unlike other Data Types you cannot directly declare a variable as void unless it is a pointer.  Void when used as a Function Return Data Type, signifies that the function is incapable of returning any information from it.  Void pointer Data Types can be extremely flexible.  They can store any other Data Type, have mixed data, sizes, and memory layouts, and can also be used to  point to functions.  Main functions inside the C Standard Library will return a void pointer, or consume one as a Function Argument - malloc() and free() are good examples of this.
 
-When declaring Function Arguments in a Function Prototype you should technically use void if the Function Argument List is actually meant to be nothing.  GCC for backwards compatibility maintains arbitrary Function Prototypes and definitions of functions which can lead to problems if you program using the Function Prototypes, and  main first model of coding.  We will not be using void in this way and use the declare before use model which avoids many of these problems, but does require some planning in your code. (edited)
-Avatar
-PDrifting 17-Apr-21 10:31 PM
+When declaring Function Arguments in a Function Prototype you should technically use void if the Function Argument List is actually meant to be nothing.  GCC for backwards compatibility maintains arbitrary Function Prototypes and definitions of functions which can lead to problems if you program using the Function Prototypes, and  main first model of coding.  We will not be using void in this way and use the declare before use model which avoids many of these problems, but does require some planning in your code. 
+
 C Examples
+
 Basic program that has no output, but shows how to declare basic variables and setup of the function main. 
+
+```C
 int main() {      //main program entry
   char foo = 1;   //variable type char named foo and assigns it a value of 1
   char bar = -10; //variable type char named bar and assigns it a value of -10
   return 0;       //return status successful
 }
-(edited)
+```
+
 Basic program that has no output, but shows how to declare basic variables, using a typedef to declare  a custom Type Name, and setup of the function main. 
+
+```C
 typedef unsigned char u8;  //associate type unsigned char with u8
 typedef int           s32; //associate type signed int with s32
 
@@ -157,10 +151,11 @@ s32 main() {               //main program entry
   u8 bar = 212;            //variable type u8 named bar and assigns it a value of 212
   return 0;                //return status successful
 }
-(edited)
-Avatar
-PDrifting 18-Apr-21 03:45 PM
+```
+
 Basic program that has no output, but shows using a typedef to declare a custom Type Name, definition of struct with 2 members using the custom Type Name, how to assign default values to Structure Members, and setup of the function main. 
+
+```C
 typedef unsigned char u8;  //associate type unsigned char with u8
 typedef int           s32; //associate type signed int with s32
 
@@ -177,10 +172,11 @@ s32 main() {               //main program entry
 
   return 0;                //return status successful
 }
-(edited)
-Avatar
-PDrifting 18-Apr-21 06:35 PM
+```
+
 NOTE: DISCOURAGED STYLE - Alternate basic program that has no output, but shows using a typedef to declare a custom Type Name, definition of struct with 2 members using the custom Type Name, how to assign default values to Structure Members, and setup of the function main. 
+
+```C
 typedef unsigned char u8;  //associate type unsigned char with u8
 typedef int           s32; //associate type signed int with s32
 
@@ -198,10 +194,11 @@ s32 main() {               //main program entry
 
   return 0;                //return status successful
 }
-(edited)
-Avatar
-PDrifting 18-Apr-21 06:43 PM
+```
+
 Alternate basic program that has no output, but shows using a typedef to declare a custom Type Name, definition of struct with 2 members using the custom Type Name, how to assign default values to Structure Members, and setup of the function main.  
+
+```C
 typedef unsigned char u8;  //associate type unsigned char with u8
 typedef int           s32; //associate type signed int with s32
 
@@ -216,8 +213,11 @@ s32 main() {               //main program entry
 
   return 0;                //return status successful
 }
-(edited)
+```
+
 NOTE: DISCOURAGED STYLE - Alternate basic program that has no output, but shows using a typedef to declare a custom Type Name, definition of a struct with 2 members using the custom Type Name, how to assign default values to Structure Members, and setup of the function main.   
+
+```C
 typedef unsigned char u8;  //associate type unsigned char with u8
 typedef int           s32; //associate type signed int with s32
 
@@ -235,10 +235,11 @@ s32 main() {               //main program entry
 
   return 0;                //return status successful
 }
-(edited)
-Avatar
-PDrifting 18-Apr-21 06:58 PM
+```
+
 Alternate basic program that has no output, but shows using a typedef to declare a custom Type Name, definition of a struct with 2 members using the custom Type Name, how to assign default values to Structure Members, and setup of the function main.  
+
+```C
 typedef unsigned char u8;  //associate type unsigned char with u8
 typedef int           s32; //associate type signed int with s32
 
@@ -254,10 +255,11 @@ s32 main() {               //main program entry
                                
   return 0;                //return status successful
 }
-(edited)
-Avatar
-PDrifting 18-Apr-21 08:51 PM
+```
+
 Alternate basic program that has no output, but shows using a typedef to declare a custom Type Name, definition of a struct with 2 members using the custom Type Name, how to assign default values to Structure Members, and setup of the function main.  
+
+```C
 typedef unsigned char u8;  //associate type unsigned char with u8
 typedef int           s32; //associate type signed int with s32
 
@@ -273,10 +275,11 @@ s32 main() {               //main program entry
 
   return 0;                //return status successful
 }
-(edited)
-Avatar
-PDrifting 19-Apr-21 12:32 PM
+```
+
 Basic program that has no output, but shows using a typedef to declare a custom Type Name, definition of an arbitrary array with defaults values, and setup of the function main.  
+
+```C
 typedef int          s32;        //associate type signed int with s32
 typedef unsigned int u32;        //associate type unsigned int with u32
 
@@ -292,10 +295,11 @@ s32 main() {                     //main program entry
                                  //it will calculate the size required for you
   return 0;                      //return status successful
 }
-(edited)
-Avatar
-PDrifting 19-Apr-21 12:48 PM
+```
+
 Alternate basic program that has no output, but shows using a typedef to declare a custom Type Name, definition of an arbitrary array with default values, and setup of the function main.  
+
+```
 typedef int          s32;  //associate type signed int with s32
 typedef unsigned int u32;  //associate type unsigned int with u32
 
@@ -310,10 +314,11 @@ s32 main() {               //main program entry
                            //elements in the array
   return 0;                //return status successful      
 }
-(edited)
-Avatar
-PDrifting 19-Apr-21 03:42 PM
+```
+
 Basic program that has no output, but shows using a typedef to declare a custom Type Name, how to typedef forward associations for a struct that contains members of itself, a struct with 3 members, definition of a fixed declaration of an array of structs, and setup of the function main.  
+
+```C
 typedef int          s32;         //associate type signed int with s32
 typedef unsigned int u32;         //associate type unsigned int with u32
 typedef struct _TFoobar TFoobar;  //associate struct _TFoobar with TFoobar
@@ -334,10 +339,11 @@ s32 main() {                      //main program entry
                                   //all fields will be set to a value of 0
   return 0;                       //return status successful
 }
-(edited)
-Avatar
-PDrifting 19-Apr-21 04:06 PM
+```
+
 Basic program that has no output, but shows using a typedef to declare a custom Type Name, how to typedef forward associations for a struct that contains members of itself,  struct with 3 members, definition of a fixed declaration of an array of structs, how to initialise a specific element after initial declaration of an array, and setup of function main.
+
+```C
 typedef int          s32;         //associate type signed int with s32
 typedef unsigned int u32;         //associate type unsigned int with u32
 typedef struct _TFoobar TFoobar;  //associate struct _TFoobar with TFoobar
@@ -370,10 +376,11 @@ s32 main() {                      //main program entry
                                   //struct field initialisation
   return 0;                       //return status successful
 }
-(edited)
-Avatar
-PDrifting 19-Apr-21 04:23 PM
+```
+
 Alternate basic program that has no output, but shows using a typedef to declare a custom Type Name, how to typedef forward associations for a struct that contains members of itself,  struct with 3 members, definition of a fixed declaration of an array of structs, how to initialise a specific element after initial declaration of an array, and setup of function main.
+
+```C
 typedef int          s32;         //associate type signed int with s32
 typedef unsigned int u32;         //associate type unsigned int with u32
 typedef struct _TFoobar TFoobar;  //associate struct _TFoobar with TFoobar
@@ -401,10 +408,11 @@ s32 main() {                      //main program entry
                                   //during declare  
   return 0;                       //return status successful
 }
-(edited)
-Avatar
-PDrifting 19-Apr-21 04:36 PM
+```
+
 Basic program that has no output, but shows using a typedef to declare a custom Type Name, how to create an arbitrary array, assign default values based on ranges during declaration of the array, and setup of function main. 
+
+```C
 typedef int          s32;  //associate type signed int with s32
 typedef unsigned int u32;  //associate type unsigned int with u32
 
@@ -418,10 +426,11 @@ s32 main() {               //main program entry
                            //range of elements defined by the fixed value   
   return 0;                //return status successful
 }
-(edited)
-Avatar
-PDrifting 23-Apr-21 02:51 AM
+```
+
 Basic program that has no output, but shows using multiple typedef to declare custom Type Names, how to create a union, and setup of function main.  
+
+```C
 typedef unsigned char      u8;   //associate type unsigned char with u8
 typedef unsigned short     u16;  //associate type unsigned short with u16
 typedef int                s32;  //associate type signed int with s32
@@ -448,10 +457,11 @@ s32 main() {                     //main program entry
                                  //between types for free
   return 0;                      //return status successful
 }
-(edited)
-Avatar
-PDrifting 23-Apr-21 01:29 PM
+```
+
 NOTE: PROBLEMS WITH UNIONS -- Basic program that has no output, but shows using multiple typedef to declare custom Type Names, how to create a union, data loss/confusing union behaviour, and setup of function main.  
+
+```C
 typedef unsigned char      u8;   //associate type unsigned char with u8
 typedef unsigned short     u16;  //associate type unsigned short with u16
 typedef int                s32;  //associate type signed int with s32
@@ -482,10 +492,11 @@ typedef union {                  //declare typedef for union
 s32 main() {
   return 0;
 }
-(edited)
-Avatar
-PDrifting 23-Apr-21 01:50 PM
+```
+
 NOTE: IDEAS ON WAYS TO DEAL WITH PROBLEMS IN UNIONS - Basic program that has no output, but shows using multiple typedef to declare custom Type Names, how to create a struct with an anonymous union inside it, and setup of function main. 
+
+```C
 typedef unsigned char      u8;   //associate type unsigned char with u8
 typedef unsigned short     u16;  //associate type unsigned short with u16
 typedef int                s32;  //associate type signed int with s32
@@ -523,10 +534,11 @@ s32 main() {
   
   return 0;
 }
-(edited)
-Avatar
-PDrifting 23-Apr-21 03:31 PM
+```
+
 Basic program that has no output, but shows using a union, a series of anonymous struct layouts for common associations of data, and setup of function main. 
+
+```C
 typedef int s32;          //associate type signed int with s32
 typedef float f32;        //associate type float with f32
 
@@ -558,19 +570,24 @@ s32 main() {              //main program entry
   
   return 0;               //return status successful
 }
-(edited)
-Avatar
-PDrifting 23-Apr-21 04:11 PM
+```
+
 It might seem strange to cover the complexities of struct, union, typedef and other things before the basics of general variable use and output, but since each of those things is likely to use the prior outlined references, it seemed prudent to cover those first.  This gives general exposure, so when used in the next pieces they are not new concepts.  We are going to bypass Functions, Pointers, and other types not discussed until post Console Output. (edited)
-Part 2: Console Output & Using #include (edited)
-Avatar
-PDrifting 23-Apr-21 04:22 PM
+
+# Part 2: Console Output & Using #include
+
 Console, or Terminal based output has been around since the advent of computer screens.  It is the most common way programmers can present information from within the program.  C has Functions built into the Standard Library that can be accessed from various includible libraries.  This is where the #include tag is useful.  For this context we will be referencing the library stdio.h. 
-#include <stdio.h>
- The Standard I/O library gives us access to several useful predefined Functions.
-puts
+
+> #include <stdio.h>
+ 
+The Standard I/O library gives us access to several useful predefined Functions.
+
+> puts 
+
 This allows us to write a string of char to the Console and appends a newline character to the output automatically.  The function prototype for puts...  
-int puts(const char *str)
+
+> int puts(const char *str)
+
 In this case it returns an int value, and accepts a Pointer Type of char named str.  As usual with functions that will accept char strings, they need to be NULL terminated.  In other words, make sure your char string, buffer, or other form of data has a '\0' literal on the end of it.  We will cover char strings more later.
 
 The int return from puts will be the total number of characters written to the Console including the '\n' it appends to the end.  If there is an error, the return will be set to the constant EOF and it will set an error number you can lookup.  If you missed putting the '\0' at the end, you will cause Undefined Behaviour. (edited)
