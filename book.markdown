@@ -20,9 +20,12 @@ This document exists for the sole purpose of furthing a dialogue on modern progr
 
 # index
 
-[Introduction](#introduction)
+[Chapter 1: A Tutorial Introduction](#chapter-1-a-tutorial-introduction)\
+[Part 1: Data Types](#part-1-data-types)\
+[..Basic Type](#basic-types)\
+[....Integer Types](#integer-types)\
+[....Floating Point Types](#floating-point-types)\
 
-[jump to index](#index)
 
 # Chapter 1: A Tutorial Introduction
 ## Part 1: Data Types
@@ -57,8 +60,11 @@ These are the general arithmetic types that are broken down into integer and flo
 |double          |64|  8 |   2.3E-308| to |1.7E+308   |15 decimal places|
 |long double     |80| 10 |  3.4E-4932| to |1.1E+4932  |19 decimal places|
 
-Next we have Enumerated Types.  These are typically regarded as another arithmetic type used to define named variables that are assigned discrete integer values.  They are used in place of magic numbers or hard coded values that can have arbitrary meaning.  The general modern view is to avoid using them.
+#### Enumerated Types
 
+These are typically regarded as another arithmetic type used to define named variables that are assigned discrete integer values.  They are used in place of magic numbers or hard coded values that can have arbitrary meaning.  The general modern view is to avoid using them.
+
+```
 1. They are not really integer values, but GCC does treat them as such.
 2. Code written using Enums is not treated the same by all C compilers.
 3. They do not provide any type safety.
@@ -73,7 +79,7 @@ Next we have Enumerated Types.  These are typically regarded as another arithmet
 12. Has a tendency to force state driven coding.
 13. They violate Data Oriented Design and Don't Repeat Yourself principles.
 14. Use a #define declaration instead.  We are not C++ coders.
-
+```
 ### Derived Types
 
 These include Arrays, Pointers, Structures, Unions, Functions, and Type Definitions.
