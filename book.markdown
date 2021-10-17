@@ -1,6 +1,6 @@
 # Why learn C?
 
-It drives the world and is the foundation to pretty much everything in the modern programming world.  C programmers have built most of the major tools, applications, programming langauges using it.
+It drives the world and is the foundation to pretty much everything in the modern programming world.  Some examples of this are below.
 
 |Compilers|Virtual Machines|Operating Systems|Databases|Tools|Embedded|
 |:---:|:---:|:---:|:---:|:---:|:---:|
@@ -24,38 +24,38 @@ This document exists for the sole purpose of furthing a dialogue on modern progr
 
 [jump to index](#index)
 
-Chapter 1: A Tutorial Introduction
-Part 1: Data Types
+# Chapter 1: A Tutorial Introduction
+## Part 1: Data Types
 
 These refer to specific ways that C stores data.  Data has a specific storage size or memory footprint that it consumes.  The type associated with data determines how it be stored and interpreted in memory.  C Data Types are broken up into 4 types.  However, we are not going to discuss Enumerated Types in any other context than -- avoid using them.
 
-Basic Types
+### Basic Types
 
 These are the general arithmetic types that are broken down into integer and floating point. (edited)
 
-Integer Types
+#### Integer Types
 
-Keyword             Storage Size                       Value Range
-------------------------------------------------------------------------------------
-char                 8-Bits / 1 byte                 single character
-signed char          8-Bits / 1 byte                   -128 to 127
-unsigned char        8-Bits / 1 byte                      0 to 255
-short               16-Bits / 2 bytes                -32768 to 32767
-unsigned short      16-Bits / 2 bytes                     0 to 65353
-int                 32-Bits / 4 bytes        -2,147,483,648 to 2,147,483,647
-unsigned int        32-Bits / 4 bytes                     0 to 4,294,967,295
-long long           64-Bits / 8 bytes  -9223372036854775808 to 9223372036854775807
-unsigned long long  64-Bits / 8 bytes                     0 to 18446744073709551615
+|Keyword             |Bit Width|Byte Width|Low Value||High Value|
+|---|:--:|:--:|--:|:--:|:--|
+|char              |8  | 1|    Single Character|||           
+|signed char       |8  | 1|                 -128| to |127
+|unsigned char     |8  | 1|                    0| to |255
+|short             |16 | 2|                -32768| to |32767
+|unsigned short    |16 | 2|                     0| to |65353
+|int               |32 | 4|        -2,147,483,648| to |2,147,483,647
+|unsigned int      |32 | 4|                     0| to |4,294,967,295
+|long long         |64 | 8|  -9223372036854775808| to |9223372036854775807
+|unsigned long long|64 | 8|                     0| to |18446744073709551615
 
-NOTE: GCC on Linux typically defaults to 64-bit.  On Windows, MinGW defaults to 32-bit.  For compatibility of code between 32-bit and 64-bit to make sure your long Data Types are 64-bit, use long long instead.  In 32-bit environments this will make long 64-bit, and in 64-bit environments it will treat long long as 64-bit long.
+**NOTE:** GCC on Linux typically defaults to 64-bits.  On Windows, MinGW defaults to 32-bits.  For compatibility of code between 32-bit and 64-bit, make sure your long Data Types are 64-bit by using long long instead.  In 32-bit environments this will make long 64-bit, and in 64-bit environments it will treat long long as 64-bit long.
 
-Floating Point Types
+#### Floating Point Types
 
-Keyword         Storage Size              Value Range       Precision
--------------------------------------------------------------------------------
-float           32-Bits /  4 bytes    1.2E-38 to 3.4E+38     6 decimal places
-double          64-Bits /  8 bytes   2.3E-308 to 1.7E+308   15 decimal places
-long double     80-Bits / 10 bytes  3.4E-4932 to 1.1E+4932  19 decimal places
+|Keyword         |Bit Width|Byte Width|Low Range||High Range|Precision|
+|:--|:--:|:--:|--:|---|:--|--:|
+|float           |32|  4 |    1.2E-38| to |3.4E+38    | 6 decimal places|
+|double          |64|  8 |   2.3E-308| to |1.7E+308   |15 decimal places|
+|long double     |80| 10 |  3.4E-4932| to |1.1E+4932  |19 decimal places|
 
 Next we have Enumerated Types.  These are typically regarded as another arithmetic type used to define named variables that are assigned discrete integer values.  They are used in place of magic numbers or hard coded values that can have arbitrary meaning.  The general modern view is to avoid using them.
 
@@ -74,13 +74,15 @@ Next we have Enumerated Types.  These are typically regarded as another arithmet
 13. They violate Data Oriented Design and Don't Repeat Yourself principles.
 14. Use a #define declaration instead.  We are not C++ coders.
 
-Let's talk about Derived Types.  These include Arrays, Pointers, Structures, Unions, Functions, and Type Definitions. (edited)
+### Derived Types
 
-Arrays
+These include Arrays, Pointers, Structures, Unions, Functions, and Type Definitions.
+
+#### Arrays
 
 An Array is created from a Data Type that is used to store multiple elements of the same data.  They are zero indexed and you declare them by specifying the total number of elements needed.  To access the last element in an Array use the total number of elements minus one.  Arrays, once declared, cannot change size.  Elements are accessed by unique integer based indices.  Data stored inside an Array, provided Pointers are not involved with the data stored in each element, will generally create a single block of contiguous memory.  Most off by one errors in your code will be created by trying to access information inside Arrays. You do not need to pass an Array by reference to a function as an argument in most cases when using them as they are treated under the hood as pointers or referenced as such. (edited)
 
-Pointers
+#### Pointers
 
 Regarded as one of the single hardest concepts to learn in programming, and the reason most people avoid coding in C.  A Pointer is a variable that uses the address of another variable for storage.  It uses represents an address to a specific location in memory.  You must declare pointers like any other variable declaration.  Confusingly Pointers use the asterisk for dereferencing.  This simply means, to get the value stored at the location of memory the Pointer is pointing at.  The asterisk is also used as the multiplication maths operator.  Pointers have many problems associated with their use, but they are a staple in many of the advanced C language syntax.  To pass variables to a function by reference you must use a pointer for all Data Types, except Arrays in some cases.
 
@@ -88,17 +90,17 @@ C has a special kind of Pointer called the Function Pointer.  This allows creati
 
 Other uses of Pointers and Function Pointers exist to form bridges tying certain portions of an Operating System, or to make a call inside a specific library accessing a foreign piece of code.
 
-Structures and Unions
+#### Structures and Unions
 
 These are your user defined record types.  Useful when you need to combine groups of items, fields, or members of different data types that can be referenced by name to create a single type.  C doesn't have classes, or support object oriented coding methods for the most part.  All members of a Structure and Union are publicly declared.  Defined Structures and Unions are not assigned memory until declared, and will always be stored in contiguous memory.  Alignment, packing, and padding are compiler implementation specific.  Let's discuss how GCC manages these aspects of Structures. The only real difference between a Structure and Union is how they are stored in memory.  Structure members are have unique allotments memory, where Union members all share the same memory region. (edited)
 
-Alignment - This tells the compiler to attempt a specific alignment during allocation to specific boundaries. Alignment can only be used to increase member boundaries. These are determined by the linker and the platform you are compiling on.  GCC by default will optimise for the platform you are compiling on.  
+**Alignment** - This tells the compiler to attempt a specific alignment during allocation to specific boundaries. Alignment can only be used to increase member boundaries. These are determined by the linker and the platform you are compiling on.  GCC by default will optimise for the platform you are compiling on.  
 
-Packing - Specifies to the compiler that it should use the minimum footprint of memory required to represent the type.  All members of the Structure will have the same equivalent packed attribute applied to them.  This will almost always affect performance negatively.
+**Packing** - Specifies to the compiler that it should use the minimum footprint of memory required to represent the type.  All members of the Structure will have the same equivalent packed attribute applied to them.  This will almost always affect performance negatively.
 
-Padding - Is required, and can be manipulated by alignment and packing attributes. Overriding the default padding performed by GCC is likely to slow down access to members, but can save memory. Padding will only be inserted when a Structure member is followed by another Structure member that requires a larger alignment or at the end of the Structure to align it to a specific boundary. GCC by default is not allowed to reorder any Structure members to achieve optimal alignment, so programmers should be mindful of their member layouts inside their Structure definitions.
+**Padding** - Is required, and can be manipulated by alignment and packing attributes. Overriding the default padding performed by GCC is likely to slow down access to members, but can save memory. Padding will only be inserted when a Structure member is followed by another Structure member that requires a larger alignment or at the end of the Structure to align it to a specific boundary. GCC by default is not allowed to reorder any Structure members to achieve optimal alignment, so programmers should be mindful of their member layouts inside their Structure definitions.
 
-Functions
+#### Functions
 
 This is another very hard concept for programmers to grasp -- code reuse.  Functions make this possible.  They are a block of syntax statements put together to perform a specific task.  Learning when to use Functions takes a lot of practice.  When you declare a Function you can provide a Return Type, and Argument Types that you want to pass to the Function to be used by the statements inside it.  Functions can call other Functions, and use other Data Types to declare variables.  
 
@@ -112,7 +114,7 @@ C does not support Function Overloading, so all Function names must be unique.  
 
 Function Overloading - The ability to create multiple Functions with the same name declaration and different arguments.  In modern programming, this is a major drawback that C has not added the ability to use this feature of coding.  This drives many C programmers to write C in C++.  This has a host of other drawbacks.  Despite missing this syntax feature, you can still write robust and useful programs in a meaningful way with C.  A later standard has implemented Generics into C with Macros that can emulate Function Overloading.  When discussing the preprocessor, we will cover this feature.
 
-Type Definitions
+#### Type Definitions
 
 To implement a Type Definition you must use the typedef keyword.  This allows you to give meaningful names to things, and stop having to type the typical longer syntax required by C.   It also allows forward declarations of things.  Many libraries have custom Type Definitions to keep track of what specific parts of the library belongs to what.  OpenGL comes to mind, or even just having the desire to shorten unsigned long long int to u64.  This has excellent utility when used meaningfully.  Many C purists discourage using Type Definitions, but you cannot overlook the modern desire to keep your code clean, readable, and maintainable.
 
@@ -120,7 +122,7 @@ There are many good discussions between Linus Torvalds and the rest of the inter
 
 Most projects and coding firms you will write code for have Style Guides.  Each guide will usually include a section on Type Definitions.  Along with other restrictions on how code should be written for the given project.  In general, if it makes things easier for you to write code, is generally self-documenting, helps with maintenance of the code base, then use it regardless of the opinions of other coders. (edited)
 
-Void
+#### Void
 
 Despite this being a Data Type which can be used in various scenarios, there are some restrictions on void that should be discussed.  When dealing with void, it generally means different things contextually. There are also problems with void conversions and data loss. Opportunities to create Undefined Behaviour are also in abundance. 
 
@@ -128,172 +130,204 @@ Unlike other Data Types you cannot directly declare a variable as void unless it
 
 When declaring Function Arguments in a Function Prototype you should technically use void if the Function Argument List is actually meant to be nothing.  GCC for backwards compatibility maintains arbitrary Function Prototypes and definitions of functions which can lead to problems if you program using the Function Prototypes, and  main first model of coding.  We will not be using void in this way and use the declare before use model which avoids many of these problems, but does require some planning in your code. 
 
-C Examples
+### Basic Code Examples
 
-Basic program that has no output, but shows how to declare basic variables and setup of the function main. 
+Basic program that has no output.
+
+1. declaring basic variables and assigning default values
+2. setup of function main 
 
 ```C
-int main() {      //main program entry
-  char foo = 1;   //variable type char named foo and assigns it a value of 1
-  char bar = -10; //variable type char named bar and assigns it a value of -10
-  return 0;       //return status successful
+int main() {                                   //main program entry
+  char foo = 1;                                //variable type char named foo and assigns it a value of 1
+  char bar = -10;                              //variable type char named bar and assigns it a value of -10
+  return 0;                                    //return status successful
 }
 ```
 
-Basic program that has no output, but shows how to declare basic variables, using a typedef to declare  a custom Type Name, and setup of the function main. 
+Basic program that has no output.
+
+1. using a typedef to declare a custom Type Name
+2. declaring basic variables and assigning default values
+3. setup of function main 
 
 ```C
-typedef unsigned char u8;  //associate type unsigned char with u8
-typedef int           s32; //associate type signed int with s32
+typedef unsigned char u8;                      //associate type unsigned char with u8
+typedef int           s32;                     //associate type signed int with s32
 
-s32 main() {               //main program entry
-  u8 foo = 0;              //variable type u8 named foo and assigns it a value of 0
-  u8 bar = 212;            //variable type u8 named bar and assigns it a value of 212
-  return 0;                //return status successful
+s32 main() {                                   //main program entry
+  u8 foo = 0;                                  //variable type u8 named foo and assigns it a value of 0
+  u8 bar = 212;                                //variable type u8 named bar and assigns it a value of 212
+  return 0;                                    //return status successful
 }
 ```
 
-Basic program that has no output, but shows using a typedef to declare a custom Type Name, definition of struct with 2 members using the custom Type Name, how to assign default values to Structure Members, and setup of the function main. 
+Basic program that has no output.
+
+1. using a typedef to declare a custom Type Name
+2. definition of a struct with 2 members using the custom Type Name
+3. assigning default values to Structure Members
+4. setup of function main 
 
 ```C
-typedef unsigned char u8;  //associate type unsigned char with u8
-typedef int           s32; //associate type signed int with s32
+typedef unsigned char u8;                      //associate type unsigned char with u8
+typedef int           s32;                     //associate type signed int with s32
 
-typedef struct {           //declare typedef for struct
-  u8 foo;                  //declare struct member of type u8 named foo
-  u8 bar;                  //declare struct member of type u8 named bar
-} TFoobar;                 //assign name of TFoobar to struct declare
+typedef struct {                               //declare typedef for struct
+  u8 foo;                                      //declare struct member of type u8 named foo
+  u8 bar;                                      //declare struct member of type u8 named bar
+} TFoobar;                                     //assign name of TFoobar to struct declare
 
-s32 main() {               //main program entry
-  TFoobar record = {       //declare type TFoobar named record 
-    .foo = 16,             //assign a default value of 16 to member foo
-    .bar = 255             //assign a default value of 255 to member bar
+s32 main() {                                   //main program entry
+  TFoobar record = {                           //declare type TFoobar named record 
+    .foo = 16,                                 //assign a default value of 16 to member foo
+    .bar = 255                                 //assign a default value of 255 to member bar
   };
 
-  return 0;                //return status successful
+  return 0;                                    //return status successful
 }
 ```
 
-NOTE: DISCOURAGED STYLE - Alternate basic program that has no output, but shows using a typedef to declare a custom Type Name, definition of struct with 2 members using the custom Type Name, how to assign default values to Structure Members, and setup of the function main. 
+Alternate basic program that has no output.
+
+1. using a typedef to declare a custom Type Name
+2. definition of a struct with 2 members using the custom Type Name
+3. assigning default values to Structure Members
+4. setup of function main 
 
 ```C
-typedef unsigned char u8;  //associate type unsigned char with u8
-typedef int           s32; //associate type signed int with s32
+typedef unsigned char u8;                      // associate type unsigned char with u8
+typedef int           s32;                     // associate type signed int with s32
 
-typedef struct {           //declare typedef for struct
-  u8 foo;                  //declare struct member of type u8 named foo
-  u8 bar;                  //declare struct member of type u8 named bar
-} TFoobar;                 //assign name of TFoobar to struct declare
+typedef struct {                               // declare typedef for struct
+  u8 foo;                                      // declare struct member of type u8 named foo
+  u8 bar;                                      // declare struct member of type u8 named bar
+} TFoobar;                                     // assign name of TFoobar to struct declare
 
-s32 main() {               //main program entry
-  TFoobar record = {2,1};  //declare type TFoobar named record
-                           //assigns the values in order of member layout
-                           //this would assign 2 to foo and 1 to bar
-                           //despite this method being shorter, it does not
-                           //produce self-documenting code and is discouraged
+s32 main() {                                   // main program entry
+  TFoobar record = {2, 1};                     // declare type TFoobar named record
+                                               // assigns the values in order of member layout
+                                               // this would assign 2 to foo and 1 to bar
+                                               // despite this method being shorter, it does not
+                                               // produce self-documenting code and is discouraged
 
-  return 0;                //return status successful
+  return 0;                                    // return status successful
 }
 ```
 
-Alternate basic program that has no output, but shows using a typedef to declare a custom Type Name, definition of struct with 2 members using the custom Type Name, how to assign default values to Structure Members, and setup of the function main.  
+Alternate basic program that has no output.
+
+1. using a typedef to declare a custom Type Name
+2. definition of a struct with 2 members using the custom Type Name
+3. assigning default values to Structure Members
+4. setup of function main 
 
 ```C
-typedef unsigned char u8;  //associate type unsigned char with u8
-typedef int           s32; //associate type signed int with s32
+typedef unsigned char u8;                      // associate type unsigned char with u8
+typedef int           s32;                     // associate type signed int with s32
 
-typedef struct {           //declare typedef for struct
-  u8 foo;                  //declare struct member of type u8 named foo
-  u8 bar;                  //declare struct member of type u8 named bar
-} TFoobar;                 //assign name of TFoobar to struct declare
+typedef struct {                               // declare typedef for struct
+  u8 foo;                                      // declare struct member of type u8 named foo
+  u8 bar;                                      // declare struct member of type u8 named bar
+} TFoobar;                                     // assign name of TFoobar to struct declare
 
-s32 main() {               //main program entry
-  TFoobar record = {};     //declare type TFoobar named record
-                           //assigns a default value of 0 to both foo and bar
+s32 main() {                                   // main program entry
+  TFoobar record = {};                         // declare type TFoobar named record
+                                               // assigns a default value of 0 to both foo and bar
 
-  return 0;                //return status successful
+  return 0;                                    // return status successful
 }
 ```
 
-NOTE: DISCOURAGED STYLE - Alternate basic program that has no output, but shows using a typedef to declare a custom Type Name, definition of a struct with 2 members using the custom Type Name, how to assign default values to Structure Members, and setup of the function main.   
+Alternate basic program that has no output.
+
+1. using a typedef to declare a custom Type Name
+2. definition of a struct with 2 members using the custom Type Name
+3. assigning default values to Structure Members
+4. setup of function main 
 
 ```C
-typedef unsigned char u8;  //associate type unsigned char with u8
-typedef int           s32; //associate type signed int with s32
+typedef unsigned char u8;                      // associate type unsigned char with u8
+typedef int           s32;                     // associate type signed int with s32
 
-typedef struct {           //declare typedef for struct
-  u8 foo;                  //declare struct member of type u8 named foo
-  u8 bar;                  //declare struct member of type u8 named bar
-} TFoobar;                 //assign name of TFoobar to struct declare
+typedef struct {                               // declare typedef for struct
+  u8 foo;                                      // declare struct member of type u8 named foo
+  u8 bar;                                      // declare struct member of type u8 named bar
+} TFoobar;                                     // assign name of TFoobar to struct declare
 
-s32 main() {               //main program entry
-  TFoobar record = {4};    //declare type TFoobar named record
-                           //assigns a default value of 4 to foo
-                           //and then sets bar to a value 0 by default
-                           //despite this method being shorter, it does not
-                           //produce self-documenting code and is discouraged
+s32 main() {                                   // main program entry                                               
+  TFoobar record = { 4 };                      // declare type TFoobar named record
+                                               // assigns a default value of 4 to foo
+                                               // and then sets bar to a value 0 by default.
+                                               // despite this method being shorter, it does not
+                                               // produce self-documenting code and is discouraged.
 
-  return 0;                //return status successful
+  return 0;                                    // return status successful
 }
 ```
 
-Alternate basic program that has no output, but shows using a typedef to declare a custom Type Name, definition of a struct with 2 members using the custom Type Name, how to assign default values to Structure Members, and setup of the function main.  
+Alternate basic program that has no output.
+
+1. using a typedef to declare a custom Type Name
+2. definition of a struct with 2 members using the custom Type Name
+3. assigning default values to Structure Members
+4. setup of function main 
 
 ```C
-typedef unsigned char u8;  //associate type unsigned char with u8
-typedef int           s32; //associate type signed int with s32
+typedef unsigned char u8;                      // associate type unsigned char with u8
+typedef int           s32;                     // associate type signed int with s32
 
-typedef struct {           //declare typedef for struct
-  u8 foo;                  //declare struct member of type u8 named foo
-  u8 bar;                  //declare struct member of type u8 named bar
-} TFoobar;                 //assign name of TFoobar to struct declare
+typedef struct {                               // declare typedef for struct
+  u8 foo;                                      // declare struct member of type u8 named foo
+  u8 bar;                                      // declare struct member of type u8 named bar
+} TFoobar;                                     // assign name of TFoobar to struct declare
 
-s32 main() {               //main program entry
-  TFoobar record = {       //declare type TFoobar named record
-    .foo = 12              //assigns a default value of 12 to foo
-  };                       //and then sets bar to a value of 0 by default
+s32 main() {                                   // main program entry
+  TFoobar record = {                           // declare type TFoobar named record
+    .foo = 12                                  // assigns a default value of 12 to foo
+  };                                           // and then sets bar to a value of 0 by default
                                
-  return 0;                //return status successful
+  return 0;                                    // return status successful
 }
 ```
 
 Alternate basic program that has no output, but shows using a typedef to declare a custom Type Name, definition of a struct with 2 members using the custom Type Name, how to assign default values to Structure Members, and setup of the function main.  
 
 ```C
-typedef unsigned char u8;  //associate type unsigned char with u8
-typedef int           s32; //associate type signed int with s32
+typedef unsigned char u8;                      // associate type unsigned char with u8
+typedef int           s32;                     // associate type signed int with s32
 
-typedef struct {           //declare typedef for struct
-  u8 foo;                  //declare struct member of type u8 named foo
-  u8 bar;                  //declare struct member of type u8 named bar
-} TFoobar;                 //assign name of TFoobar to struct declare
+typedef struct {                               // declare typedef for struct
+  u8 foo;                                      // declare struct member of type u8 named foo
+  u8 bar;                                      // declare struct member of type u8 named bar
+} TFoobar;                                     // assign name of TFoobar to struct declare
 
-s32 main() {               //main program entry
-  TFoobar record = {       //declare type TFoobar named record
-    .bar = 34             //assigns a default value of 34 to bar
-  };                       //and then sets foo to a value of 0 by default
+s32 main() {                                   // main program entry
+  TFoobar record = {                           // declare type TFoobar named record
+    .bar = 34                                  // assigns a default value of 34 to bar
+  };                                           // and then sets foo to a value of 0 by default.
 
-  return 0;                //return status successful
+  return 0;                                    // return status successful
 }
 ```
 
 Basic program that has no output, but shows using a typedef to declare a custom Type Name, definition of an arbitrary array with defaults values, and setup of the function main.  
 
 ```C
-typedef int          s32;        //associate type signed int with s32
-typedef unsigned int u32;        //associate type unsigned int with u32
+typedef int          s32;                      // associate type signed int with s32
+typedef unsigned int u32;                      // associate type unsigned int with u32
 
-s32 main() {                     //main program entry
-  u32 foo[] = {0,1,2,3,4,5,6};   //declare type u32 named foo
-                                 //the square brackets [] are used
-                                 //to denote an array in C
-                                 //in this case we are not defining
-                                 //the array with a starting size but
-                                 //we are assigning default data to it
-                                 //with GCC this is a method of
-                                 //automatic initialisation of the array
-                                 //it will calculate the size required for you
-  return 0;                      //return status successful
+s32 main() {                                   // main program entry
+  u32 foo[] = {0, 1, 2, 3, 4, 5, 6};           // declare type u32 named foo
+                                               // the square brackets [] are used
+                                               // to denote an array in C.
+                                               // in this case we are not defining
+                                               // the array with a starting size but
+                                               // we are assigning default data to it.
+                                               // when using GCC, this is a method for
+                                               // automatic initialisation of the array.
+                                               // it will calculate the size required for you
+  return 0;                                    // return status successful.
 }
 ```
 
