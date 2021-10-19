@@ -14,7 +14,7 @@ It drives the world and is the foundation to pretty much everything in the moder
 |SWIFT|Python    |Windows|             |Shell         |
 |     |R         |       |             |Vehicles      |
 
-C is also extremely portable which is why it drives so many things.  The [GCC Compiler](https://gcc.gnu.org/) supports 70+ platforms and several architectures.  All of the code examples and C sources in this document will be largely focused on Linux and Windows development.  You can find the base manual for GCC [here](https://gcc.gnu.org/onlinedocs/). MinGW has been used for validation of sources on Windows, you can get it [here](https://sourceforge.net/projects/mingw/files/latest/download).  A general how to install and configure the path can be found [here](https://youtu.be/guM4XS43m4I). Unlike Unix-like environments, GCC does not come installed by default on the Windows platforms. You can also turn on the [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/) and use the Microsoft App Store to install a Unix-Like operating system and use GCC natively.  If you're on a Linux or non-windows platform, this document assumes you have a decent command of that evironment.
+C is also extremely portable which is why it drives so many things.  The [GCC Compiler](https://gcc.gnu.org/) supports 70+ platforms and several architectures.  All of the code examples and C sources in this document will be largely focused on Linux and Windows development.  You can find the base manual for GCC [here](https://gcc.gnu.org/onlinedocs/). MinGW has been used for validation of sources on Windows, you can get it [here](https://sourceforge.net/projects/mingw/files/latest/download).  A general how to install MinGW and configure the path can be found [here](https://youtu.be/guM4XS43m4I). Unlike Unix-like environments, GCC does not come installed by default on the Windows platforms. You can also turn on the [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/) and use the Microsoft App Store to install a Unix-Like operating system and use GCC natively.  If you're on a Linux or non-windows platform, this document assumes you have a decent command of that evironment.
 
 This document exists for the sole purpose of furthing a dialogue on modern programming in C using GCC for the [C Programming Server](https://discord.gg/KydfXPfpYK) on [Discord](https://discord.com/).
 
@@ -22,10 +22,36 @@ This document exists for the sole purpose of furthing a dialogue on modern progr
 
 [Chapter 1: A Tutorial Introduction](#chapter-1-a-tutorial-introduction)\
 [Part 1: Data Types](#part-1-data-types)\
-[..Basic Type](#basic-types)\
-[....Integer Types](#integer-types)\
-[....Floating Point Types](#floating-point-types)\
-
+[⠀⠀Basic Type](#basic-types)\
+[⠀⠀⠀⠀Integer Types](#integer-types)\
+[⠀⠀⠀⠀Floating Point Types](#floating-point-types)\
+[⠀⠀⠀⠀Enumerated Types](#enumerated-types)\
+[⠀⠀Derived Types](#derived-types)\
+[⠀⠀⠀⠀Arrays](#arrays)\
+[⠀⠀⠀⠀Pointers](#pointers)\
+[⠀⠀⠀⠀Structures and Unions](#structures-and-unions)\
+[⠀⠀⠀⠀Functions](#functions)\
+[⠀⠀⠀⠀Type Definitions](#type-definitions)\
+[⠀⠀⠀⠀Void](#void)\
+[⠀⠀Basic Code Examples](#basic-code-examples)\
+[⠀⠀⠀⠀Example 1: Variable Declarations](#example-1-variable-declarations)\
+[⠀⠀⠀⠀Example 2: Type Definitions](#example-2-type-definitions)\
+[⠀⠀⠀⠀Example 3: Structures](#example-3-structures)\
+[⠀⠀⠀⠀Example 4: Structures (Bad Form)](#example-4-structures-bad-form)\
+[⠀⠀⠀⠀Example 5: Structures](#example-5-structures)\
+[⠀⠀⠀⠀Example 6: Structures (Bad Form)](#example-6-structures-bad-form)\
+[⠀⠀⠀⠀Example 7: Structures](#example-7-structures)\
+[⠀⠀⠀⠀Example 8: Structures](#example-8-structures)\
+[⠀⠀⠀⠀Example 9: Arrays](#example-9-arrays)\
+[⠀⠀⠀⠀Example 10: Arrays](#example-10-arrays)\
+[⠀⠀⠀⠀Example 11: Arrays](#example-11-arrays)\
+[⠀⠀⠀⠀Example 12: Arrays](#example-12-arrays)\
+[⠀⠀⠀⠀Example 13: Arrays](#example-13-arrays)\
+[⠀⠀⠀⠀Example 14: Arrays](#example-14-arrays)\
+[⠀⠀⠀⠀Example 15: Unions](#example-15-unions)\
+[⠀⠀⠀⠀Example 16: Problems with Unions](#example-16-problems-with-unions)\
+[⠀⠀⠀⠀Example 17: Ideas on Dealing with Union Troubles](#example-17-ideas-on-dealing-with-union-troubles)\
+[⠀⠀⠀⠀Example 18: Unions](#example-18-unions)
 
 # Chapter 1: A Tutorial Introduction
 ## Part 1: Data Types
@@ -138,6 +164,7 @@ When declaring Function Arguments in a Function Prototype you should technically
 
 ### Basic Code Examples
 
+#### Example 1: Variable Declarations
 Basic program that has no output.
 
 1. declaring basic variables and assigning default values
@@ -151,6 +178,7 @@ int main() {                                   //main program entry
 }
 ```
 
+#### Example 2: Type Definitions
 Basic program that has no output.
 
 1. using a typedef to declare a custom Type Name
@@ -167,7 +195,7 @@ s32 main() {                                   //main program entry
   return 0;                                    //return status successful
 }
 ```
-
+#### Example 3: Structures
 Basic program that has no output.
 
 1. using a typedef to declare a custom Type Name
@@ -194,6 +222,7 @@ s32 main() {                                   //main program entry
 }
 ```
 
+#### Example 4: Structures (Bad Form)
 Alternate basic program that has no output.
 
 1. using a typedef to declare a custom Type Name
@@ -221,6 +250,7 @@ s32 main() {                                   // main program entry
 }
 ```
 
+#### Example 5: Structures
 Alternate basic program that has no output.
 
 1. using a typedef to declare a custom Type Name
@@ -245,6 +275,7 @@ s32 main() {                                   // main program entry
 }
 ```
 
+#### Example 6: Structures (Bad Form)
 Alternate basic program that has no output.
 
 1. using a typedef to declare a custom Type Name
@@ -262,7 +293,7 @@ typedef struct {                               // declare typedef for struct
 } TFoobar;                                     // assign name of TFoobar to struct declare
 
 s32 main() {                                   // main program entry                                               
-  TFoobar record = { 4 };                      // declare type TFoobar named record
+  TFoobar record = {4};                        // declare type TFoobar named record
                                                // assigns a default value of 4 to foo
                                                // and then sets bar to a value 0 by default.
                                                // despite this method being shorter, it does not
@@ -272,6 +303,7 @@ s32 main() {                                   // main program entry
 }
 ```
 
+#### Example 7: Structures
 Alternate basic program that has no output.
 
 1. using a typedef to declare a custom Type Name
@@ -297,6 +329,7 @@ s32 main() {                                   // main program entry
 }
 ```
 
+#### Example 8: Structures
 Alternate basic program that has no output, but shows using a typedef to declare a custom Type Name, definition of a struct with 2 members using the custom Type Name, how to assign default values to Structure Members, and setup of the function main.  
 
 ```C
@@ -317,11 +350,13 @@ s32 main() {                                   // main program entry
 }
 ```
 
-Basic program that has no output, but shows using a typedef to declare a custom Type Name, definition of an arbitrary array with defaults values, and setup of the function main.  
+#### Example 9: Arrays
+Basic program that has no output.
+, but shows using a typedef to declare a custom Type Name, definition of an arbitrary array with defaults values, and setup of the function main.  
 
 ```C
-typedef int          s32;                      // associate type signed int with s32
 typedef unsigned int u32;                      // associate type unsigned int with u32
+typedef int          s32;                      // associate type signed int with s32
 
 s32 main() {                                   // main program entry
   u32 foo[] = {0, 1, 2, 3, 4, 5, 6};           // declare type u32 named foo
@@ -337,6 +372,7 @@ s32 main() {                                   // main program entry
 }
 ```
 
+#### Example 10: Arrays
 Alternate basic program that has no output, but shows using a typedef to declare a custom Type Name, definition of an arbitrary array with default values, and setup of the function main.  
 
 ```
@@ -356,6 +392,7 @@ s32 main() {               //main program entry
 }
 ```
 
+#### Example 11: Arrays
 Basic program that has no output, but shows using a typedef to declare a custom Type Name, how to typedef forward associations for a struct that contains members of itself, a struct with 3 members, definition of a fixed declaration of an array of structs, and setup of the function main.  
 
 ```C
@@ -381,6 +418,7 @@ s32 main() {                      //main program entry
 }
 ```
 
+#### Example 12: Arrays
 Basic program that has no output, but shows using a typedef to declare a custom Type Name, how to typedef forward associations for a struct that contains members of itself,  struct with 3 members, definition of a fixed declaration of an array of structs, how to initialise a specific element after initial declaration of an array, and setup of function main.
 
 ```C
@@ -418,6 +456,7 @@ s32 main() {                      //main program entry
 }
 ```
 
+#### Example 13: Arrays
 Alternate basic program that has no output, but shows using a typedef to declare a custom Type Name, how to typedef forward associations for a struct that contains members of itself,  struct with 3 members, definition of a fixed declaration of an array of structs, how to initialise a specific element after initial declaration of an array, and setup of function main.
 
 ```C
@@ -450,6 +489,7 @@ s32 main() {                      //main program entry
 }
 ```
 
+#### Example 14: Arrays
 Basic program that has no output, but shows using a typedef to declare a custom Type Name, how to create an arbitrary array, assign default values based on ranges during declaration of the array, and setup of function main. 
 
 ```C
@@ -468,6 +508,7 @@ s32 main() {               //main program entry
 }
 ```
 
+#### Example 15: Unions
 Basic program that has no output, but shows using multiple typedef to declare custom Type Names, how to create a union, and setup of function main.  
 
 ```C
@@ -499,6 +540,7 @@ s32 main() {                     //main program entry
 }
 ```
 
+#### Example 16: Problems with Unions
 NOTE: PROBLEMS WITH UNIONS -- Basic program that has no output, but shows using multiple typedef to declare custom Type Names, how to create a union, data loss/confusing union behaviour, and setup of function main.  
 
 ```C
@@ -534,7 +576,8 @@ s32 main() {
 }
 ```
 
-NOTE: IDEAS ON WAYS TO DEAL WITH PROBLEMS IN UNIONS - Basic program that has no output, but shows using multiple typedef to declare custom Type Names, how to create a struct with an anonymous union inside it, and setup of function main. 
+#### Example 17: Ideas on Dealing with Union Troubles
+NOTE: IDEAS ON DEALING WITH UNION TROUBLES - Basic program that has no output, but shows using multiple typedef to declare custom Type Names, how to create a struct with an anonymous union inside it, and setup of function main. 
 
 ```C
 typedef unsigned char      u8;   //associate type unsigned char with u8
@@ -550,7 +593,7 @@ typedef struct {                 //declare typedef for struct
   union {                        //in this case we are declaring an
     u8  chars  [8];              //anonymous union to deal with our
     u16 shorts [4];              //compatible integer types and embedding
-    u32 ints   [2];              //it inside out struct
+    u32 ints   [2];              //it inside our struct
     u64 intBase;                 //these members will still share the same
   };                             //memory region
   char *pchars;                  //where these members outside the union
@@ -576,6 +619,7 @@ s32 main() {
 }
 ```
 
+#### Example 18: Unions
 Basic program that has no output, but shows using a union, a series of anonymous struct layouts for common associations of data, and setup of function main. 
 
 ```C
@@ -612,7 +656,7 @@ s32 main() {              //main program entry
 }
 ```
 
-It might seem strange to cover the complexities of struct, union, typedef and other things before the basics of general variable use and output, but since each of those things is likely to use the prior outlined references, it seemed prudent to cover those first.  This gives general exposure, so when used in the next pieces they are not new concepts.  We are going to bypass Functions, Pointers, and other types not discussed until post Console Output. (edited)
+It might seem strange to cover the complexities of struct, union, typedef and other things before the basics of general variable use and output, but since each of those things is likely to use the prior outlined references, it seemed prudent to cover those first.  This gives general exposure, so when used in the next pieces they are not new concepts.  We are going to bypass Functions, Pointers, and other types not discussed until post Console Output.
 
 # Part 2: Console Output & Using #include
 
