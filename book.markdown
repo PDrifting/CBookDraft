@@ -106,6 +106,8 @@ These are typically regarded as another arithmetic type used to define named var
 13. They violate Data Oriented Design and Don't Repeat Yourself principles.
 14. Use a #define declaration instead.  We are not C++ coders.
 ```
+[Return to Index](#index)
+
 ### Derived Types
 
 These include Arrays, Pointers, Structures, Unions, Functions, and Type Definitions.
@@ -122,6 +124,8 @@ C has a special kind of Pointer called the Function Pointer.  This allows creati
 
 Other uses of Pointers and Function Pointers exist to form bridges tying certain portions of an Operating System, or to make a call inside a specific library accessing a foreign piece of code.
 
+[Return to Index](#index)
+
 #### Structures and Unions
 
 These are your user defined record types.  Useful when you need to combine groups of items, fields, or members of different data types that can be referenced by name to create a single type.  C doesn't have classes, or support object oriented coding methods for the most part.  All members of a Structure and Union are publicly declared.  Defined Structures and Unions are not assigned memory until declared, and will always be stored in contiguous memory.  Alignment, packing, and padding are compiler implementation specific.  Let's discuss how GCC manages these aspects of these Data Types. The only real difference between a Structure and Union is how they are stored in memory.  Structure members are have unique allotments memory, where Union members all share the same memory region.
@@ -131,6 +135,8 @@ These are your user defined record types.  Useful when you need to combine group
 **Packing** - Specifies to the compiler that it should use the minimum footprint of memory required to represent the type.  All members of the Structure or Union will have the same equivalent packed attribute applied to them.  This will almost always affect performance negatively.  If you are memory constrained platforms, the performance tradeoff may be required to make things fit.
 
 **Padding** - Is required, and can be manipulated by alignment and packing attributes. Overriding the default padding performed by GCC is likely to slow down access to members, but can save memory. Padding will only be inserted when a Structure member is followed by another Structure member that requires a larger alignment or at the end of the Structure to align it to a specific boundary. GCC by default is not allowed to reorder any Structure members to achieve optimal alignment, so programmers should be mindful of their member layouts inside their Structure definitions.
+
+[Return to Index](#index)
 
 #### Functions
 
@@ -150,25 +156,31 @@ Many tutorials written for C, still declare Function main as Return Type void.  
 
 **Argument Lists** - Functions in order to pass information to them use arguement lists.  They consist of a Data Type and name separated by a comma. This book does not use the modern form of supplying void when there are no arguments accepted.  GCC does not warn if you make a function call with arguments to an empty argument listed function declare.  You will see comments on the Undefined Behaviour this technically causes, however, at best you're going to get a warning.  C compilers have a fuzzy area when it comes to empty argument lists. Since at best you will get is a warning, this book excludes the promotion of using void argument lists.  The only other alternative is to use Function Prototypes.
 
-**Function Prototypes** - Generally these create code clutter, but they can be meaningful in context and are required when delcaring Function Pointers in a modified syntax. The book will detail when using Function Prototypes is generally a good idea.  Since all C Compilers are known as single pass for the most part, things must be declared before use. If a Function is delcared elsewhere, externally, or compiled/linked from another foreign piece of code, you must use a Function Prototype to announce that the compiler should be aware to look for it. Otherwise, you are encouraged to reorder your main Function to the end of your code and ordering all other functions in precalling fashion.  This is another heavily debated topic amongst purists.  As mentioned this book focuses on keeping code clean, easy to read, hardware friendly and most modern. Some old school syntax is still encouraged regardless of side-effects.
+**Function Prototypes** - Generally these create code clutter, but they can be meaningful in context and are required when delcaring Function Pointers in a modified syntax. The book will detail when using Function Prototypes is generally a good idea.  Since all C Compilers are known as single pass for the most part, things must be declared before use. If a Function is delcared elsewhere, externally, or compiled/linked from another foreign piece of code, you must use a Function Prototype to announce that the compiler should be aware to look for it. Otherwise, you are encouraged to reorder your main Function to the end of your code and ordering all other functions in precalling fashion.  This is another heavily debated topic amongst purists.  As mentioned this book focuses on keeping code clean, easy to read, hardware friendly and mostly modern. Some old school syntax is still encouraged regardless of side-effects.
 
 **NOTE** - No process is going to save you from mistakes you're going to make in your code based on standards, compiler warnings, or style guides.  Based on the discussions around Functions, you are encouraged to understand that C can be an over forgiving language and pretty much take whatever you throw at it. Understanding what the code is doing in C is far more important than anything you can do to generate useless warnings for mistakes you should be aware of in your code. 
+
+[Return to Index](#index)
 
 #### Type Definitions
 
 To implement a Type Definition you must use the typedef keyword.  This allows you to give meaningful names to things, and stop having to type the typical longer syntax required by C.   It also allows forward declarations of things.  Many libraries have custom Type Definitions to keep track of what specific parts of the library belongs to what.  OpenGL comes to mind, or even just having the desire to shorten unsigned long long int to u64.  This has excellent utility when used meaningfully.  Many C purists discourage using Type Definitions, but you cannot overlook the modern desire to keep your code clean, readable, and maintainable.
 
-There are many good discussions between Linus Torvalds and the rest of the internet on [his views](https://yarchive.net/comp/linux/typedefs.html) on programmers that abuse the typedef keyword.  It can certainly be agreed that this is a completely abusable feature of C.  But like the goto keyword, there are some places where it is useful.  You will be urged to ignore a feature of the language because many programmers never learn when to use it in proper context. 
+There are many good discussions between Linus Torvalds and the rest of the internet on [his views](https://yarchive.net/comp/linux/typedefs.html) on programmers that abuse the typedef keyword.  It can certainly be agreed that this is a completely abusable feature of C.  But like the goto keyword, there are some places where it is useful.  You will unfortunately be urged to ignore a feature of the language by many programmers and tutorials because most never learn when to use it in proper context. 
 
 Most projects and coding firms you will write code for have Style Guides.  Each guide will usually include a section on Type Definitions.  Along with other restrictions on how code should be written for the given project.  In general, if it makes things easier for you to write code, is generally self-documenting, helps with maintenance of the code base, then use it regardless of the opinions of other coders, unless the project you are working on has a strict Style Guide.  In which case, you must follow it, regardless of preferred personal coding styles.
+
+[Return to Index](#index)
 
 #### Void
 
 Despite this being a Data Type which can be used in various scenarios, there are some restrictions on void that should be discussed.  When dealing with void, it generally means different things contextually. There are also problems with void conversions and data loss. Opportunities to create Undefined Behaviour are also in abundance. 
 
-Unlike other Data Types you cannot directly declare a variable as void unless it is a pointer.  Void when used as a Function Return Data Type, signifies that the function is incapable of returning any information from it.  Void pointer Data Types can be extremely flexible.  They can store any other Data Type, have mixed data, sizes, and memory layouts, and can also be used to point to functions.  Many functions inside the C Standard Library will return a void pointer, or consume one as a Function Argument - malloc() and free() are good examples of this.
+Unlike other Data Types you cannot directly declare a variable as void unless it is a pointer.  Void when used as a Function Return Data Type, signifies that a Function is incapable of returning any information from it.  Void pointer Data Types on the other hand can be extremely flexible.  They can store any other Data Type, have mixed data, memory layouts, and can also be used to point to Functions.  Many Functions inside the C Standard Library will return a void pointer, or consume one as a Function Argument - malloc() and free() are good examples of this.
 
-When declaring Function Arguments in a Function Prototype you should technically use void if the Function Argument List is actually meant to be nothing.  GCC for backwards compatibility maintains arbitrary Function Prototypes and definitions of functions which can lead to problems if you program using the Function Prototypes.  As mentioned in the Functions sections for arguments lists, this book does not use void in this way. 
+When declaring Function Arguments in a Function Prototype you should technically use void if the Function Argument List is actually meant to be nothing.  GCC for backwards compatibility maintains arbitrary Function Prototypes and definitions of functions which can lead to problems if you program using the Function Prototypes.  As mentioned in the Functions sections for Arguments Lists, this book does not use void in this way. 
+
+[Return to Index](#index)
 
 ### Basic Code Examples
 
@@ -185,6 +197,8 @@ int main() {                                   //main program entry
   return 0;                                    //return status successful
 }
 ```
+
+[Return to Index](#index)
 
 #### Example 2: Type Definitions
 Basic program that has no output.
@@ -203,6 +217,9 @@ s32 main() {                                   //main program entry
   return 0;                                    //return status successful
 }
 ```
+
+[Return to Index](#index)
+
 #### Example 3: Structures
 Basic program that has no output.
 
@@ -229,6 +246,8 @@ s32 main() {                                   //main program entry
   return 0;                                    //return status successful
 }
 ```
+
+[Return to Index](#index)
 
 #### Example 4: Structures (Bad Form)
 Alternate basic program that has no output.
@@ -258,6 +277,8 @@ s32 main() {                                   // main program entry
 }
 ```
 
+[Return to Index](#index)
+
 #### Example 5: Structures
 Alternate basic program that has no output.
 
@@ -282,6 +303,8 @@ s32 main() {                                   // main program entry
   return 0;                                    // return status successful
 }
 ```
+
+[Return to Index](#index)
 
 #### Example 6: Structures (Bad Form)
 Alternate basic program that has no output.
@@ -311,6 +334,8 @@ s32 main() {                                   // main program entry
 }
 ```
 
+[Return to Index](#index)
+
 #### Example 7: Structures
 Alternate basic program that has no output.
 
@@ -337,6 +362,8 @@ s32 main() {                                   // main program entry
 }
 ```
 
+[Return to Index](#index)
+
 #### Example 8: Structures
 Alternate basic program that has no output, but shows using a typedef to declare a custom Type Name, definition of a struct with 2 members using the custom Type Name, how to assign default values to Structure Members, and setup of the function main.  
 
@@ -357,6 +384,8 @@ s32 main() {                                   // main program entry
   return 0;                                    // return status successful
 }
 ```
+
+[Return to Index](#index)
 
 #### Example 9: Arrays
 Basic program that has no output.
@@ -380,6 +409,8 @@ s32 main() {                                   // main program entry
 }
 ```
 
+[Return to Index](#index)
+
 #### Example 10: Arrays
 Alternate basic program that has no output, but shows using a typedef to declare a custom Type Name, definition of an arbitrary array with default values, and setup of the function main.  
 
@@ -399,6 +430,8 @@ s32 main() {               //main program entry
   return 0;                //return status successful      
 }
 ```
+
+[Return to Index](#index)
 
 #### Example 11: Arrays
 Basic program that has no output, but shows using a typedef to declare a custom Type Name, how to typedef forward associations for a struct that contains members of itself, a struct with 3 members, definition of a fixed declaration of an array of structs, and setup of the function main.  
@@ -425,6 +458,8 @@ s32 main() {                      //main program entry
   return 0;                       //return status successful
 }
 ```
+
+[Return to Index](#index)
 
 #### Example 12: Arrays
 Basic program that has no output, but shows using a typedef to declare a custom Type Name, how to typedef forward associations for a struct that contains members of itself,  struct with 3 members, definition of a fixed declaration of an array of structs, how to initialise a specific element after initial declaration of an array, and setup of function main.
@@ -464,6 +499,8 @@ s32 main() {                      //main program entry
 }
 ```
 
+[Return to Index](#index)
+
 #### Example 13: Arrays
 Alternate basic program that has no output, but shows using a typedef to declare a custom Type Name, how to typedef forward associations for a struct that contains members of itself,  struct with 3 members, definition of a fixed declaration of an array of structs, how to initialise a specific element after initial declaration of an array, and setup of function main.
 
@@ -497,6 +534,8 @@ s32 main() {                      //main program entry
 }
 ```
 
+[Return to Index](#index)
+
 #### Example 14: Arrays
 Basic program that has no output, but shows using a typedef to declare a custom Type Name, how to create an arbitrary array, assign default values based on ranges during declaration of the array, and setup of function main. 
 
@@ -515,6 +554,8 @@ s32 main() {               //main program entry
   return 0;                //return status successful
 }
 ```
+
+[Return to Index](#index)
 
 #### Example 15: Unions
 Basic program that has no output, but shows using multiple typedef to declare custom Type Names, how to create a union, and setup of function main.  
@@ -547,6 +588,8 @@ s32 main() {                     //main program entry
   return 0;                      //return status successful
 }
 ```
+
+[Return to Index](#index)
 
 #### Example 16: Problems with Unions
 NOTE: PROBLEMS WITH UNIONS -- Basic program that has no output, but shows using multiple typedef to declare custom Type Names, how to create a union, data loss/confusing union behaviour, and setup of function main.  
@@ -583,6 +626,8 @@ s32 main() {
   return 0;
 }
 ```
+
+[Return to Index](#index)
 
 #### Example 17: Ideas on Dealing with Union Troubles
 NOTE: IDEAS ON DEALING WITH UNION TROUBLES - Basic program that has no output, but shows using multiple typedef to declare custom Type Names, how to create a struct with an anonymous union inside it, and setup of function main. 
@@ -627,6 +672,8 @@ s32 main() {
 }
 ```
 
+[Return to Index](#index)
+
 #### Example 18: Unions
 Basic program that has no output, but shows using a union, a series of anonymous struct layouts for common associations of data, and setup of function main. 
 
@@ -665,6 +712,8 @@ s32 main() {              //main program entry
 ```
 
 It might seem strange to cover the complexities of struct, union, typedef and other things before the basics of general variable use and output, but since each of those things is likely to use the prior outlined references, it seemed prudent to cover those first.  This gives general exposure, so when used in the next pieces they are not new concepts.  We are going to bypass Functions, Pointers, and other types not discussed until post Console Output.
+
+[Return to Index](#index)
 
 # Part 2: Console Output & Using #include
 
