@@ -191,10 +191,10 @@ Basic program that has no output.
 2. setup of function main 
 
 ```C
-int main() {                                   //main program entry
-  char foo = 1;                                //variable type char named foo and assigns it a value of 1
-  char bar = -10;                              //variable type char named bar and assigns it a value of -10
-  return 0;                                    //return status successful
+int main() {                                   // Main program entry.
+  char foo = 1;                                // Variable type char named foo and assigns it a value of 1.
+  char bar = -10;                              // Variable type char named bar and assigns it a value of -10.
+  return 0;                                    // Return status successful.
 }
 ```
 
@@ -208,13 +208,13 @@ Basic program that has no output.
 3. setup of function main 
 
 ```C
-typedef unsigned char u8;                      //associate type unsigned char with u8
-typedef int           s32;                     //associate type signed int with s32
+typedef unsigned char u8;                      // Associate type unsigned char with u8.
+typedef int           s32;                     // Associate type signed int with s32.
 
-s32 main() {                                   //main program entry
-  u8 foo = 0;                                  //variable type u8 named foo and assigns it a value of 0
-  u8 bar = 212;                                //variable type u8 named bar and assigns it a value of 212
-  return 0;                                    //return status successful
+s32 main() {                                   // Main program entry.
+  u8 foo = 0;                                  // Variable type u8 named foo and assigns it a value of 0.
+  u8 bar = 212;                                // Variable type u8 named bar and assigns it a value of 212.
+  return 0;                                    // Return status successful.
 }
 ```
 
@@ -229,21 +229,21 @@ Basic program that has no output.
 4. setup of function main 
 
 ```C
-typedef unsigned char u8;                      //associate type unsigned char with u8
-typedef int           s32;                     //associate type signed int with s32
+typedef unsigned char u8;                      // Associate type unsigned char with u8.
+typedef int           s32;                     // Associate type signed int with s32.
 
-typedef struct {                               //declare typedef for struct
-  u8 foo;                                      //declare struct member of type u8 named foo
-  u8 bar;                                      //declare struct member of type u8 named bar
-} TFoobar;                                     //assign name of TFoobar to struct declare
+typedef struct {                               // Declare typedef for struct.
+  u8 foo;                                      // Declare struct member of type u8 named foo.
+  u8 bar;                                      // Declare struct member of type u8 named bar.
+} TFoobar;                                     // Assign name of TFoobar to struct declare.
 
-s32 main() {                                   //main program entry
-  TFoobar record = {                           //declare type TFoobar named record 
-    .foo = 16,                                 //assign a default value of 16 to member foo
-    .bar = 255                                 //assign a default value of 255 to member bar
+s32 main() {                                   // Main program entry.
+  TFoobar record = {                           // Declare type TFoobar named record.
+    .foo = 16,                                 // Assign a default value of 16 to member foo.
+    .bar = 255                                 // Assign a default value of 255 to member bar.
   };
 
-  return 0;                                    //return status successful
+  return 0;                                    // Return status successful.
 }
 ```
 
@@ -258,22 +258,22 @@ Alternate basic program that has no output.
 4. setup of function main 
 
 ```C
-typedef unsigned char u8;                      // associate type unsigned char with u8
-typedef int           s32;                     // associate type signed int with s32
+typedef unsigned char u8;                      // Associate type unsigned char with u8.
+typedef int           s32;                     // Associate type signed int with s32.
 
-typedef struct {                               // declare typedef for struct
-  u8 foo;                                      // declare struct member of type u8 named foo
-  u8 bar;                                      // declare struct member of type u8 named bar
-} TFoobar;                                     // assign name of TFoobar to struct declare
+typedef struct {                               // Declare typedef for struct.
+  u8 foo;                                      // Declare struct member of type u8 named foo.
+  u8 bar;                                      // Declare struct member of type u8 named bar.
+} TFoobar;                                     // Assign name of TFoobar to struct declare.
 
-s32 main() {                                   // main program entry
-  TFoobar record = {2, 1};                     // declare type TFoobar named record
-                                               // assigns the values in order of member layout
-                                               // this would assign 2 to foo and 1 to bar
+s32 main() {                                   // Main program entry.
+  TFoobar record = {2, 1};                     // Declare type TFoobar named record.
+                                               // Assigns the values in order of member layout.
+                                               // This would assign 2 to foo and 1 to bar
                                                // despite this method being shorter, it does not
-                                               // produce self-documenting code and is discouraged
+                                               // produce self-documenting code and is discouraged.
 
-  return 0;                                    // return status successful
+  return 0;                                    // Return status successful.
 }
 ```
 
@@ -288,19 +288,19 @@ Alternate basic program that has no output.
 4. setup of function main 
 
 ```C
-typedef unsigned char u8;                      // associate type unsigned char with u8
-typedef int           s32;                     // associate type signed int with s32
+typedef unsigned char u8;                      // Associate type unsigned char with u8.
+typedef int           s32;                     // Associate type signed int with s32.
 
-typedef struct {                               // declare typedef for struct
-  u8 foo;                                      // declare struct member of type u8 named foo
-  u8 bar;                                      // declare struct member of type u8 named bar
-} TFoobar;                                     // assign name of TFoobar to struct declare
+typedef struct {                               // Declare typedef for struct.
+  u8 foo;                                      // Declare struct member of type u8 named foo.
+  u8 bar;                                      // Declare struct member of type u8 named bar.
+} TFoobar;                                     // Assign name of TFoobar to struct declare.
 
-s32 main() {                                   // main program entry
-  TFoobar record = {};                         // declare type TFoobar named record
-                                               // assigns a default value of 0 to both foo and bar
+s32 main() {                                   // Main program entry.
+  TFoobar record = {};                         // Declare type TFoobar named record.
+                                               // Assigns a default value of 0 to both foo and bar.
 
-  return 0;                                    // return status successful
+  return 0;                                    // Return status successful.
 }
 ```
 
@@ -315,22 +315,22 @@ Alternate basic program that has no output.
 4. setup of function main 
 
 ```C
-typedef unsigned char u8;                      // associate type unsigned char with u8
-typedef int           s32;                     // associate type signed int with s32
+typedef unsigned char u8;                      // Associate type unsigned char with u8.
+typedef int           s32;                     // Associate type signed int with s32.
 
-typedef struct {                               // declare typedef for struct
-  u8 foo;                                      // declare struct member of type u8 named foo
-  u8 bar;                                      // declare struct member of type u8 named bar
-} TFoobar;                                     // assign name of TFoobar to struct declare
+typedef struct {                               // Declare typedef for struct.
+  u8 foo;                                      // Declare struct member of type u8 named foo.
+  u8 bar;                                      // Declare struct member of type u8 named bar.
+} TFoobar;                                     // Assign name of TFoobar to struct declare.
 
-s32 main() {                                   // main program entry                                               
-  TFoobar record = {4};                        // declare type TFoobar named record
-                                               // assigns a default value of 4 to foo
+s32 main() {                                   // Main program entry.
+  TFoobar record = {4};                        // Declare type TFoobar named record.
+                                               // Assigns a default value of 4 to foo
                                                // and then sets bar to a value 0 by default.
-                                               // despite this method being shorter, it does not
+                                               // Despite this method being shorter, it does not
                                                // produce self-documenting code and is discouraged.
 
-  return 0;                                    // return status successful
+  return 0;                                    // Return status successful.
 }
 ```
 
@@ -345,43 +345,49 @@ Alternate basic program that has no output.
 4. setup of function main 
 
 ```C
-typedef unsigned char u8;                      // associate type unsigned char with u8
-typedef int           s32;                     // associate type signed int with s32
+typedef unsigned char u8;                      // Associate type unsigned char with u8.
+typedef int           s32;                     // Associate type signed int with s32.
 
-typedef struct {                               // declare typedef for struct
-  u8 foo;                                      // declare struct member of type u8 named foo
-  u8 bar;                                      // declare struct member of type u8 named bar
-} TFoobar;                                     // assign name of TFoobar to struct declare
+typedef struct {                               // Declare typedef for struct.
+  u8 foo;                                      // Declare struct member of type u8 named foo.
+  u8 bar;                                      // Declare struct member of type u8 named bar.
+} TFoobar;                                     // Assign name of TFoobar to struct declare.
 
-s32 main() {                                   // main program entry
-  TFoobar record = {                           // declare type TFoobar named record
-    .foo = 12                                  // assigns a default value of 12 to foo
-  };                                           // and then sets bar to a value of 0 by default
+s32 main() {                                   // Main program entry.
+  TFoobar record = {                           // Seclare type TFoobar named record.
+    .foo = 12                                  // Assigns a default value of 12 to foo
+  };                                           // and then sets bar to a value of 0 by default.
                                
-  return 0;                                    // return status successful
+  return 0;                                    // Return status successful
 }
 ```
 
 [Return to Index](#index)
 
 #### Example 8: Structures
-Alternate basic program that has no output, but shows using a typedef to declare a custom Type Name, definition of a struct with 2 members using the custom Type Name, how to assign default values to Structure Members, and setup of the function main.  
+Alternate basic program that has no output.
+
+1. using a typedef to declare a custom Type Name
+2. definition of a struct with 2 members using the custom Type Name
+3. assigning default values to Structure Members
+4. setup of function main
 
 ```C
-typedef unsigned char u8;                      // associate type unsigned char with u8
-typedef int           s32;                     // associate type signed int with s32
+typedef unsigned char u8;                      // Associate type unsigned char with u8.
+typedef int           s32;                     // Associate type signed int with s32.
 
-typedef struct {                               // declare typedef for struct
-  u8 foo;                                      // declare struct member of type u8 named foo
-  u8 bar;                                      // declare struct member of type u8 named bar
-} TFoobar;                                     // assign name of TFoobar to struct declare
 
-s32 main() {                                   // main program entry
-  TFoobar record = {                           // declare type TFoobar named record
-    .bar = 34                                  // assigns a default value of 34 to bar
+typedef struct {                               // Declare typedef for struct.
+  u8 foo;                                      // Declare struct member of type u8 named foo.
+  u8 bar;                                      // Declare struct member of type u8 named bar.
+} TFoobar;                                     // Assign name of TFoobar to struct declare.
+
+s32 main() {                                   // Main program entry.
+  TFoobar record = {                           // Declare type TFoobar named record.
+    .bar = 34                                  // Assigns a default value of 34 to bar
   };                                           // and then sets foo to a value of 0 by default.
 
-  return 0;                                    // return status successful
+  return 0;                                    // Return status successful.
 }
 ```
 
@@ -389,203 +395,239 @@ s32 main() {                                   // main program entry
 
 #### Example 9: Arrays
 Basic program that has no output.
-, but shows using a typedef to declare a custom Type Name, definition of an arbitrary array with defaults values, and setup of the function main.  
+
+1. using a typedef to declare a custom Type Name
+2. definition of an arbitrary array with defaults values
+3. setup of function main
 
 ```C
-typedef unsigned int u32;                      // associate type unsigned int with u32
-typedef int          s32;                      // associate type signed int with s32
+typedef int          s32;                      // Associate type signed int with s32
+typedef unsigned int u32;                      // Associate type unsigned int with u32
 
-s32 main() {                                   // main program entry
-  u32 foo[] = {0, 1, 2, 3, 4, 5, 6};           // declare type u32 named foo
-                                               // the square brackets [] are used
+s32 main() {                                   // Main program entry
+  u32 foo[] = {0, 1, 2, 3, 4, 5, 6};           // Declare type u32 named foo
+                                               // The square brackets [] are used
                                                // to denote an array in C.
-                                               // in this case we are not defining
+                                               // In this case we are not defining
                                                // the array with a starting size but
                                                // we are assigning default data to it.
-                                               // when using GCC, this is a method for
+                                               // When using GCC, this is a method for
                                                // automatic initialisation of the array.
-                                               // it will calculate the size required for you
-  return 0;                                    // return status successful.
+                                               // It will calculate the size required for you.
+  return 0;                                    // Return status successful.
 }
 ```
 
 [Return to Index](#index)
 
 #### Example 10: Arrays
-Alternate basic program that has no output, but shows using a typedef to declare a custom Type Name, definition of an arbitrary array with default values, and setup of the function main.  
+Alternate basic program that has no output.
+
+1. using a typedef to declare a custom Type Name
+2. definition of an arbitrary array with defaults values
+3. setup of function main
 
 ```
-typedef int          s32;  //associate type signed int with s32
-typedef unsigned int u32;  //associate type unsigned int with u32
+typedef int          s32;                       // Associate type signed int with s32.
+typedef unsigned int u32;                       // Associate type unsigned int with u32.
 
-s32 main() {               //main program entry
-  u32 foo[7] = {};         //declare type u32 named data
-                           //in this case we are declaring 7 elements
-                           //C is a 0 index based language
-                           //this will have a range of 0 to 6
-                           //we are assigning default data to it
-                           //with GCC this is a method of
-                           //automatic initialisation to 0 of all
-                           //elements in the array
-  return 0;                //return status successful      
+s32 main() {                                    // Main program entry.
+  u32 foo[7] = {};                              // Declare type u32 named data.
+                                                // In this case we are declaring 7 elements.
+                                                // C is a 0 index based language
+                                                // this will have a range of 0 to 6.
+                                                // We are assigning default data to it.
+                                                // With GCC this is a method of
+                                                // automatic initialisation to 0 of all
+                                                // elements in the array.
+  return 0;                                     // Return status successful      
 }
 ```
 
 [Return to Index](#index)
 
 #### Example 11: Arrays
-Basic program that has no output, but shows using a typedef to declare a custom Type Name, how to typedef forward associations for a struct that contains members of itself, a struct with 3 members, definition of a fixed declaration of an array of structs, and setup of the function main.  
+Basic program that has no output.
+
+1. using a typedef to declare a custom Type Name
+2. how to typedef forward associations for a struct that contains members of itself
+3. definition of a struct with 3 members
+4. definition of a fixed declaration of an array of structs with default values
+5. setup of function main
 
 ```C
-typedef int          s32;         //associate type signed int with s32
-typedef unsigned int u32;         //associate type unsigned int with u32
-typedef struct _TFoobar TFoobar;  //associate struct _TFoobar with TFoobar
-                                  //we need this forward typedef because
-                                  //the struct has a member data type
-                                  //of itself
+typedef int          s32;                       // Associate type signed int with s32.
+typedef unsigned int u32;                       // Associate type unsigned int with u32.
 
-struct _TFoobar {                 //you cannot use the standard typedef
-  u32 foo;                        //method of declaration when your struct
-  u32 bar;                        //contains a member of itself
-  TFoobar *foobar;                //members that are struct data types
-};                                //must be declared as pointers
+typedef struct _TFoobar TFoobar;                // Associate struct _TFoobar with TFoobar.
+                                                // We need this forward typedef because
+                                                // the struct has a member data type
+                                                // of itself.
 
-s32 main() {                      //main program entry
-  TFoobar data[15] = {};          //arrays of structs can be default initialised
-                                  //in this case we have declared 15 elements
-                                  //this will have a range of 0 to 14;
-                                  //all fields will be set to a value of 0
-  return 0;                       //return status successful
+struct _TFoobar {                               // You cannot use the standard typedef
+  u32 foo;                                      // method of declaration when your struct
+  u32 bar;                                      // contains a member of itself.
+  TFoobar *foobar;                              // Members that are struct data types
+};                                              // must be declared as pointers.
+
+s32 main() {                                    // Main program entry.
+  TFoobar data[15] = {};                        // Arrays of structs can be default initialised
+                                                // in this case we have declared 15 elements.
+                                                // This will have a range of 0 to 14.
+                                                // All fields will be set to a value of 0.
+  return 0;                                     // Return status successful.
 }
 ```
 
 [Return to Index](#index)
 
 #### Example 12: Arrays
-Basic program that has no output, but shows using a typedef to declare a custom Type Name, how to typedef forward associations for a struct that contains members of itself,  struct with 3 members, definition of a fixed declaration of an array of structs, how to initialise a specific element after initial declaration of an array, and setup of function main.
+Basic program that has no output.
+
+1. using a typedef to declare a custom Type Name
+2. how to typedef forward associations for a struct that contains members of itself
+3. definition of a struct with 3 members
+4. definition of a fixed declaration of an array of structs with specified values
+5. setup of function main
 
 ```C
-typedef int          s32;         //associate type signed int with s32
-typedef unsigned int u32;         //associate type unsigned int with u32
-typedef struct _TFoobar TFoobar;  //associate struct _TFoobar with TFoobar
-                                  //we need this forward typedef because
-                                  //the struct has a member data type
-                                  //of itself
+typedef int          s32;                       // Associate type signed int with s32.
+typedef unsigned int u32;                       // Associate type unsigned int with u32.
 
-struct _TFoobar {                 //you cannot use the standard typedef
-  u32 foo;                        //method of declaration when your struct
-  u32 bar;                        //contains a member of itself
-  TFoobar *foobar;                //members that are struct data types
-};                                //must be declared as pointers
+typedef struct _TFoobar TFoobar;                // Associate struct _TFoobar with TFoobar
+                                                // we need this forward typedef because the
+                                                // struct has a member data type of itself.                                                
 
-s32 main() {                      //main program entry
-  TFoobar data[15] = {            //arrays of structs can be default initialised
-    { .foo = 12, .bar = 8 },      //each element must be contained in a secondary
-    {},                           //block of {} and then it can follow the
-    { .foo = 1 }                  //rules defined earlier in examples for initialisation
-  };                              //commas are used to seperate a list of
-                                  //consecutive initialisations
-                                  //even though this has 15 elements
-                                  //the reamaining elements will be default
-                                  //initialised to 0
-                                  //this is mererly one method for initialisation
-                                  //during declare
+struct _TFoobar {                               // You cannot use the standard typedef
+  u32 foo;                                      // method of declaration when your struct
+  u32 bar;                                      // contains a member of itself.
+  TFoobar *foobar;                              // Members that are struct data types
+};                                              // must be declared as pointers.
 
-  data[12] = (TFoobar){           //accesses element 13 [12+1 from 0 index]
-    .foo = 5, .bar = 6            //we need to perform a cast (TFoobar) then
-  };                              //it's possible to use the standard
-                                  //struct field initialisation
-  return 0;                       //return status successful
+s32 main() {                                    // Main program entry.
+  TFoobar data[15] = {                          // Arrays of structs can be default initialised.
+    { .foo = 12, .bar = 8 },                    // Each element must be contained in a secondary
+    {},                                         // block of {} and then it can follow the
+    { .foo = 1 }                                // rules defined earlier in examples for initialisation.
+  };                                            // Commas are used to seperate a list of
+                                                // consecutive initialisations.
+                                                // Even though this has 15 elements the reamaining
+                                                // elements will be default initialised to 0.
+                                                // This is mererly one method for initialisation
+                                                // during declare.
+
+  data[12] = (TFoobar){                         // Accesses element 13 [12+1 from 0 index].
+    .foo = 5, .bar = 6                          // We need to perform a cast (TFoobar) then
+  };                                            // it's possible to use the standard struct
+                                                // field initialisation.
+  return 0;                                     // Return status successful.
 }
 ```
 
 [Return to Index](#index)
 
 #### Example 13: Arrays
-Alternate basic program that has no output, but shows using a typedef to declare a custom Type Name, how to typedef forward associations for a struct that contains members of itself,  struct with 3 members, definition of a fixed declaration of an array of structs, how to initialise a specific element after initial declaration of an array, and setup of function main.
+Alternate basic program that has no output.
+
+1. using a typedef to declare a custom Type Name
+2. how to typedef forward associations for a struct that contains members of itself
+3. definition of a struct with 3 members
+4. definition of a fixed declaration of an array of structs
+5. initialisation of specific elements after initial declaration of an array
+6. setup of function main
 
 ```C
-typedef int          s32;         //associate type signed int with s32
-typedef unsigned int u32;         //associate type unsigned int with u32
-typedef struct _TFoobar TFoobar;  //associate struct _TFoobar with TFoobar
-                                  //we need this forward typedef because
-                                  //the struct has a member data type
-                                  //of itself
+typedef int          s32;                       // Associate type signed int with s32.
+typedef unsigned int u32;                       // Associate type unsigned int with u32.
 
-struct _TFoobar {                 //you cannot use the standard typedef
-  u32 foo;                        //method of declaration when your struct
-  u32 bar;                        //contains a member of itself
-  TFoobar *foobar;                //members that are struct data types
-};                                //must be declared as pointers
+typedef struct _TFoobar TFoobar;                // Associate struct _TFoobar with TFoobar.
+                                                // We need this forward typedef because
+                                                // the struct has a member data type
+                                                // of itself.
 
-s32 main() {                      //main program entry
-  TFoobar data[15] = {            //arrays of structs can be default initialised
-    [0].foo = 12, [0].bar = 8,    //each element and member can be referenced
-    [2].bar = 3,                  //by element index in this manner also then
-    [12].foo = 5, [12].bar = 5    //follow rules defined earlier in examples
-  };                              //for member initialisation
-                                  //commas are used to seperate a list of
-                                  //consecutive initialisations
-                                  //even though this has 15 elements
-                                  //they will be default initialised to 0
-                                  //this is another method for initialisation
-                                  //during declare  
-  return 0;                       //return status successful
+struct _TFoobar {                               // You cannot use the standard typedef.
+  u32 foo;                                      // Method of declaration when your struct
+  u32 bar;                                      // contains a member of itself.
+  TFoobar *foobar;                              // Members that are struct data types
+};                                              // must be declared as pointers.
+
+s32 main() {                                    // Main program entry.
+  TFoobar data[15] = {                          // Arrays of structs can be default initialised
+    [0].foo = 12, [0].bar = 8,                  // each element and member can be referenced
+    [2].bar = 3,                                // by element index in this manner also, then
+    [12].foo = 5, [12].bar = 5                  // follow rules defined earlier in examples
+  };                                            // for member initialisation.
+                                                // Commas are used to seperate a list of
+                                                // consecutive initialisations even though
+                                                // this has 15 elements they will be default
+                                                // initialised to 0.
+                                                // This is another method for initialisation
+                                                // during declare.
+  return 0;                                     // Return status successful.
 }
 ```
 
 [Return to Index](#index)
 
 #### Example 14: Arrays
-Basic program that has no output, but shows using a typedef to declare a custom Type Name, how to create an arbitrary array, assign default values based on ranges during declaration of the array, and setup of function main. 
+Basic program that has no output.
+
+1. using a typedef to declare a custom Type Name
+2. definition of an arbitrary array of u32
+3. initialisation of specific elements in an array using ranges
+4. setup of function main
 
 ```C
-typedef int          s32;  //associate type signed int with s32
-typedef unsigned int u32;  //associate type unsigned int with u32
+typedef int          s32;                       // Associate type signed int with s32.
+typedef unsigned int u32;                       // Associate type unsigned int with u32.
 
-s32 main() {               //main program entry
-  u32 data[] = {           //arrays can be default initialised using
-    [ 0 ... 10] = 1,       //ranges for specific values in this manner
-    [11 ... 20] = 3,       //this will define an arbitrary array with
-    [21 ... 99] = 5,       //101 elements ranging from 0 to 100
-    [100]       = 0        //this method also works for fixed element             
-  };                       //declares of arrays provided indexes fall within
-                           //range of elements defined by the fixed value   
-  return 0;                //return status successful
+s32 main() {                                    // Main program entry.
+  u32 data[] = {                                // Arrays can be default initialised using
+    [ 0 ... 10] = 1,                            // ranges for specific values in this manner.
+    [11 ... 20] = 3,                            // This will define an arbitrary array with
+    [21 ... 99] = 5,                            // 101 elements ranging from 0 to 100.
+    [100]       = 0                             // It also works for fixed element declares of
+  };                                            // arrays provided indexes fall within range
+                                                // of elements defined by the fixed value.
+  return 0;                                     // Return status successful.
 }
 ```
 
 [Return to Index](#index)
 
 #### Example 15: Unions
-Basic program that has no output, but shows using multiple typedef to declare custom Type Names, how to create a union, and setup of function main.  
+Basic program that has no output.
+
+1. using multiple typedefs to declare custom Type Names
+2. creation of a union and its declaration
+3. setup of function main.  
 
 ```C
-typedef unsigned char      u8;   //associate type unsigned char with u8
-typedef unsigned short     u16;  //associate type unsigned short with u16
-typedef int                s32;  //associate type signed int with s32
-typedef unsigned int       u32;  //associate type unsigned int with u32
-typedef unsigned long long u64;  //associate type unsigned long long with u64
+typedef unsigned char      u8;                  // associate type unsigned char with u8
+typedef unsigned short     u16;                 // associate type unsigned short with u16
+typedef int                s32;                 // associate type signed int with s32
+typedef unsigned int       u32;                 // associate type unsigned int with u32
+typedef unsigned long long u64;                 // associate type unsigned long long with u64
 
-typedef union {                  //declare typedef for union
-  u8  chars [8];                 //takes 8x 1 byte to make a u64
-  u16 shorts[4];                 //takes 4x 2 bytes to make a u64 
-  u32 ints  [2];                 //takes 2x 4 bytes to make a u64
-  u64 base;                      //largest type inside the union at 8 bytes
-} TMagiCaster;                   //assign TMagiCaster as the union name
+typedef union {                                 // declare typedef for union
+  u8  chars [8];                                // takes 8x 1 byte to make a u64
+  u16 shorts[4];                                // takes 4x 2 bytes to make a u64 
+  u32 ints  [2];                                // takes 2x 4 bytes to make a u64
+  u64 base;                                     // largest type inside the union at 8 bytes
+} TMagiCaster;                                  // assign TMagiCaster as the union name
 
-s32 main() {                     //main program entry
-  TMagiCaster foo = {};          //unions can be initialised to 0
-                                 //the same as structs
-                                 //any assignment to any of the members
-                                 //will cause the automatic update of all
-                                 //other members inside the union
-                                 //this is because each member of the union
-                                 //shares the same memory address as every
-                                 //other member in the union
-                                 //you gain auto-casting or assignments
-                                 //between types for free
-  return 0;                      //return status successful
+s32 main() {                                    // main program entry
+  TMagiCaster foo = {};                         // unions can be initialised to 0
+                                                // the same as structs
+                                                // any assignment to any of the members
+                                                // will cause the automatic update of all
+                                                // other members inside the union
+                                                // this is because each member of the union
+                                                // shares the same memory address as every
+                                                // other member in the union
+                                                // you gain auto-casting or assignments
+                                                // between types for free
+  return 0;                                     // return status successful
 }
 ```
 
@@ -595,32 +637,32 @@ s32 main() {                     //main program entry
 NOTE: PROBLEMS WITH UNIONS -- Basic program that has no output, but shows using multiple typedef to declare custom Type Names, how to create a union, data loss/confusing union behaviour, and setup of function main.  
 
 ```C
-typedef unsigned char      u8;   //associate type unsigned char with u8
-typedef unsigned short     u16;  //associate type unsigned short with u16
-typedef int                s32;  //associate type signed int with s32
-typedef unsigned int       u32;  //associate type unsigned int with u32
-typedef unsigned long long u64;  //associate type unsigned long long with u64
-typedef float              f32;  //associate type float with f32
-typedef double             f64;  //associate type double with f64
-typedef double long        f80;  //associate type double long with f80
+typedef unsigned char      u8;                  // Associate type unsigned char with u8.
+typedef unsigned short     u16;                 // Associate type unsigned short with u16.
+typedef int                s32;                 // Associate type signed int with s32.
+typedef unsigned int       u32;                 // Associate type unsigned int with u32.
+typedef unsigned long long u64;                 // Associate type unsigned long long with u64.
+typedef float              f32;                 // Associate type float with f32.
+typedef double             f64;                 // Associate type double with f64.
+typedef double long        f80;                 // Associate type double long with f80.
 
-typedef union {                  //declare typedef for union
-  char *pchars;                  //when you cross types in this case
-  u8  chars  [8];                //mixing pointers, and floating point
-  u16 shorts [4];                //numbers with integers you will cause
-  u32 ints   [2];                //data loss, conversion cast problems
-  u64 intBase;                   //as these types are fundamentally
-  f32 floats [2];                //incompatible on a memory storage level
-  f64 doubles[2];                //floating points and pointers traditionally
-  f80 floatBase;                 //are not used in unions because of this
-} TMagiCaster;                   //assign TMagiCaster as the union name
+typedef union {                                 // Declare typedef for union.
+  char *pchars;                                 // When you cross types in this case
+  u8  chars  [8];                               // mixing pointers, and floating point
+  u16 shorts [4];                               // numbers with integers you will cause
+  u32 ints   [2];                               // data loss, conversion cast problems
+  u64 intBase;                                  // as these types are fundamentally
+  f32 floats [2];                               // incompatible on a memory storage level.
+  f64 doubles[2];                               // Floating points and pointers traditionally
+  f80 floatBase;                                // are not used in unions because of this.
+} TMagiCaster;                                  // Assign TMagiCaster as the union name.
 
-//there are special cases where you may want to mix some types
-//but generally follow that pointers in unions will reference
-//the address, and not the data at the pointer
-//floating points will cause some form of awry behaviour when
-//converting between them
-//this is not a good use of a union
+// There are special cases where you may want to mix some types
+// but generally follow that pointers in unions will reference
+// the address, and not the data at the pointer.
+// Floating points will cause some form of awry behaviour when
+// converting between them.
+// This is not a good use of a union.
 
 s32 main() {
   return 0;
