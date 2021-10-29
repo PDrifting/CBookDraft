@@ -4,17 +4,18 @@ It drives the world and is the foundation to pretty much everything in the moder
 
 |Compilers|Virtual Machines|Operating Systems|Databases|Tools|Embedded|
 |:---:|:---:|:---:|:---:|:---:|:---:|
-|C++  |AWK       |Android|DB2          |Animation     |Appliances |
-|D    |BrainFuck |BSD    |MySQL        |Drawing       |Controllers|
-|GO   |.NET      |iOS    |MS SQL Server|Game Engines  |Drivers    |
-|LUA  |JAVA      |Linux  |Oracle       |Web Browsers  |Firmware   |
-|JAI  |Javascript|Mac OS |PostgreSQL   |Machinery     |
-|ODIN |PERL      |Solaris|             |Data Pipelines|
-|RUST |PHP       |Unix   |             |Robotics      |
-|SWIFT|Python    |Windows|             |Shell         |
-|     |R         |       |             |Vehicles      |
+|[C++](https://isocpp.org/)  |[AWK](https://www.gnu.org/software/gawk/manual/gawk.html)       |Android|[DB2](https://www.ibm.com/products/db2-database)          |[Animation](https://www.blender.org/)     |[Internet of Things](https://github.com/aws/aws-iot-device-sdk-embedded-C) |
+|[D](https://dlang.org/)    |[BrainFuck](https://esolangs.org/wiki/Brainfuck) |[BSD](https://www.bsd.org/?)    |[MySQL](https://www.mysql.com/)        |[Drawing](https://www.adobe.com/)       |[Imaging](http://www.imagesystems.se/)|
+|[GO](https://golang.org/)   |[.NET](https://dotnet.microsoft.com/)      |[iOS](https://www.apple.com/ca/ios)    |[MS SQL Server](https://www.microsoft.com/en-ca/sql-server/sql-server-2019)|[Game Engines](https://developer.valvesoftware.com/wiki/Goldsource)  |[Drivers](http://www.qnx.com/developers/docs/6.5.0/index.jsp?topic=%2Fcom.qnx.doc.ddk_en%2Fbookset.html)    |
+|[LUA](https://www.lua.org/)  |[JAVA](https://www.java.com/en/)      |Linux  |[Oracle](https://www.oracle.com/index.html)       |[Game Engines](https://handmadehero.org/)  |[Firmware](https://en.wikipedia.org/wiki/Firmware)   |
+|[JAI](https://valueinbrief.blogspot.com/2021/02/jai-language.html)  |[Javascript](https://www.javascript.com/)|Mac OS |PostgreSQL   |[Machinery](https://github.com/grbl/grbl)     |
+|[ODIN](https://odin-lang.org/) |[PERL](https://www.perl.org/)      |[Solaris](https://www.oracle.com/ca-en/solaris/solaris11/)|             |[Data Pipelines](https://www.khronos.org/opengl/wiki/Rendering_Pipeline_Overview)|
+|[RUST](https://www.rust-lang.org/) |[PHP](https://www.php.net/)       |[Unix](https://unix.org/)   |             |[Robotics](https://www.firstinspires.org/robotics/frc)      |
+|[SWIFT](https://developer.apple.com/swift/)|[Python](https://www.python.org/)    |[Windows](https://www.microsoft.com/en-ca/windows)|             |[Shells](https://www.gnu.org/software/bash/)        |
+|     |[R](https://www.r-project.org/about.html)         |       |             |[Vehicles](https://en.wikipedia.org/wiki/Intel_8051)      |
 
-C is also extremely portable which is why it drives so many things.  The [GCC Compiler](https://gcc.gnu.org/) supports 70+ platforms and several architectures.  All of the code examples and C sources in this document will be largely focused on Linux and Windows development.  You can find the base manual for GCC [here](https://gcc.gnu.org/onlinedocs/). MinGW has been used for validation of sources on Windows, you can get it [here](https://sourceforge.net/projects/mingw/files/latest/download).  A general how to install MinGW and configure the path can be found [here](https://youtu.be/guM4XS43m4I). Unlike Unix-like environments, GCC does not come installed by default on the Windows platforms. You can also turn on the [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/) and use the Microsoft App Store to install a Unix-Like operating system and use GCC natively.  If you're on a Linux or non-windows platform, this document assumes you have a decent command of that evironment.
+
+C is also extremely portable, which is why it drives so many things.  The [GCC Compiler](https://gcc.gnu.org/) supports 70+ platforms and several architectures.  All of the code examples and C source code in this document will be largely focused on Linux and Windows development.  You can find the base manual for GCC [here](https://gcc.gnu.org/onlinedocs/). MinGW has been used for validation of sources on Windows, you can get it [here](https://sourceforge.net/projects/mingw/files/latest/download).  A general how to install MinGW and configure the path can be found [here](https://youtu.be/guM4XS43m4I). Unlike Unix-like environments, GCC does not come installed by default on Windows platforms. You can also turn on the [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/) and use the Microsoft App Store to install a Unix-Like operating system and use GCC natively.  If you're on a Linux or non-windows platform, this document assumes you have a decent command of that evironment.
 
 This document exists for the sole purpose of furthing a dialogue on modern programming in C using GCC for the [C Programming Server](https://discord.gg/KydfXPfpYK) on [Discord](https://discord.com/).
 
@@ -56,11 +57,11 @@ This document exists for the sole purpose of furthing a dialogue on modern progr
 # Chapter 1: A Tutorial Introduction
 ## Part 1: Data Types
 
-These refer to specific ways that C stores data.  Data has a specific storage size or memory footprint that it consumes.  The type associated with data determines how it be stored and interpreted in memory.  C Data Types are broken up into 4 types.  However, we are not going to discuss Enumerated Types in any other context than -- avoid using them.
+These refer to specific ways that C stores data.  Data has a specific storage size or memory footprint that it consumes.  The type associated with data determines how it will be stored and interpreted in memory.  C Data Types are broken up into 4 types.  However, we are not going to discuss Enumerated Types in any other context than -- **avoid using them**.
 
 ### Basic Types
 
-These are the general arithmetic types that are broken down into integer and floating point.
+These are the general arithmetic types that are broken down into integer and floating point formats.
 
 #### Integer Types
 
@@ -76,7 +77,7 @@ These are the general arithmetic types that are broken down into integer and flo
 |long long         |64 | 8|  -9223372036854775808| to |9223372036854775807
 |unsigned long long|64 | 8|                     0| to |18446744073709551615
 
-**NOTE:** GCC on Linux typically defaults to 64-bits.  On Windows, MinGW defaults to 32-bits.  For compatibility of code between 32-bit and 64-bit, make sure your long Data Types are 64-bit by using long long instead.  In 32-bit environments this will make long 64-bit, and in 64-bit environments it will treat long long as 64-bit long.
+**NOTE:** GCC on Linux typically defaults to 64-bits.  On Windows, MinGW defaults to 32-bits.  For compatibility of code between 32-bit and 64-bit, make sure your _long_ Data Types are 64-bit by using _long long_ instead.  In 32-bit environments this will make long 64-bit, and in 64-bit environments it will treat _long long_ as 64-bit _long_.
 
 #### Floating Point Types
 
@@ -89,6 +90,8 @@ These are the general arithmetic types that are broken down into integer and flo
 #### Enumerated Types
 
 These are typically regarded as another arithmetic type used to define named variables that are assigned discrete integer values.  They are used in place of magic numbers or hard coded values that can have arbitrary meaning.  The general modern view is to avoid using them.
+
+**MAGIC NUMBERS** Enumerated values were created as a solution to this problem.  However, they create more problems than they resolve.  When we consider the issue of obfuscated information by using values instead of meaninful tokens we generally refer Magic Numbers.  It is generally regarded that we should not use them as initial values or in the endpoint test expressions of a while, do while, or for loop.  There is general concern for avoiding their use also in expressions, mallocs, and other statements where it may obfuscate information and taint obvious readability or understanding of the code.  
 
 ```
 1. They are not really integer values, but GCC does treat them as such.
