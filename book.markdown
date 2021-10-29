@@ -4,11 +4,11 @@ It drives the world and is the foundation to pretty much everything in the moder
 
 |Compilers|Virtual Machines|Operating Systems|Databases|Tools|Embedded|
 |:---:|:---:|:---:|:---:|:---:|:---:|
-|[C++](https://isocpp.org/)  |[AWK](https://www.gnu.org/software/gawk/manual/gawk.html)       |Android|[DB2](https://www.ibm.com/products/db2-database)          |[Animation](https://www.blender.org/)     |[Internet of Things](https://github.com/aws/aws-iot-device-sdk-embedded-C) |
+|[C++](https://isocpp.org/)  |[AWK](https://www.gnu.org/software/gawk/manual/gawk.html)       |[Android](https://developer.android.com/)|[DB2](https://www.ibm.com/products/db2-database)          |[Animation](https://www.blender.org/)     |[Internet of Things](https://github.com/aws/aws-iot-device-sdk-embedded-C) |
 |[D](https://dlang.org/)    |[BrainFuck](https://esolangs.org/wiki/Brainfuck) |[BSD](https://www.bsd.org/?)    |[MySQL](https://www.mysql.com/)        |[Drawing](https://www.adobe.com/)       |[Imaging](http://www.imagesystems.se/)|
 |[GO](https://golang.org/)   |[.NET](https://dotnet.microsoft.com/)      |[iOS](https://www.apple.com/ca/ios)    |[MS SQL Server](https://www.microsoft.com/en-ca/sql-server/sql-server-2019)|[Game Engines](https://developer.valvesoftware.com/wiki/Goldsource)  |[Drivers](http://www.qnx.com/developers/docs/6.5.0/index.jsp?topic=%2Fcom.qnx.doc.ddk_en%2Fbookset.html)    |
-|[LUA](https://www.lua.org/)  |[JAVA](https://www.java.com/en/)      |Linux  |[Oracle](https://www.oracle.com/index.html)       |[Game Engines](https://handmadehero.org/)  |[Firmware](https://en.wikipedia.org/wiki/Firmware)   |
-|[JAI](https://valueinbrief.blogspot.com/2021/02/jai-language.html)  |[Javascript](https://www.javascript.com/)|Mac OS |PostgreSQL   |[Machinery](https://github.com/grbl/grbl)     |
+|[LUA](https://www.lua.org/)  |[JAVA](https://www.java.com/en/)      |[Linux](https://www.linux.org/)  |[Oracle](https://www.oracle.com/index.html)       |[Game Engines](https://handmadehero.org/)  |[Firmware](https://en.wikipedia.org/wiki/Firmware)   |
+|[JAI](https://valueinbrief.blogspot.com/2021/02/jai-language.html)  |[Javascript](https://www.javascript.com/)|[Mac OS](https://www.apple.com/ca/macos/) |[PostgreSQL](https://www.postgresql.org/)   |[Machinery](https://github.com/grbl/grbl)     |
 |[ODIN](https://odin-lang.org/) |[PERL](https://www.perl.org/)      |[Solaris](https://www.oracle.com/ca-en/solaris/solaris11/)|             |[Data Pipelines](https://www.khronos.org/opengl/wiki/Rendering_Pipeline_Overview)|
 |[RUST](https://www.rust-lang.org/) |[PHP](https://www.php.net/)       |[Unix](https://unix.org/)   |             |[Robotics](https://www.firstinspires.org/robotics/frc)      |
 |[SWIFT](https://developer.apple.com/swift/)|[Python](https://www.python.org/)    |[Windows](https://www.microsoft.com/en-ca/windows)|             |[Shells](https://www.gnu.org/software/bash/)        |
