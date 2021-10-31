@@ -17,8 +17,6 @@ It drives the world and is the foundation to pretty much everything in the moder
 
 C is also extremely portable, which is why it drives so many things.  The [GCC Compiler](https://gcc.gnu.org/) supports 70+ platforms and several architectures.  All of the code examples and C source code in this document will be largely focused on Linux and Windows development.  You can find the base manual for GCC [here](https://gcc.gnu.org/onlinedocs/). MinGW has been used for validation of sources on Windows, you can get it [here](https://sourceforge.net/projects/mingw/files/latest/download).  A general how to install MinGW and configure the path can be found [here](https://youtu.be/guM4XS43m4I). Unlike Unix-like environments, GCC does not come installed by default on Windows platforms. You can also turn on the [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/) and use the Microsoft App Store to install a Unix-Like operating system and use GCC natively.  If you're on a Linux or non-windows platform, this document assumes you have a decent command of that evironment.
 
-This document exists for the sole purpose of furthing a dialogue on modern programming in C using GCC for the [C Programming Server](https://discord.gg/KydfXPfpYK) on [Discord](https://discord.com/).
-
 # index
 
 [Chapter 1: A Tutorial Introduction](#chapter-1-a-tutorial-introduction)\
