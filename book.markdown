@@ -199,8 +199,8 @@ Basic program that has no output.
 
 ```C
 int main() {                                   // Main program entry.
-  char foo = 1;                                // Variable type char named foo and assigns it a value of 1.
-  char bar = -10;                              // Variable type char named bar and assigns it a value of -10.
+  unsigned char foo = 1;                       // Variable type char named foo and assigns it a value of 1.
+  signed   char bar = -10;                     // Variable type char named bar and assigns it a value of -10.
   return 0;                                    // Return status successful.
 }
 ```
