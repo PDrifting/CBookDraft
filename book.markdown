@@ -559,16 +559,15 @@ struct _TFoobar {                               // You cannot use the standard t
 };                                              // must be declared as pointers.
 
 s32 main() {                                    // Main program entry.
-  TFoobar data[15] = {                          // Arrays of structs can be default initialised
-    [0].foo = 12, [0].bar = 8,                  // each element and member can be referenced
-    [2].bar = 3,                                // by element index in this manner also, then
-    [12].foo = 5, [12].bar = 5                  // follow rules defined earlier in examples
-  };                                            // for member initialisation.
-                                                // Commas are used to seperate a list of
-                                                // consecutive initialisations even though
-                                                // this has 15 elements they will be default
-                                                // initialised to 0.
-                                                // This is another method for initialisation
+  TFoobar data[15] = {                          // Arrays of structs can be default initialised.
+    [0].foo  = 12,  [0].bar = 8,                // Each element and member can be referenced
+                    [2].bar = 3,                // by element index in this manner also, then
+    [12].foo = 5,  [12].bar = 5                 // follow rules defined earlier in examples
+  };                                            // for member initialisation. Commas are used
+                                                // to seperate a list of consecutive 
+                                                // initialisations. Even though this has 15, the
+                                                // remaining elements will be default initialised
+                                                // to 0. This is another method for initialisation
                                                 // during declare.
   return 0;                                     // Return status successful.
 }
@@ -592,10 +591,10 @@ s32 main() {                                    // Main program entry.
   u32 data[] = {                                // Arrays can be default initialised using
     [ 0 ... 10] = 1,                            // ranges for specific values in this manner.
     [11 ... 20] = 3,                            // This will define an arbitrary array with
-    [21 ... 99] = 5,                            // 101 elements ranging from 0 to 100.
-    [100]       = 0                             // It also works for fixed element declares of
-  };                                            // arrays provided indexes fall within range
-                                                // of elements defined by the fixed value.
+    [21 ... 99] = 5,                            // 101 elements ranging from 0 to 100. It also 
+    [100]       = 0                             // works for fixed element declares of arrays
+  };                                            // provided indexes fall within range of
+                                                // elements defined by the fixed value.
   return 0;                                     // Return status successful.
 }
 ```
@@ -607,41 +606,45 @@ Basic program that has no output.
 
 1. using multiple typedefs to declare custom Type Names
 2. creation of a union and its declaration
-3. setup of function main.  
+3. setup of function main
 
 ```C
-typedef unsigned char      u8;                  // associate type unsigned char with u8
-typedef unsigned short     u16;                 // associate type unsigned short with u16
-typedef int                s32;                 // associate type signed int with s32
-typedef unsigned int       u32;                 // associate type unsigned int with u32
-typedef unsigned long long u64;                 // associate type unsigned long long with u64
+typedef unsigned char      u8;                  // Associate type unsigned char with u8.
+typedef unsigned short     u16;                 // Associate type unsigned short with u16.
+typedef int                s32;                 // Associate type signed int with s32.
+typedef unsigned int       u32;                 // Associate type unsigned int with u32.
+typedef unsigned long long u64;                 // Associate type unsigned long long with u64.
 
-typedef union {                                 // declare typedef for union
-  u8  chars [8];                                // takes 8x 1 byte to make a u64
-  u16 shorts[4];                                // takes 4x 2 bytes to make a u64 
-  u32 ints  [2];                                // takes 2x 4 bytes to make a u64
-  u64 base;                                     // largest type inside the union at 8 bytes
-} TMagiCaster;                                  // assign TMagiCaster as the union name
+typedef union {                                 // Declare typedef for union.
+  u8  chars [8];                                // Takes 8x 1 byte to make a u64.
+  u16 shorts[4];                                // Takes 4x 2 bytes to make a u64.
+  u32 ints  [2];                                // Takes 2x 4 bytes to make a u64.
+  u64 base;                                     // Largest type inside the union at 8 bytes.
+} TMagiCaster;                                  // Assign TMagiCaster as the union name.
 
-s32 main() {                                    // main program entry
-  TMagiCaster foo = {};                         // unions can be initialised to 0
-                                                // the same as structs
-                                                // any assignment to any of the members
-                                                // will cause the automatic update of all
-                                                // other members inside the union
-                                                // this is because each member of the union
-                                                // shares the same memory address as every
-                                                // other member in the union
-                                                // you gain auto-casting or assignments
-                                                // between types for free
-  return 0;                                     // return status successful
+s32 main() {                                    // Main program entry.
+  TMagiCaster foo = {};                         // Unions can be initialised to 0 the same
+                                                // as structs. Any assignment to any of
+                                                // the members will cause the automatic
+                                                // update of all other members inside the
+                                                // union. This is because each member of
+                                                // the union shares the same memory address
+                                                // as every other member in the union.
+                                                // You gain auto-casting or assignments
+                                                // between types for free.
+  return 0;                                     // Return status successful.
 }
 ```
 
 [Return to Index](#index)
 
 #### Example 16: Problems with Unions
-NOTE: PROBLEMS WITH UNIONS -- Basic program that has no output, but shows using multiple typedef to declare custom Type Names, how to create a union, data loss/confusing union behaviour, and setup of function main.  
+Basic program that has no output.
+
+1. shows using multiple typedef to declare custom Type Names
+2. how to create a union
+3. data loss/confusing union behaviour
+4. setup of function main.
 
 ```C
 typedef unsigned char      u8;                  // Associate type unsigned char with u8.
@@ -664,12 +667,10 @@ typedef union {                                 // Declare typedef for union.
   f80 floatBase;                                // are not used in unions because of this.
 } TMagiCaster;                                  // Assign TMagiCaster as the union name.
 
-// There are special cases where you may want to mix some types
-// but generally follow that pointers in unions will reference
-// the address, and not the data at the pointer.
-// Floating points will cause some form of awry behaviour when
-// converting between them.
-// This is not a good use of a union.
+// There are special cases where you may want to mix some types but generally follow that
+// pointers in unions will reference the address, and not the data at the pointer. Floating
+// points will cause some form of awry behaviour when converting between them. This is not
+// a good use of a union.
 
 s32 main() {
   return 0;
@@ -679,43 +680,47 @@ s32 main() {
 [Return to Index](#index)
 
 #### Example 17: Ideas on Dealing with Union Troubles
-NOTE: IDEAS ON DEALING WITH UNION TROUBLES - Basic program that has no output, but shows using multiple typedef to declare custom Type Names, how to create a struct with an anonymous union inside it, and setup of function main. 
+Basic program that has no output.
+
+1. shows using multiple typedef to declare custom Type Names
+2. how to create a struct with an anonymous union inside it
+3. setup of function main
 
 ```C
-typedef unsigned char      u8;   //associate type unsigned char with u8
-typedef unsigned short     u16;  //associate type unsigned short with u16
-typedef int                s32;  //associate type signed int with s32
-typedef unsigned int       u32;  //associate type unsigned int with u32
-typedef unsigned long long u64;  //associate type unsigned long long with u64
-typedef float              f32;  //associate type float with f32
-typedef double             f64;  //associate type double with f64
-typedef long double        f80;  //associate type double long with f80
+typedef unsigned char      u8;   // Associate type unsigned char with u8.
+typedef unsigned short     u16;  // Associate type unsigned short with u16.
+typedef int                s32;  // Associate type signed int with s32.
+typedef unsigned int       u32;  // Associate type unsigned int with u32.
+typedef unsigned long long u64;  // Associate type unsigned long long with u64.
+typedef float              f32;  // Associate type float with f32.
+typedef double             f64;  // Associate type double with f64.
+typedef long double        f80;  // Associate type double long with f80.
 
-typedef struct {                 //declare typedef for struct  
-  union {                        //in this case we are declaring an
-    u8  chars  [8];              //anonymous union to deal with our
-    u16 shorts [4];              //compatible integer types and embedding
-    u32 ints   [2];              //it inside our struct
-    u64 intBase;                 //these members will still share the same
-  };                             //memory region
-  char *pchars;                  //where these members outside the union
-  f32 floats [2];                //will have their own regions of memory
-  f64 doubles[2];                //as regular members of a struct
+typedef struct {                 // Declare typedef for struct.
+  union {                        // In this case we are declaring an
+    u8  chars  [8];              // anonymous union to deal with our
+    u16 shorts [4];              // compatible integer types and embedding
+    u32 ints   [2];              // it inside our struct. These members will
+    u64 intBase;                 // still share the same memory region where
+  };                             // these members outside the union will have
+  char *pchars;                  // their own regions of memory as regular
+  f32 floats [2];                // members of a struct.
+  f64 doubles[2];
   f80 floatBase;             
 } TMagiCaster;               
 
 s32 main() {
   TMagiCaster foo = {};
-  //you can access the members from the anonymous union as if they
-  //were base members of the struct
+  // You can access the members from the anonymous union as if they were base
+  // members of the struct.
 
-  //foo.chars
-  //foo.shorts
-  //foo.floatbase
+  // foo.chars
+  // foo.shorts
+  // foo.floatbase
 
-  //if we named the union inside the struct, you would need to
-  //specify the union name as in foo.unionName.chars to access those
-  //members inside the union
+  // If we named the union inside the struct, you would need to specify the
+  // union name as in foo.unionName.chars to access those members inside
+  // the union. The anonymous union used in this way allows for better layout.
   
   return 0;
 }
@@ -724,39 +729,43 @@ s32 main() {
 [Return to Index](#index)
 
 #### Example 18: Unions
-Basic program that has no output, but shows using a union, a series of anonymous struct layouts for common associations of data, and setup of function main. 
+Basic program that has no output.
+
+1. using a union
+2. a series of anonymous struct layouts for common associations of data
+3. setup of function main
 
 ```C
-typedef int s32;          //associate type signed int with s32
-typedef float f32;        //associate type float with f32
+typedef int   s32;        // Associate type signed int with s32.
+typedef float f32;        // Associate type float with f32.
 
-typedef union {           //declare typedef for struct  
-  struct {                //each of these anonymous structures
-    f32 x;                //inside the union will be treated as
-    f32 y;                //two seperate groups of members
-  };                      //because each anonymous struct is part
-  struct {                //of the union all the structs will share
-    f32 u;                //the same memory region
-    f32 v;                //set 1:
-  };                      //  foo.x
-  struct {                //  foo.u
-    f32 left;             //  foo.left
-    f32 right;            //  foo.width
-  };                      //set 2:
-  struct {                //  foo.y
-    f32 width;            //  foo.v
-    f32 height;           //  foo.right
-  };                      //  foo.height
-  f32 members[2];         //this array will place set 1 at index 0
-} T2DVectorF32;           //and set 2 at index 1
+typedef union {           // Declare typedef for struct.
+  struct {                // Each of these anonymous structures
+    f32 x;                // inside the union will be treated as
+    f32 y;                // two seperate groups of members. Each
+  };                      // anonymous struct is part of the union.
+  struct {                // All the structs will share the same
+    f32 u;                // memory region.
+    f32 v;                //  set 1:
+  };                      //    foo.x
+  struct {                //    foo.u
+    f32 left;             //    foo.left
+    f32 right;            //    foo.width
+  };                      //  set 2:
+  struct {                //    foo.y
+    f32 width;            //    foo.v
+    f32 height;           //    foo.right
+  };                      //    foo.height
+  f32 members[2];         // This array will place set 1 at index 0
+} T2DVectorF32;           // and set 2 at index 1.
 
-s32 main() {              //main program entry
-  T2DVectorF32 foo = {};  //default initialise all members to 0
+s32 main() {              // Main program entry.
+  T2DVectorF32 foo = {};  // Default initialise all members to 0.
   
-  foo.x = 0.6f;           //assigns a value of 0.6f to set 1
-  foo.right = 8.5f;       //assigns a value of 8.5f to set 2
+  foo.x = 0.6f;           // Assigns a value of 0.6f to set 1.
+  foo.right = 8.5f;       // Assigns a value of 8.5f to set 2.
   
-  return 0;               //return status successful
+  return 0;               // Return status successful.
 }
 ```
 
@@ -780,27 +789,28 @@ This allows us to write a string of char to the Console and appends a newline ch
 
 In this case it returns an int value, and accepts a Pointer Type of char named str.  As usual with functions that will accept char strings, they need to be NULL terminated.  In other words, make sure your char string, buffer, or other form of data has a '\0' literal on the end of it.  We will cover char strings more later.
 
-The int return from puts will be the total number of characters written to the Console including the '\n' it appends to the end.  If there is an error, the return will be set to the constant EOF and it will set an error number you can lookup.  If you missed putting the '\0' at the end, you will cause Undefined Behaviour. (edited)
-Avatar
-PDrifting 23-Apr-21 04:42 PM
-putchar
-Sometimes you just need to output a single char to the Console.  This is what putchar is for.  The function prototype for putchar... 
-int putchar(int character)
+The int return from puts will be the total number of characters written to the Console including the '\n' it appends to the end.  If there is an error, the return will be set to the constant EOF and it will set an error number you can lookup.  If you missed putting the '\0' at the end, you will cause Undefined Behaviour.
+
+> putchar
+
+Sometimes you just need to output a single char to the Console.  This is what putchar is for.  The function prototype for putchar.
+
+> int putchar(int character)
+
 It might seem odd that putchar accepts an int instead of char, but these are compatible Data Types that can be thought of like a union.  Any int can be a char and any char can be an int.  We'll go over char literals and int more later.  This makes putchar extremely flexible.  You can refer to a specific character by an int value, or by a char literal.
 
-The int return from putchar returns the char output to the Console.  If there is an error, the return will be set to the constant EOF and it will set an error number you can lookup. (edited)
-Avatar
-PDrifting 23-Apr-21 05:11 PM
-printf
-Avatar
-PDrifting 23-Apr-21 05:36 PM
-The beast of Console output.  For formatted output printf is your friend.  Remembering how to use it will make it your enemy.  If you scour the internet for printf cheat sheets, you'll find them in abundance. This is by far one of the most complex feature out the C Standard Library.  Let's start with the prototype... 
-int printf(const char *format, ...)
+The int return from putchar returns the char output to the Console.  If there is an error, the return will be set to the constant EOF and it will set an error number you can lookup
+
+> printf
+
+The beast of Console output.  For formatted output printf is your friend.  Remembering how to use it will make it your enemy.  If you scour the internet for printf cheat sheets, you'll find them in abundance. This is by far one of the most complex feature contained in the C Standard Library.  Let's start with the prototype. 
+
+> int printf(const char *format, ...)
+
 There is a complex concept shown in this prototype -- the ellipsis [...]. All you need to remember is the ellipsis means, can take an arbitrary list of comma separated arguments.  The char format string on the other hand is going to require some deeper discussion.
 
-The format string argument in printf can be a straight char string, but with Format Specifiers peppered throughout it.  Let's dissect the associated Data Types and their Format Specifiers. (edited)
-Avatar
-PDrifting 23-Apr-21 06:01 PM
+The format string argument in printf can be a straight char string, but with Format Specifiers peppered throughout it.  Let's dissect the associated Data Types and their Format Specifiers. 
+```
                     Format Specifier & Special Characters Table
 
 Integer             Value   Char       Pointer            Address
@@ -826,8 +836,9 @@ Strings             Display            \"                 Use " inside string
 ------------------------------------   %%                 Use % inside string
 char *              %s                 \'                 Single Quote
                                        \0                 Null Character
+```
 
-NOTE [1]: Type char is unique from all other types in that it has three unique states, char, signed char, and unsigned char.  None of these equate to each other.  According to the C Standard char will be guaranteed to hold a single character/byte worth of data.  Function arguments that expect char will complain if you try to pass a signed or unsigned variant instead.
+NOTE [1]: Type char is unique from all other types. It has three unique states -- char, signed char, and unsigned char.  None of these equate to each other.  According to the C Standard char will be guaranteed to hold a single character/byte worth of data.  Function arguments that expect char will complain if you try to pass a signed or unsigned variant instead.
 
 NOTE [2]: If the hex specifier is used for any unsigned integer Data Type it will be cast to unsigned char and only display one 8-bit.  The hex and octal specifiers can only be used to represent integer Data Types.  Floating Point Data Types require special pointer twiddling.  You will get strange output trying to use either of the conversion specifiers otherwise.
 
