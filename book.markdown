@@ -838,17 +838,23 @@ char *              %s                 \'                 Single Quote
                                        \0                 Null Character
 ```
 
-NOTE [1]: Type char is unique from all other types. It has three unique states -- char, signed char, and unsigned char.  None of these equate to each other.  According to the C Standard char will be guaranteed to hold a single character/byte worth of data.  Function arguments that expect char will complain if you try to pass a signed or unsigned variant instead.
+<sup>**NOTE [1]:** *Type char is unique from all other types. It has three unique states -- char, signed char, and unsigned char.  None of these equate to each other.  According to the C Standard char will be guaranteed to hold a single character/byte worth of data.  Function arguments that expect char will complain if you try to pass a signed or unsigned variant instead.*</sup>
 
-NOTE [2]: If the hex specifier is used for any unsigned integer Data Type it will be cast to unsigned char and only display one 8-bit.  The hex and octal specifiers can only be used to represent integer Data Types.  Floating Point Data Types require special pointer twiddling.  You will get strange output trying to use either of the conversion specifiers otherwise.
+<sup>**NOTE [2]:** *If the hex specifier is used for any unsigned integer Data Type it will be cast to unsigned char and only display one 8-bit.  The hex and octal specifiers can only be used to represent integer Data Types.  Floating Point Data Types require special pointer twiddling.  You will get strange output trying to use either of the conversion specifiers otherwise.*</sup>
 
 Alright, now we have a table of nightmares and the basic knowledge to start tackling some basic output.  Let's write some examples.  The following examples will expand on topics missed above and cover a more complete set of examples based on all topics we have covered so far.  Get ready, there's going to be a lot. 
 
-NOTE: Comments and such might be sparse as we carry on with these examples due to the limitations of discord messages to 2000 characters.  This will be resolved later when the book is out of draft format.  Attempts to provide comments will persist where possible. (edited)
-Avatar
-PDrifting 28-Apr-21 09:59 PM
-Part 3: C Output & Expansion on Type Examples (edited)
-Basic program with output, using a portion of the C Standard Library to access Functions for output, and setup of function main. 
+[Return to Index](#index)
+
+### C Output & Expansion on Type Examples
+
+#### Example 1: Using Puts
+Basic program with output.
+
+1. using a portion of the C Standard Library to access Functions for output
+2. setup of function main
+
+```C
 #include <stdio.h>         //provide access to i/o functions 
 
 typedef int s32;
@@ -857,34 +863,41 @@ s32 main() {               //main program entry
   puts("Hello World!");    //displays Hello World! to the console
   return 0;                //return status successful
 }
-(edited)
-Avatar
-PDrifting 29-Apr-21 12:26 AM
-Basic program with output, using a portion of the C Standard Library to access Functions for output, showing various typedef assignments, general variable use, and setup of function main. (edited)
-Avatar
-PDrifting 29-Apr-21 03:17 PM
+```
+
+[Return to Index](#index)
+
+#### Example 2: Using Printf Format Specifiers
+Basic program with output.
+
+1. showing various typedef assignments
+2. general variable use
+3. using a portion of the C Standard Library to access Functions for output
+4. setup of function main
+
+```C
 #include <stdio.h>
 
 //create typedef associations
-typedef char s8;
-typedef short s16;
-typedef int s32;
+typedef char      c8;
+typedef short     s16;
+typedef int       s32;
 typedef long long s64;
 
-typedef unsigned char u8;
-typedef unsigned short u16;
-typedef unsigned int u32;
+typedef unsigned char      u8;
+typedef unsigned short     u16;
+typedef unsigned int       u32;
 typedef unsigned long long u64;
 
-typedef float f32;
-typedef double f64;
+typedef float       f32;
+typedef double      f64;
 typedef long double f80;
 
 s32 main() {
-  //variable declarations follow
-  //type name = initial value;  
-  s8  sFoo  = -120;
-  u8  uFoo  = 'A';
+  // Variable declarations follow
+  // type name = initial value;  
+  c8  uFoo  = 'A';
+  s8  sFoo  = -120;  
   s16 sBar  = -27543;  
   u16 uBar  = 98;
   s32 sBaz  = -1676352;
@@ -895,11 +908,11 @@ s32 main() {
   f64 corge = 3.141592653589793;
   f80 plugh = 9.6169031625e+35;
 
-  //shows using the appropriate format specifier for a given type
-  //C has a special use case for %c so that integer based 8-bit,
-  //16-bit, and 32-bit data types can all be used to represent
-  //chars as can be seen from the output information below
-  //64-bit integer types are incapable of storing char information
+  // Shows using the appropriate format specifier for any given type.
+  // C has a special use case for %c so that integer based 8-bit,
+  // 16-bit, and 32-bit data types can all be used to represent
+  // chars. This can be seen from the output information below.
+  // 64-bit integer types are incapable of storing char information.
 
   printf("sFoo  [%%c]   = %c\n", sFoo);
   printf("uFoo  [%%c]   = %c\n", uFoo);
@@ -927,10 +940,10 @@ s32 main() {
 
   return 0;
 }
-(edited)
-Avatar
-PDrifting 29-Apr-21 03:26 PM
-Generated output:
+```
+
+**Generated output:**
+```
 sFoo  [%c]   = �
 uFoo  [%c]   = A
 sFoo  [%d]   = -120
@@ -954,12 +967,20 @@ corge [%lE]  = 3.141593E+00
 plugh [%Lf]  = 961690316249999956021666669771358208.000000
 plugh [%Le]  = 9.616903e+35
 plugh [%LE]  = 9.616903E+35
-(edited)
-Avatar
-PDrifting 29-Apr-21 06:00 PM
-Based on the above we can see some janky output showing up with at least two of the %c specifiers for sFoo and sBaz.  There are problems sometimes, as you can see with non-displayable information.  Here's a little basic program with output, showing how to use the %x [hex specifier], some examples on how it can be used, and setup of Function main. (edited)
-Avatar
-PDrifting 30-Apr-21 12:00 AM
+```
+
+Based on the above we can see some janky output showing up with at least two of the %c specifiers for sFoo and sBaz.  There are problems sometimes, as you can see with non-displayable information.  The following example will show how to display information with a different specifier.
+
+[Return to Index](#index)
+
+#### Example 3: Using Printf with %X
+Basic program with output.
+
+1. showing how to use %x \[hex specifier\]
+2. examples on how it can be used
+3. setup of function main.
+
+```C
 #include <stdio.h>
 
 //create typedef associations
@@ -1003,10 +1024,10 @@ s32 main() {
 
   return 0;
 }
-(edited)
-Avatar
-PDrifting 01-May-21 11:47 AM
-Generated Output:
+```
+
+**Generated Output:**
+```
 sFoo  [%x] = ffffff88
 uFoo  [%x] = 41                    //cast to a single unsigned char byte
 sBar  [%x] = ffff9469
@@ -1015,12 +1036,13 @@ sBaz  [%x] = ffe66bc0
 uBaz  [%x] = 43                    //cast to a single unsigned char byte
 sThud [%Lx] = ffffdd51be37f376
 uThud [%Lx] = 36ccacba3
-(edited)
-Avatar
-PDrifting 01-May-21 01:41 PM
-Now that we have a general handle on the basics of printf there is another part we need to discuss that deals with modifiers that can be applied to format specifiers.  These modifiers control justification, number of decimal places to show, and control padding with characters of the output.  We'll need to create another table for some of the rules.  Then we'll go over some examples. (edited)
-Avatar
-PDrifting 01-May-21 11:19 PM
+```
+
+[Return to Index](#index)
+
+Now that we have a general handle on the basics of printf, there is another part we need to discuss that deals with modifiers that can be applied to format specifiers.  These modifiers control justification, number of decimal places to show with floats, and control padding with characters of the output.  We'll need to create another table for some of the rules.  Then we'll go over some examples.
+
+```
 Modified Format Specifier
 
 %[A][B][C][D]
@@ -1033,11 +1055,15 @@ Modified Format Specifier
 [D] Use your normal format specifier here.
 
 [A][B][C] are optional.
-(edited)
-Confused? Probably... so let's throw some more examples into the mix.  It's always easier to look at code to figure out how things work.  We'll need to break down every specifier with enough context to fully explore the last remaining pieces of printf. (edited)
-Avatar
-PDrifting 08-May-21 11:16 AM
+```
+
+Confused? Probably... so let's throw some more examples into the mix.  It's always easier to look at code to figure out how things work.  We'll need to break down every specifier with enough context to fully explore the last remaining pieces of printf.
+
+[Return to Index](#index)
+
 Here's a little basic program with output, showing the basics of left justification.  
+
+```C
 #include <stdio.h>
 
 typedef char s8;
@@ -1078,8 +1104,10 @@ s32 main() {
 
   return 0;
 }
-(edited)
-Generated Output:
+```
+
+**Generated Output:**
+```
 sFoo  [%-d] -120
 sBar  [%-d] 7
 sBaz  [%-d] 115
@@ -1099,10 +1127,13 @@ uFoo  [%-c]
 uBar  [%-c] 
 uBaz  [%-c] �
 uThud [%-c] A
-(edited)
-Avatar
-PDrifting 08-May-21 11:24 AM
+```
+
+[Return to Index](#index)
+
 Another little program with output showing how to use zero and width padding.  Keep in mind you cannot using zero padding or any other character padding with %c.  Only width padding is valid with this Format Specifier.  
+
+```C
 #include <stdio.h>
 
 typedef char s8;
@@ -1146,10 +1177,10 @@ s32 main() {
 
   return 0;
 }
-(edited)
-Avatar
-PDrifting 08-May-21 09:54 PM
-Generated Output:
+```
+
+**Generated Output:**
+```
 sFoo  [%05d] -0120
 sBar  [%05d] 00007
 sBaz  [%05d] 00115
@@ -1169,10 +1200,13 @@ uFoo  [%5c]
 uBar  [%5c]     
 uBaz  [%5c]     �
 uThud [%5c]     A
-(edited)
-Avatar
-PDrifting 08-May-21 10:22 PM
+```
+
+[Return to Index](#index)
+
 Modifications to show %x and %X and some side-effects when dealing with signed numbers.
+
+```C
 #include <stdio.h>
 
 typedef char s8;
@@ -1219,8 +1253,10 @@ s32 main() {
 
   return 0;
 }
-(edited)
-Generated Output:
+```
+
+**Generated Output:**
+```
 sFoo  [%05x] ffffff88
 sBar  [%05x] 00007
 sBaz  [%05x] 00073
@@ -1240,12 +1276,13 @@ uFoo  [%05X] 00000
 uBar  [%05X] 00011
 uBaz  [%05X] 000F7
 uThud [%05X] 00041
-(edited)
-Avatar
-PDrifting 08-May-21 10:33 PM
-All Integer Data Types follow what is shown above.  You can change the padding character, width padding, and interchange the Format Specifier with the appropriate type.  The next little program will show how to format Floating Point Data Types.  When declaring with float, literals used to initialise variables are treated as double by default, so you'll need to tack on an 'f' to cast them to float. (edited)
-Avatar
-PDrifting 24-May-21 04:10 PM
+```
+
+[Return to Index](#index)
+
+All Integer Data Types follow what is shown above.  You can change the padding character, width padding, and interchange the Format Specifier with the appropriate type.  The next little program will show how to format Floating Point Data Types.  When declaring with float, literals used to initialise variables are treated as double by default, so you'll need to tack on an 'f' to cast them to float.
+
+```C
 #include <stdio.h>
 
 typedef int s32;
@@ -1295,8 +1332,10 @@ s32 main() {
 
   return 0;
 }
-(edited)
-General Output:
+```
+
+**General Output:**
+```
 f32Foo  [%-f] 10.200000
 f32Bar  [%-f] 0.123456
 f32Baz  [%-f] 123456.015625
@@ -1316,10 +1355,11 @@ f32Foo  [%9.2f]     10.20
 f32Bar  [%9.2f]      0.12
 f32Baz  [%9.2f] 123456.02
 f32Thud [%9.2f]      3.14
-(edited)
-Avatar
-PDrifting 24-May-21 05:46 PM
-This expands on the float example above showing we can get a bit more precision with double but things still get messy.  Since literals are double by default when dealing with Floating Point Types, you do not need to add anything to the end of the literals on initalisation. (edited)
+```
+
+This expands on the float example above showing we can get a bit more precision with double but things still get messy.  Since literals are double by default when dealing with Floating Point Types, you do not need to add anything to the end of the literals on initalisation.
+
+```C
 #include <stdio.h>
 
 typedef int s32;
@@ -1370,8 +1410,10 @@ s32 main() {
 
   return 0;
 }
-(edited)
-General Output:
+```
+
+**General Output:**
+```
 f64Foo  [%-lf] 10.200000
 f64Bar  [%-lf] 0.123456
 f64Baz  [%-lf] 123456.012346
@@ -1391,9 +1433,11 @@ f64Foo  [%9.2lf]     10.20
 f64Bar  [%9.2lf]      0.12
 f64Baz  [%9.2lf] 123456.01
 f64Thud [%9.2lf]      3.14
-Lastly, we'll look at long double.  We need to tack on an 'L' to end of literals used for assignment.  Despite more precision, you will never be able to get absolutely true representations of your values.  All we are going to gain is some extra digits of accuracy.  We'll also look at using E Notation Fomat Specifiers with long double output. (edited)
-Avatar
-PDrifting 24-May-21 09:12 PM
+```
+
+Lastly, we'll look at long double.  We need to tack on an 'L' to end of literals used for assignment.  Despite more precision, you will never be able to get absolutely true representations of your values.  All we are going to gain is some extra digits of accuracy.  We'll also look at using E Notation Fomat Specifiers with long double output.
+
+```C
 #include <stdio.h>
 
 typedef int s32;
