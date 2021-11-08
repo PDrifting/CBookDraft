@@ -408,19 +408,19 @@ Basic program that has no output.
 3. setup of function main
 
 ```C
-typedef int          s32;                      // Associate type signed int with s32
-typedef unsigned int u32;                      // Associate type unsigned int with u32
+typedef int          s32;                      // Associate type signed int with s32.
+typedef unsigned int u32;                      // Associate type unsigned int with u32.
 
-s32 main() {                                   // Main program entry
-  u32 foo[] = {0, 1, 2, 3, 4, 5, 6};           // Declare type u32 named foo
-                                               // The square brackets [] are used
-                                               // to denote an array in C.
-                                               // In this case we are not defining
-                                               // the array with a starting size but
-                                               // we are assigning default data to it.
-                                               // When using GCC, this is a method for
-                                               // automatic initialisation of the array.
-                                               // It will calculate the size required for you.
+s32 main() {                                   // Main program entry.
+  u32 foo[] = {0, 1, 2, 3, 4, 5, 6};           // Declare type u32 named foo.
+                                               // The square brackets [] are used to
+                                               // denote an array in C. In this case
+                                               // we are not defining the array with a
+                                               // starting size, but we are assigning 
+                                               // default data to it. When using GCC,
+                                               // this is a method for automatic
+                                               // initialisation of the array. It will
+                                               // calculate the size required for you.
   return 0;                                    // Return status successful.
 }
 ```
@@ -434,7 +434,7 @@ Alternate basic program that has no output.
 2. definition of an arbitrary array with defaults values
 3. setup of function main
 
-```
+```C
 typedef int          s32;                       // Associate type signed int with s32.
 typedef unsigned int u32;                       // Associate type unsigned int with u32.
 
@@ -503,7 +503,7 @@ typedef unsigned int u32;                       // Associate type unsigned int w
 
 typedef struct _TFoobar TFoobar;                // Associate struct _TFoobar with TFoobar
                                                 // we need this forward typedef because the
-                                                // struct has a member data type of itself.                                                
+                                                // struct has a member data type of itself.
 
 struct _TFoobar {                               // You cannot use the standard typedef
   u32 foo;                                      // method of declaration when your struct
@@ -512,16 +512,18 @@ struct _TFoobar {                               // You cannot use the standard t
 };                                              // must be declared as pointers.
 
 s32 main() {                                    // Main program entry.
-  TFoobar data[15] = {                          // Arrays of structs can be default initialised.
-    { .foo = 12, .bar = 8 },                    // Each element must be contained in a secondary
-    {},                                         // block of {} and then it can follow the
-    { .foo = 1 }                                // rules defined earlier in examples for initialisation.
-  };                                            // Commas are used to seperate a list of
-                                                // consecutive initialisations.
-                                                // Even though this has 15 elements the reamaining
-                                                // elements will be default initialised to 0.
-                                                // This is mererly one method for initialisation
-                                                // during declare.
+  TFoobar data[15] = {                          // Arrays of structs can be default
+    { .foo = 12, .bar = 8 },                    // initialised. Each element must be
+    {},                                         // contained in a secondary block of {}
+    { .foo = 1 }                                // and then it can follow the rules
+  };                                            // defined earlier in examples for
+                                                // initialisation. Commas are used to
+                                                // seperate a list of consecutive
+                                                // initialisations. Even though this
+                                                // has 15 elements the reamaining
+                                                // elements will be default initialised
+                                                // to 0. This is mererly one method for
+                                                // initialisationduring declare.
 
   data[12] = (TFoobar){                         // Accesses element 13 [12+1 from 0 index].
     .foo = 5, .bar = 6                          // We need to perform a cast (TFoobar) then
