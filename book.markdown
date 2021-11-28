@@ -89,7 +89,7 @@ These are the general arithmetic types that are broken down into integer and flo
 
 These are typically regarded as another arithmetic type used to define named variables that are assigned discrete integer values.  They are used in place of magic numbers or hard coded values that can have arbitrary meaning.  The general modern view is to avoid using them.
 
-**MAGIC NUMBERS** - Enumerated values were created as a solution to this problem.  However, they create more problems than they resolve.  When we consider the issue of obfuscated information by using values instead of meaninful tokens we generally refer to those as Magic Numbers.  It is generally regarded that we should not use them as initial values or in the endpoint test expressions of a while, do while, or for loop.  There is general concern for avoiding their use also in expressions, mallocs, and other statements where it may obfuscate information and taint obvious readability or understanding of the code.  You are advised to use a [#define](, or specific variable within contextual scope to give a meaningful name to your value.
+**MAGIC NUMBERS** - Enumerated values were created as a solution to this problem.  However, they create more problems than they resolve.  When we consider the issue of obfuscated information by using values instead of meaninful tokens we generally refer to those as Magic Numbers.  It is generally regarded that we should not use them as initial values or in the endpoint test expressions of a while, do while, or for loop.  There is general concern for avoiding their use also in expressions, mallocs, and other statements where it may obfuscate information and taint obvious readability or understanding of the code.  You are advised to use a #define, or specific variable within contextual scope to give a meaningful name to your value.
 
 ```
 1. They are not really integer values, but GCC does treat them as such.
@@ -125,17 +125,21 @@ C has a special kind of Pointer called the Function Pointer.  This allows creati
 
 Other uses of Pointers and Function Pointers exist to form bridges tying certain portions of an Operating System together, or to make a call inside a specific library accessing a foreign piece of code.
 
-**NOTE** - Function pointers should be used sparingly in your code.  We need to cover some basic operations of a modern CPU to understand why. When you compile your code, the compiler creates soemthing called bytecode.  The bytecode is a compressed representation of opcodes.  Opcodes are references to specific Operation Codes for commands inside the CPU. When a modern CPU is executing bytecode, it goes through several steps.  These steps generally follow as fetch, unpack, and then execution.  The problem is created in prediction models that modern CPUs have. They attempt to determine where the operations you are executing will end up.  Modern processors use a very complicated set of algorithms inside a Data Pipeline that has a cache.  We know that anytime an indirect jump takes place, either by an a general function call, or a jump created by some other type of branching code like an if, switch, or expressions used in loops, there is potential to destroy the prediction cache.  If your code path is not created in a way that is generally predicatable this can cause drastic performance consequences.  Always try to keep your code flow simple.  This is also a good argument for single-entrance, single-exit coding style.
+**NOTE** - Function pointers should be used sparingly in your code.  We need to cover some basic operations of a modern CPU to understand why. When you compile your code, the compiler creates soemthing called bytecode.  The bytecode is a compressed representation of opcodes.  Opcodes are references to specific Operation Codes for commands inside the CPU. When a modern CPU is executing bytecode, it goes through several steps.  These steps generally follow as fetch, unpack, and then execution.  The problem is created in prediction models that modern CPUs have. They attempt to determine where the operations you are executing will end up.  Modern processors use a very complicated set of algorithms inside a Data Pipeline that has a cache.  We know that anytime an indirect jump takes place, either by a general function call, or a jump created by some other type of branching code.  This includes if, switch, or expressions used in loops.  These guarantree a potential to destroy the prediction cache.  If your code path is not created in a way that is generally predicatable this can cause drastic performance consequences.  Always try to keep your code flow simple.  This is also a good argument for single-entrance, single-exit coding style.
 
 [Return to Index](#index)
 
 #### Structures and Unions
 
-These are your user defined record types.  Useful when you need to combine groups of items, fields, or members of different data types that can be referenced by name to create a single type.  C doesn't have classes, or support object oriented coding methods for the most part.  All members of a Structure and Union are publicly declared.  Defined Structures and Unions are not assigned memory until declared, and will always be stored in contiguous memory.  Alignment, packing, and padding are compiler implementation specific.  Let's discuss how GCC manages these aspects of these Data Types. The only real difference between a Structure and Union is how they are stored in memory.  Structure members are have unique allotments memory, where Union members all share the same memory region.
+These are your user defined record types.  Useful when you need to combine groups of items, fields, or members of different data types that can be referenced by name to create a single type.  C doesn't have classes, or support object oriented coding methods for the most part.  All members of a _struct_ and _union_ are publicly declared.  Defined _struct_ and _union_ types are not assigned memory until declared, and will always be stored in contiguous memory.  Alignment, packing, and padding are compiler implementation specific.  Let's discuss how GCC manages these aspects of these Data Types. The only real difference between a _struct_ and _union_ type is how they are stored in memory.
+
+> _struct_ members have distinct regions of memory allocated
+
+> _union_ members all share the same memory region
 
 **Alignment** - This tells the compiler to attempt a specific alignment during allocation to specific boundaries. Alignment can only be used to increase member boundaries. These are determined by the linker and the platform you are compiling on.  GCC by default will optimise for the platform you are compiling on.  You can assume this is the default memory layout.
 
-**Packing** - Specifies to the compiler that it should use the minimum footprint of memory required to represent the type.  All members of the Structure or Union will have the same equivalent packed attribute applied to them.  This will almost always affect performance negatively.  If you are memory constrained platforms, the performance tradeoff may be required to make things fit.
+**Packing** - Specifies to the compiler that it should use the minimum footprint of memory required to represent the type.  All members of the Structure or Union will have the same equivalent packed attribute applied to them.  This will almost always affect performance negatively.  If you are using memory constrained platforms, the performance tradeoff may be required to make things fit.
 
 **Padding** - Is required, and can be manipulated by alignment and packing attributes. Overriding the default padding performed by GCC is likely to slow down access to members, but can save memory. Padding will only be inserted when a Structure member is followed by another Structure member that requires a larger alignment or at the end of the Structure to align it to a specific boundary. GCC by default is not allowed to reorder any Structure members to achieve optimal alignment, so programmers should be mindful of their member layouts inside their Structure definitions.
 
@@ -145,7 +149,12 @@ These are your user defined record types.  Useful when you need to combine group
 
 This is another very hard concept for programmers to grasp -- code reuse.  Functions make this possible.  They are a block of syntax statements put together to perform a specific task.  Learning when to use Functions takes a lot of practice.  When you declare a Function you can provide a Return Type, and Argument Types that you want to pass to the Function to be used by the statements inside it.  Functions can call other Functions, and use other Data Types to declare variables.
 
-The C Standard Library provides numerous Functions that you can call.  These often require using the correct #include statement before they can be used.  We will discuss this in detail when going over the preprocessor and the side-effects associated with including and creating headers in your code.
+```
+[return type] [name]([argument list])
+int           foo   (int a, float b)
+```
+
+The C Standard Library provides numerous Functions that you can call.  These often require using the correct _#include_ statement before they can be used.  We will discuss this in detail when going over the preprocessor and the side-effects associated with including and creating headers in your code.
 
 There is one Function that must be present in all programs called main.  This is your entry point to your program.  When you execute programs this will be where the main portion of the controlling code exists.  It is required to be present.  Your main Function should always return an int type.  It can optionally have no arguments or a pair of arguments to accept information being passed to it from the command line.
 
@@ -163,19 +172,19 @@ Many tutorials written for C, still declare Function main as Return Type void.  
 
 **SINGLE-ENTRANCE/SINGLE-EXIT** - As mentioned earlier in Pointers, there is the issue with Function Pointers creating a potential for unpredictable code.  In order to simplfy the flow and reduce the branching potential inside your Function you should ensure that you only have a single return statement that exists at the end of each of your Functions. Placing more than one return statement inside a Function has the potential to confuse the compiler and prevent it front creating clean bytecode.  Make sure you do what you can to assist the compiler to create predictable and clean bytecode by ensuring simple program flow.  Many programmers will argue this does not matter, but it does.  You might also hear aguments that languages like GO promote the idea of multiples exits from a Function.  Please remember, that not all compilers treat all forms of code the same.  What works well in one language, is unlikely to be performant in others. C compilers are complex, they do not do well with complicated code.  They make mistakes, and often their own internal prediction algorithms to optimise code will give up when you fail to keep the flow of your code simple.  See the [KISS Principle](https://en.wikipedia.org/wiki/KISS_principle).  When in doubt check your code with [Godbolt](https://godbolt.org).
 
-**NOTE** - No process is going to save you from mistakes you're going to make in your code based on standards, compiler warnings, or style guides.  Based on the discussions around Functions, you are encouraged to understand that C can be an over forgiving language and pretty much take whatever you throw at it. Understanding what the code is doing in C is far more important than anything you can do to generate useless warnings for mistakes you should be aware of in your code. 
+**NOTE** - No process is going to save you from mistakes you're going to make in your code based on standards, compiler warnings, or style guides.  Based on the discussions around Functions, you are encouraged to understand that C can be an overforgiving language and pretty much take whatever you throw at it. Understanding what the code is doing in C is far more important than anything you can do to generate useless warnings for mistakes you should be aware of in your code. 
 
 [Return to Index](#index)
 
 #### Type Definitions
 
-To implement a Type Definition you must use the typedef keyword.  This allows you to give meaningful names to things, and stop having to type the typical longer syntax required by C.   It also allows forward declarations of things.  Many libraries have custom Type Definitions to keep track of what specific parts of the library belongs to what.  OpenGL comes to mind, or even just having the desire to shorten unsigned long long int to u64.  This has excellent utility when used meaningfully.  Many C purists discourage using Type Definitions, but you cannot overlook the modern desire to keep your code clean, readable, and maintainable.
+To implement a Type Definition you must use the _typedef_ keyword.  This allows you to give meaningful names to things, and stop having to type the typical longer syntax required by C.   It also allows forward declarations of things.  Many libraries have custom Type Definitions to keep track of what specific parts of the library belongs to what.  OpenGL comes to mind, or even just having the desire to shorten unsigned long long int to u64.  This has excellent utility when used meaningfully.  Many C purists discourage using Type Definitions, but you cannot overlook the modern desire to keep your code clean, readable, and maintainable.
 
-There are many good discussions between Linus Torvalds and the rest of the internet on [his views](https://yarchive.net/comp/linux/typedefs.html) on programmers that abuse the typedef keyword.  It can certainly be agreed that this is a completely abusable feature of C.  But like the goto keyword, there are some places where it is useful.  You will unfortunately be urged to ignore a feature of the language by many programmers and tutorials because most never learn when to use it in proper context. 
+There are many good discussions between Linus Torvalds and the rest of the internet on [his views](https://yarchive.net/comp/linux/typedefs.html) on programmers that abuse the _typedef_ keyword.  It can certainly be agreed that this is a completely abusable feature of C.  But like the _goto_ keyword, there are some places where it is useful.  You will unfortunately be urged to ignore a feature of the language by many programmers and tutorials because most never learn when to use it in proper context. 
 
 Most projects and coding firms you will write code for have Style Guides.  Each guide will usually include a section on Type Definitions.  Along with other restrictions on how code should be written for the given project.  In general, if it makes things easier for you to write code, is generally self-documenting, helps with maintenance of the code base, then use it regardless of the opinions of other coders, unless the project you are working on has a strict Style Guide.  In which case, you must follow it, regardless of preferred personal coding styles.
 
-**NOTE** - You will see typedefs being used in pretty much every example in this book.  Instead of using <stdint.h>, which normally provides typedefs for specific bitwidth data types, this book uses shorter forms of the int32_t for an unsigned int.  Instead prefixing all unsigned types with a _u_, and signed types with an _s_.  In this case _s64_ would be a type guaranteed to be at least 64 bits and signed.  The only base data type in C that you will see unmodified with a typedef is char.  It has no equivalent associated signed or unsigned state.  Remember the char data type is unique in that it has three distict states, char, usngined char, and signed char.  The _u8_, and _s8_ typedefs specifiy an unsigned char, and signed char of 8 bits wide.  Floating point types will be prefixed with an _f_.  In the case of structs, unions, and other specific user types they will be prefixed with a _T_.
+**NOTE** - You will see _typedef_ being used in pretty much every example in this book.  Instead of using <stdint.h>, which normally provides a _typedef_ for specific bitwidth data types, this book uses shorter forms of the int32_t for an unsigned int.  Instead prefixing all unsigned types with a _u_, and signed types with an _s_.  In this case _s64_ would be a type guaranteed to be at least 64 bits and signed.  The only base data type in C that you will see unmodified with a _typedef_ is _char_.  It has no equivalent associated signed or unsigned state.  Remember the _char_ data type is unique in that it has three distict states _char_, _usngined char_, and _signed char_.  The _typedef_ _u8_, and _s8_ specifiy an _unsigned char_, and _signed char_ of 8 bits wide.  Floating point types will be prefixed with an _f_.  In the case of structs, unions, and other specific user types they will be prefixed with a _T_.
 
 [Return to Index](#index)
 
@@ -183,9 +192,15 @@ Most projects and coding firms you will write code for have Style Guides.  Each 
 
 Despite this being a Data Type which can be used in various scenarios, there are some restrictions on void that should be discussed.  When dealing with void, it generally means different things contextually. There are also problems with void conversions and data loss. Opportunities to create Undefined Behaviour are also in abundance. 
 
-Unlike other Data Types you cannot directly declare a variable as void unless it is a pointer.  Void when used as a Function Return Data Type, signifies that a Function is incapable of returning any information from it.  Void pointer Data Types on the other hand can be extremely flexible.  They can store any other Data Type, have mixed data, memory layouts, and can also be used to point to Functions.  Many Functions inside the C Standard Library will return a void pointer, or consume one as a Function Argument - malloc() and free() are good examples of this.
+Unlike other Data Types you cannot directly declare a variable as _void_ unless it is a pointer.  _void_ when used as a Function Return Data Type, signifies that a Function is incapable of returning any information from it.  Pointer Data Types declared as _void_ can be extremely flexible.  They can store any other Data Type, have mixed data, memory layouts, and can also be used to point to Functions.  Many Functions inside the C Standard Library will return a _void_ pointer, or consume one as a Function Argument. 
 
-When declaring Function Arguments in a Function Prototype you should technically use void if the Function Argument List is actually meant to be nothing.  GCC for backwards compatibility maintains arbitrary Function Prototypes and definitions of functions which can lead to problems if you program using the Function Prototypes.  As mentioned in the Functions sections for Arguments Lists, this book does not use void in this way. 
+_malloc()_ and _free()_ are good examples of this.
+
+> void *malloc(size_t size)
+
+> void free(void *ptr)
+
+When declaring Function Arguments in a Function Prototype you should technically use void if the Function Argument List is actually meant to be nothing.  GCC for backwards compatibility maintains arbitrary Function Prototypes and definitions of functions which can lead to problems if you program using the Function Prototypes.  As mentioned in the Functions sections for Arguments Lists, this book does not use _void_ in this way. 
 
 [Return to Index](#index)
 
@@ -660,13 +675,13 @@ typedef double long        f80;                 // Associate type double long wi
 
 typedef union {                                 // Declare typedef for union.
   char *pchars;                                 // When you cross types in this case
-  u8  chars  [8];                               // mixing pointers, and floating point
-  u16 shorts [4];                               // numbers with integers you will cause
-  u32 ints   [2];                               // data loss, conversion cast problems
-  u64 intBase;                                  // as these types are fundamentally
-  f32 floats [2];                               // incompatible on a memory storage level.
-  f64 doubles[2];                               // Floating points and pointers traditionally
-  f80 floatBase;                                // are not used in unions because of this.
+  u8    chars  [8];                             // mixing pointers, and floating point
+  u16   shorts [4];                             // numbers with integers you will cause
+  u32   ints   [2];                             // data loss, conversion cast problems
+  u64   intBase;                                // as these types are fundamentally
+  f32   floats [2];                             // incompatible on a memory storage level.
+  f64   doubles[2];                             // Floating points and pointers traditionally
+  f80   floatBase;                              // are not used in unions because of this.
 } TMagiCaster;                                  // Assign TMagiCaster as the union name.
 
 // There are special cases where you may want to mix some types but generally follow that
@@ -704,11 +719,11 @@ typedef struct {                 // Declare typedef for struct.
     u16 shorts [4];              // compatible integer types and embedding
     u32 ints   [2];              // it inside our struct. These members will
     u64 intBase;                 // still share the same memory region where
-  };                             // these members outside the union will have
+  };                             // the members outside the union will have
   char *pchars;                  // their own regions of memory as regular
   f32 floats [2];                // members of a struct.
   f64 doubles[2];
-  f80 floatBase;             
+  f80 longFloat;             
 } TMagiCaster;               
 
 s32 main() {
@@ -718,7 +733,7 @@ s32 main() {
 
   // foo.chars
   // foo.shorts
-  // foo.floatbase
+  // foo.longFloat
 
   // If we named the union inside the struct, you would need to specify the
   // union name as in foo.unionName.chars to access those members inside
@@ -734,7 +749,7 @@ s32 main() {
 Basic program that has no output.
 
 1. using a union
-2. a series of anonymous struct layouts for common associations of data
+2. declaring a series of anonymous struct layouts for common associations of data
 3. setup of function main
 
 ```C
@@ -783,7 +798,7 @@ Console, or Terminal based output has been around since the advent of computer s
  
 The Standard I/O library gives us access to several useful predefined Functions.
 
-> puts 
+### Puts 
 
 This allows us to write a string of char to the Console and appends a newline character to the output automatically.  The function prototype for puts...  
 
@@ -793,7 +808,7 @@ In this case it returns an int value, and accepts a Pointer Type of char named s
 
 The int return from puts will be the total number of characters written to the Console including the '\n' it appends to the end.  If there is an error, the return will be set to the constant EOF and it will set an error number you can lookup.  If you missed putting the '\0' at the end, you will cause Undefined Behaviour.
 
-> putchar
+### Putchar
 
 Sometimes you just need to output a single char to the Console.  This is what putchar is for.  The function prototype for putchar.
 
@@ -803,7 +818,7 @@ It might seem odd that putchar accepts an int instead of char, but these are com
 
 The int return from putchar returns the char output to the Console.  If there is an error, the return will be set to the constant EOF and it will set an error number you can lookup
 
-> printf
+### Printf
 
 The beast of Console output.  For formatted output printf is your friend.  Remembering how to use it will make it your enemy.  If you scour the internet for printf cheat sheets, you'll find them in abundance. This is by far one of the most complex feature contained in the C Standard Library.  Let's start with the prototype. 
 
@@ -850,7 +865,7 @@ Alright, now we have a table of nightmares and the basic knowledge to start tack
 
 ### C Output & Expansion on Type Examples
 
-#### Example 1: Using Puts
+#### Example 1: Using puts
 Basic program with output.
 
 1. using a portion of the C Standard Library to access Functions for output
@@ -869,46 +884,49 @@ s32 main() {               //main program entry
 
 [Return to Index](#index)
 
-#### Example 2: Using Printf Format Specifiers
+#### Example 2: Using Format Specifiers with printf
 Basic program with output.
 
 1. showing various typedef assignments
 2. general variable use
 3. using a portion of the C Standard Library to access Functions for output
-4. setup of function main
+4. showing how to use various format specifiers
+5. examples on how they can be used
+6. setup of function main
 
 ```C
 #include <stdio.h>
 
 //create typedef associations
-typedef char      c8;
-typedef short     s16;
-typedef int       s32;
-typedef long long s64;
-
+typedef char               c8;
+typedef signed char        s8;
 typedef unsigned char      u8;
+typedef short              s16;
 typedef unsigned short     u16;
+typedef int                s32;
 typedef unsigned int       u32;
+typedef long long          s64;
 typedef unsigned long long u64;
-
-typedef float       f32;
-typedef double      f64;
-typedef long double f80;
+typedef float              f32;
+typedef double             f64;
+typedef long double        f80;
 
 s32 main() {
-  // Variable declarations follow
-  // type name = initial value;  
-  c8  uFoo  = 'A';
-  s8  sFoo  = -120;  
-  s16 sBar  = -27543;  
-  u16 uBar  = 98;
-  s32 sBaz  = -1676352;
-  u32 uBaz  = 'C';
-  s64 sThud = -38131823283338;
-  u64 uThud = 14710131619;
-  f32 flob  = 0.125;
-  f64 corge = 3.141592653589793;
-  f80 plugh = 9.6169031625e+35;
+  // Variable declarations follow.
+  // [data type] [name] = [initial value];
+  
+  c8   cFoo  = 'A';  
+  s8   sFoo  = -120;  
+  u8   uFoo  = 128;
+  s16  sBar  = -27543;  
+  u16  uBar  = 98;
+  s32  sBaz  = -1676352;
+  u32  uBaz  = 'C';
+  s64  sThud = -38131823283338;
+  u64  uThud = 14710131619;
+  f32  flob  = 0.125;
+  f64  corge = 3.141592653589793;
+  f80  plugh = 9.6169031625e+35;
 
   // Shows using the appropriate format specifier for any given type.
   // C has a special use case for %c so that integer based 8-bit,
@@ -916,8 +934,9 @@ s32 main() {
   // chars. This can be seen from the output information below.
   // 64-bit integer types are incapable of storing char information.
 
-  printf("sFoo  [%%c]   = %c\n", sFoo);
+  printf("cFoo  [%%c]   = %c\n", cFoo);  
   printf("uFoo  [%%c]   = %c\n", uFoo);
+  printf("sFoo  [%%c]   = %c\n", sFoo);
   printf("sFoo  [%%d]   = %d\n", sFoo);
   printf("uFoo  [%%d]   = %d\n", uFoo);
   printf("sBar  [%%c]   = %c\n", sBar);  
@@ -946,10 +965,12 @@ s32 main() {
 
 **Generated output:**
 ```
+cFoo  [%c]   = A
+uFoo  [%c]   = �
 sFoo  [%c]   = �
-uFoo  [%c]   = A
+cFoo  [%d]   = 65
 sFoo  [%d]   = -120
-uFoo  [%d]   = 65
+uFoo  [%d]   = 128
 sBar  [%c]   = i
 uBar  [%c]   = b
 sBar  [%hi]  = -27543
@@ -971,36 +992,41 @@ plugh [%Le]  = 9.616903e+35
 plugh [%LE]  = 9.616903E+35
 ```
 
-Based on the above we can see some janky output showing up with at least two of the %c specifiers for sFoo and sBaz.  There are problems sometimes, as you can see with non-displayable information.  The following example will show how to display information with a different specifier.
+Based on the above we can see some janky output showing up with %c specifier formatting for uFoo, sFoo and sBaz.  This has generated non-displayable information.  The following example will show how to display information with a different specifier.
 
 [Return to Index](#index)
 
-#### Example 3: Using Printf with %X
+#### Example 3: Using printf with %x
 Basic program with output.
 
-1. showing how to use %x \[hex specifier\]
-2. examples on how it can be used
-3. setup of function main.
+1. showing various typedef assignments
+2. general variable use
+3. using a portion of the C Standard Library to access Functions for output
+4. showing how to use %x \[hex specifier\]
+5. examples on how it can be used
+6. setup of function main.
 
 ```C
 #include <stdio.h>
 
 //create typedef associations
-typedef char s8;
-typedef short s16;
-typedef int s32;
-typedef long long s64;
-
-typedef unsigned char u8;
-typedef unsigned short u16;
-typedef unsigned int u32;
+typedef char               c8;
+typedef signed char        s8;
+typedef unsigned char      u8;
+typedef short              s16;
+typedef unsigned short     u16;
+typedef int                s32;
+typedef unsigned int       u32;
+typedef long long          s64;
 typedef unsigned long long u64;
 
 s32 main() {
-  //variable declarations follow
-  //type name = initial value;  
+  // Variable declarations follow.
+  // [data type] [name] = [initial value];
+  
+  c8  cFoo  = 'A';
   s8  sFoo  = -120;
-  u8  uFoo  = 'A';
+  u8  uFoo  = 128;
   s16 sBar  = -27543;
   u16 uBar  = 98;
   s32 sBaz  = -1676352;
@@ -1012,9 +1038,10 @@ s32 main() {
   //out of the box and only showing the lower case specifier in this case
   //you can use %X and %LX if you prefer upper case
   //remember you need the %Lx or %LX for 64-bit
-  //also that all other unsigned integer data tyoes will be cast
+  //also that all other unsigned integer data types will be cast
   //to unsigned char as you'll see in the output
 
+  printf("cFoo  [%%x] = %x\n", cFoo);
   printf("sFoo  [%%x] = %x\n", sFoo);
   printf("uFoo  [%%x] = %x\n", uFoo);
   printf("sBar  [%%x] = %x\n", sBar);  
@@ -1030,8 +1057,9 @@ s32 main() {
 
 **Generated Output:**
 ```
+cFoo  [%x] = 41                    //cast to a single unsigned char byte
 sFoo  [%x] = ffffff88
-uFoo  [%x] = 41                    //cast to a single unsigned char byte
+uFoo  [%x] = 80                    //cast to a single unsigned char byte
 sBar  [%x] = ffff9469
 uBar  [%x] = 62                    //cast to a single unsigned char byte
 sBaz  [%x] = ffe66bc0
@@ -1042,6 +1070,8 @@ uThud [%Lx] = 36ccacba3
 
 [Return to Index](#index)
 
+### Format Modifiers
+
 Now that we have a general handle on the basics of printf, there is another part we need to discuss that deals with modifiers that can be applied to format specifiers.  These modifiers control justification, number of decimal places to show with floats, and control padding with characters of the output.  We'll need to create another table for some of the rules.  Then we'll go over some examples.
 
 ```
@@ -1050,27 +1080,31 @@ Modified Format Specifier
 %[A][B][C][D]
 
 [A] Use - to format for left justification.
-[B] Specify a padding character here.
+[B] Specify a padding character here. [1]
 [C] Use ?.? where ? is an integer value.
-    First position is the total width of output.
-    Second position after the . is how many decimal positions.
+    First position is the total width of output. 
+    Second position after the . is how many decimal positions. [2]
 [D] Use your normal format specifier here.
 
 [A][B][C] are optional.
 ```
+<sup>**NOTE [1]** Not valid with the _char_ type.  Only Padding is valid with this Format Specifier.</sup>
 
-Confused? Probably... so let's throw some more examples into the mix.  It's always easier to look at code to figure out how things work.  We'll need to break down every specifier with enough context to fully explore the last remaining pieces of printf.
+<sup>**NOTE [2]** Only valid with Floating Point Data Types</sup>
+
+Confused? Probably... so let's throw some more examples into the mix.  It's always easier to look at code to figure out how things work.  We'll need to break down every specifier with enough context to fully explore the last remaining pieces of _printf_.
 
 [Return to Index](#index)
 
-Here's a little basic program with output, showing the basics of left justification.  
+#### Example 4: Left Justification with printf
+Basic program with output.
 
 ```C
 #include <stdio.h>
 
-typedef char s8;
+typedef char          s8;
 typedef unsigned char u8;
-typedef int s32;
+typedef int           s32;
 
 s32 main() {
   s8 sFoo  = -120;
@@ -1083,7 +1117,7 @@ s32 main() {
   u8 uBaz  = 247;
   u8 uThud = 'A';
   
-  //left justify 
+  // Use - left justify.
   printf("sFoo  [%%-d] %-d\n", sFoo);
   printf("sBar  [%%-d] %-d\n", sBar);
   printf("sBaz  [%%-d] %-d\n", sBaz);
@@ -1133,14 +1167,15 @@ uThud [%-c] A
 
 [Return to Index](#index)
 
-Another little program with output showing how to use zero and width padding.  Keep in mind you cannot using zero padding or any other character padding with %c.  Only width padding is valid with this Format Specifier.  
+#### Example 5: Zero Padding with printf
+Basic program with output.
 
 ```C
 #include <stdio.h>
 
-typedef char s8;
+typedef char          s8;
 typedef unsigned char u8;
-typedef int s32;
+typedef int           s32;
 
 s32 main() {
   s8 sFoo  = -120;
@@ -1206,7 +1241,8 @@ uThud [%5c]     A
 
 [Return to Index](#index)
 
-Modifications to show %x and %X and some side-effects when dealing with signed numbers.
+#### Example 6: Side-Effects using printf %x and signed numbers
+Basic program with output.
 
 ```C
 #include <stdio.h>
@@ -1226,12 +1262,11 @@ s32 main() {
   u8 uBaz  = 247;
   u8 uThud = 'A';
   
-  //shows padding a value with leading zeroes
-  //with use of width padding
-  //sFoo is going to cause roll and since %x
-  //defaults to the width needed 
-  //notice an unexpected side-effect when
-  //the compiler casts the s8 to s32 for the -120
+  // Shows padding a value with leading zeroes with use of width padding.
+  // sFoo is going to cause value rolling.
+  // Since %x defaults to the width needed, notice an unexpected side-effect
+  // when the compiler casts the s8 to s32 for the -120.
+  
   printf("sFoo  [%%05x] %05x\n", sFoo);
   printf("sBar  [%%05x] %05x\n", sBar);
   printf("sBaz  [%%05x] %05x\n", sBaz);
@@ -1282,7 +1317,11 @@ uThud [%05X] 00041
 
 [Return to Index](#index)
 
-All Integer Data Types follow what is shown above.  You can change the padding character, width padding, and interchange the Format Specifier with the appropriate type.  The next little program will show how to format Floating Point Data Types.  When declaring with float, literals used to initialise variables are treated as double by default, so you'll need to tack on an 'f' to cast them to float.
+#### Example 7: Formating Floating Point Data Types with printf
+Basic program with output.
+
+
+All Integer Data Types follow what is shown above.  You can change the padding character, width padding, and interchange the Format Specifier with the appropriate type.  The next little program will show how to format Floating Point Data Types.  
 
 ```C
 #include <stdio.h>
@@ -1291,15 +1330,18 @@ typedef int s32;
 typedef float f32;
 
 s32 main() {
-  //this shows the introduction of estimation errors
-  //with floating point numbers
-  //you will see output that often does not match
-  //what you are assigning to your variables
-  //there are inaccuracy problems since all floating
-  //point type values cannot always be accurately
-  //represented with standard bit patterns like the
-  //integer types 
-    
+  // This shows the introduction of estimation errors
+  // with floating point numbers. You will see output
+  // that often does not match what you are assigning
+  // to your variables. There are inaccuracy problems
+  // since all floating point type values cannot always
+  // be accurately represented with standard bit
+  // patterns like the integer types.
+  
+  // All floating point values assigned during declare
+  // are assumed to be double. You must use the f
+  // modifier on values to cast them to float instead.
+  
   f32 f32Foo = 10.2f;
   f32 f32Bar = 0.123456f;
   f32 f32Baz = 123456.0123456f;
