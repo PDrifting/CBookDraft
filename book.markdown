@@ -52,6 +52,47 @@ C is also extremely portable, which is why it drives so many things.  The [GCC C
 [⠀⠀⠀⠀Example 17: Ideas on Dealing with Union Troubles](#example-17-ideas-on-dealing-with-union-troubles)\
 [⠀⠀⠀⠀Example 18: Unions](#example-18-unions)
 
+# Pre-Basics of GCC
+## Stages of the Compiler
+
+```
+   [1]             Source File (.c)
+                          |
+   [2]              Pre-Processor
+                          |
+   [3]     Generation of Assembly Code (.s)
+                          |
+   [4]      Generation of Object File (.o)
+                          |
+   [5]             Fetch Libraries
+                          |
+   [6]                 Linker
+                          |
+   [7]         Generation of Executable
+```
+
+1. Source File - Main file that contains your programs syntax.
+
+2. Pre-processor - It strips out comments from the sources.  Fetches header files (.h) and executes macros.
+
+> -E will halt the compilation process and emit the pre-processor stage.
+
+3. Generation of Assembly - This is actually an intermediate stage generating assembly that can only be used by the GCC compiler.  The GNU Assembler that is part of GCC can build this file with some minor modifications.  It is formatted in AT&T style vs. Intel which is generally easier to read.
+
+> -S will halt the compilation process and emit the intermediate assembly stage.
+
+4. Generation of Object File - Before the linker places the appropriate execution information at the linking stage, a general .o [object file] is created.  Libraries and other code that is meant to be used elsewhere can also be stored in this format to be included during linking with projects.
+
+> -c will halt the compilation process and emit the bytecode stored inside the object file.  This stage is not human readable.
+
+5. Fetch Libraries - These will generally be stored in object file format.  Other libraries will be fetched based on what headers you have included from the C Standard Library.
+
+6. Linker - This is where everything is tied together.  Appropriate header information, symbol tables, and addressing information is created at this stage for the final creation of your executable.
+
+7. Generation of Executable - If everything went well and compilation was not halted by another stage, GCC will emit a executable appropriate to your platform and specifications you supplied for its creation.
+
+**NOTE** - When appropriate to examples later in the book, these stages will be explored in greater detail when appropriate.
+
 # Chapter 1: A Tutorial Introduction
 ## Part 1: Data Types
 
@@ -75,7 +116,7 @@ These are the general arithmetic types that are broken down into integer and flo
 |long long         |64 | 8|  -9223372036854775808| to |9223372036854775807
 |unsigned long long|64 | 8|                     0| to |18446744073709551615
 
-**NOTE:** GCC on Linux typically defaults to 64-bits.  On Windows, MinGW defaults to 32-bits.  For compatibility of code between 32-bit and 64-bit, make sure your _long_ Data Types are 64-bit by using _long long_ instead.  In 32-bit environments this will make long 64-bit, and in 64-bit environments it will treat _long long_ as 64-bit _long_.
+**NOTE:** GCC on Linux typically defaults to 64-bits.  On Windows, MinGW defaults to 32-bits.  For compatibility of code between 32-bit and 64-bit, make sure your _long_ Data Types are 64-bit by using _long long_ instead.  In 32-bit environments this will make _long_ 64-bit, and in 64-bit environments it will treat _long long_ as 64-bit _long_.
 
 #### Floating Point Types
 
@@ -89,7 +130,7 @@ These are the general arithmetic types that are broken down into integer and flo
 
 These are typically regarded as another arithmetic type used to define named variables that are assigned discrete integer values.  They are used in place of magic numbers or hard coded values that can have arbitrary meaning.  The general modern view is to avoid using them.
 
-**MAGIC NUMBERS** - Enumerated values were created as a solution to this problem.  However, they create more problems than they resolve.  When we consider the issue of obfuscated information by using values instead of meaninful tokens we generally refer to those as Magic Numbers.  It is generally regarded that we should not use them as initial values or in the endpoint test expressions of a while, do while, or for loop.  There is general concern for avoiding their use also in expressions, mallocs, and other statements where it may obfuscate information and taint obvious readability or understanding of the code.  You are advised to use a #define, or specific variable within contextual scope to give a meaningful name to your value.
+**MAGIC NUMBERS** - Enumerated values were created as a solution to this problem.  However, they create more problems than they resolve.  When we consider the issue of obfuscated information by using values instead of meaninful tokens we generally refer to those as Magic Numbers.  It is generally regarded that we should not use them as initial values or in the endpoint test expressions of a while, do while, or for loop.  There is general concern for avoiding their use also in expressions, mallocs, and other statements where it may obfuscate information and taint obvious readability or understanding of the code.  You are advised to use a #define, or specific variables within contextual scope to give a meaningful name to your value.
 
 ```
 1. They are not really integer values, but GCC does treat them as such.
@@ -115,7 +156,7 @@ These include Arrays, Pointers, Structures, Unions, Functions, and Type Definiti
 
 #### Arrays
 
-An Array is created from a Data Type that is generally used to store multiple elements of data.  They are zero indexed and you declare them by specifying the total number of elements needed.  To access the last element in an Array use the total number of elements minus one.  Arrays, once declared, cannot change size.  Elements are accessed by unique integer based indices.  Data stored inside an Array, provided Pointers are not involved with the data stored in each element, will generally create a single block of contiguous memory.  Most off by one errors in your code will be created by trying to access information inside Arrays. You do not need to pass an Array by reference to a function as an argument.  In most cases when using them, they will be treated as pointers or referenced as such.
+An Array is created from a Data Type that is generally used to store multiple elements of data.  They are zero indexed and you declare them by specifying the total number of elements needed.  To access the last element in an Array use the total number of elements minus one.  Arrays, once declared, cannot change size.  Elements are accessed by unique integer based indices.  Data stored inside an Array, provided Pointers are not involved with the data stored in each element, will generally create a single block of contiguous memory.  Most off by one errors in your code will be created by trying to access information inside Arrays. You generally do not need to pass an Array by reference to a function as an argument.  In most cases when using them, they will be treated as pointers or referenced as such.
 
 #### Pointers
 
@@ -131,17 +172,29 @@ Other uses of Pointers and Function Pointers exist to form bridges tying certain
 
 #### Structures and Unions
 
-These are your user defined record types.  Useful when you need to combine groups of items, fields, or members of different data types that can be referenced by name to create a single type.  C doesn't have classes, or support object oriented coding methods for the most part.  All members of a _struct_ and _union_ are publicly declared.  Defined _struct_ and _union_ types are not assigned memory until declared, and will always be stored in contiguous memory.  Alignment, packing, and padding are compiler implementation specific.  Let's discuss how GCC manages these aspects of these Data Types. The only real difference between a _struct_ and _union_ type is how they are stored in memory.
+These are your user defined record types.  Useful when you need to combine groups of items, fields, or members of different data types that can be referenced by name to create a single type.  C doesn't have classes, or support object oriented coding methods for the most part.  All members of a _struct_ and _union_ are publicly declared.  Defined _struct_ and _union_ types are not assigned memory until declared, and will always be stored in contiguous memory.  The only real difference between a _struct_ and _union_ type is how they are stored in memory.
 
 > _struct_ members have distinct regions of memory allocated
 
 > _union_ members all share the same memory region
 
-**Alignment** - This tells the compiler to attempt a specific alignment during allocation to specific boundaries. Alignment can only be used to increase member boundaries. These are determined by the linker and the platform you are compiling on.  GCC by default will optimise for the platform you are compiling on.  You can assume this is the default memory layout.
+Alignment, packing, and padding are compiler implementation specific.  GCC manages these aspects of these Data Types for you.  In the case of needing to override the defaults you can use GCC defined macros.
 
-**Packing** - Specifies to the compiler that it should use the minimum footprint of memory required to represent the type.  All members of the Structure or Union will have the same equivalent packed attribute applied to them.  This will almost always affect performance negatively.  If you are using memory constrained platforms, the performance tradeoff may be required to make things fit.
+**Alignment** - This tells the compiler to attempt a specific alignment during allocation to specific boundaries. Alignment can only be used to increase member boundaries. These are determined by the linker and the platform you are compiling on.  GCC by default will optimise for the platform you are compiling on.  You can assume this is the default memory layout.  Keep in mind your linker will be a limiting factor on the largest size you are able to align to.  This will be platform specific.  Specifiying a byte alignment of 16 when the linker or platform can only support 8, will not not have any benefits.
 
-**Padding** - Is required, and can be manipulated by alignment and packing attributes. Overriding the default padding performed by GCC is likely to slow down access to members, but can save memory. Padding will only be inserted when a Structure member is followed by another Structure member that requires a larger alignment or at the end of the Structure to align it to a specific boundary. GCC by default is not allowed to reorder any Structure members to achieve optimal alignment, so programmers should be mindful of their member layouts inside their Structure definitions.
+> __attribute__ ((aligned ([in bytes])))
+
+> __attribute__ ((aligned)) // default attribute in GCC
+
+**Packing** - Specifies to the compiler that it should use the minimum footprint of memory required to represent the type.  All members of the _struct_ or _union_ Data Types will have the same equivalent packed attribute applied to them.  This will almost always affect performance negatively.  If you are using memory constrained platforms, the performance tradeoff may be required to make things fit.
+
+> __attribute__ ((packed))
+
+**Padding** - Is required, and can be manipulated by alignment and packing attributes. Overriding the default padding performed by GCC is likely to slow down access to members, but can save memory. Padding will only be inserted when a _struct_ member is followed by another _struct_ member that requires a larger alignment or at the end of the _struct_ to align it to a specific boundary. GCC by default is not allowed to reorder any _struct_ members to achieve optimal alignment, so programmers should be mindful of their member layouts inside their _struct_ definitions.
+
+**Transparency** - This only applies to _union_ Data Types. Accepting multiple types of arguments in C is problematic.  There is no Function Overloading.  However, it is possible to use a transparent _union_ in order to accomplish being able to pass multiple strictly declared Data Types using this attribute.  For instance, POSIX when dealing with sockets and other networking based code, there are several functions that take multiple argument Data Types.  This forces the function and the way it will be called with arguments to be treated in a special context.  This is a bypass for getting around having to use _void_ pointers which would allow any type to be passed.
+
+> __attribute__ ((__transparent_union__))
 
 [Return to Index](#index)
 
