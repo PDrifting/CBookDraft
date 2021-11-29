@@ -91,7 +91,7 @@ C is also extremely portable, which is why it drives so many things.  The [GCC C
 
 7. Generation of Executable - If everything went well and compilation was not halted by another stage, GCC will emit a executable appropriate to your platform and specifications you supplied for its creation.
 
-**NOTE** - When appropriate to examples later in the book, these stages will be explored in greater detail when appropriate.
+**NOTE** - When appropriate to examples later in the book, these stages will be explored in greater detail.
 
 # Chapter 1: A Tutorial Introduction
 ## Part 1: Data Types
