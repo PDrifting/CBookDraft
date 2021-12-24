@@ -104,27 +104,29 @@ These are the general arithmetic types that are broken down into integer and flo
 
 #### Integer Types
 
-|Keyword             |Bit Width|Byte Width|Low Value||High Value|
-|---|:--:|:--:|--:|:--:|:--|
-|char              |8  | 1|    Single Character|||           
-|signed char       |8  | 1|                 -128| to |127
-|unsigned char     |8  | 1|                    0| to |255
-|short             |16 | 2|                -32768| to |32767
-|unsigned short    |16 | 2|                     0| to |65353
-|int               |32 | 4|        -2,147,483,648| to |2,147,483,647
-|unsigned int      |32 | 4|                     0| to |4,294,967,295
-|long long         |64 | 8|  -9223372036854775808| to |9223372036854775807
-|unsigned long long|64 | 8|                     0| to |18446744073709551615
+|Keyword             |Bit Width|Byte Width|Low Value||High Value|Literal Suffix
+|---|:--:|:--:|--:|:--:|:--|:--:|
+|char              |8  | 1|    Single Character|||N/A
+|signed char       |8  | 1|                 -128| to |127|
+|unsigned char     |8  | 1|                    0| to |255|
+|short             |16 | 2|                -32768| to |32767|
+|unsigned short    |16 | 2|                     0| to |65353|
+|int               |32 | 4|        -2,147,483,648| to |2,147,483,647|
+|unsigned int      |32 | 4|                     0| to |4,294,967,295|U
+|long long         |64 | 8|  -9223372036854775808| to |9223372036854775807|LL
+|unsigned long long|64 | 8|                     0| to |18446744073709551615|LLU
 
 **NOTE:** GCC on Linux typically defaults to 64-bits.  On Windows, MinGW defaults to 32-bits.  For compatibility of code between 32-bit and 64-bit, make sure your _long_ Data Types are 64-bit by using _long long_ instead.  In 32-bit environments this will make _long_ 64-bit, and in 64-bit environments it will treat _long long_ as 64-bit _long_.
 
 #### Floating Point Types
 
-|Keyword         |Bit Width|Byte Width|Low Range||High Range|Precision|
-|:--|:--:|:--:|--:|---|:--|--:|
-|float           |32|  4 |    1.2E-38| to |3.4E+38    | 6 decimal places|
+|Keyword         |Bit Width|Byte Width|Low Range||High Range|Precision|Literal Suffix
+|:--|:--:|:--:|--:|---|:--|--:|:--:|
+|float           |32|  4 |    1.2E-38| to |3.4E+38    | 6 decimal places|F
 |double          |64|  8 |   2.3E-308| to |1.7E+308   |15 decimal places|
-|long double     |80| 10 |  3.4E-4932| to |1.1E+4932  |19 decimal places|
+|long double     |80| 10 |  3.4E-4932| to |1.1E+4932  |19 decimal places|L
+
+**NOTE:** The Literal Suffix fields for both Integral and Floating Point Types are used to apply a data format to values assigned to variables on declare to ensure they are recognised as a specific type.  GCC may throw warnings if you do not use them. This is specifically a case when it comes to 64-bit integral assignments, you must apply the suffix.  Also with floating point data, since _double_ is the default.  Examples in Chapter 2 will expand on the use of Literal Suffixes.
 
 #### Enumerated Types
 
@@ -1152,6 +1154,13 @@ Confused? Probably... so let's throw some more examples into the mix.  It's alwa
 #### Example 4: Left Justification with printf
 Basic program with output.
 
+1. showing various typedef assignments
+2. general variable use
+3. using a portion of the C Standard Library to access Functions for output
+4. showing how to use various output specifiers
+5. examples on how they can be used to left justify data
+6. setup of function main.
+
 ```C
 #include <stdio.h>
 
@@ -1222,6 +1231,14 @@ uThud [%-c] A
 
 #### Example 5: Zero Padding with printf
 Basic program with output.
+
+1. showing various typedef assignments
+2. general variable use
+3. using a portion of the C Standard Library to access Functions for output
+4. showing how to use various output specifiers
+5. examples on how they can be used to zero pad and justify data
+6. setup of function main.
+
 
 ```C
 #include <stdio.h>
@@ -1297,49 +1314,57 @@ uThud [%5c]     A
 #### Example 6: Side-Effects using printf %x and signed numbers
 Basic program with output.
 
+1. showing various typedef assignments
+2. general variable use
+3. using a portion of the C Standard Library to access Functions for output
+4. examples showing side-effects that can occur using certain specifiers with various data
+5. setup of function main.
+
 ```C
 #include <stdio.h>
 
-typedef char s8;
+typedef char          c8;
+typedef signed char   s8;
 typedef unsigned char u8;
-typedef int s32;
+typedef int           s32;
 
 s32 main() {
+  c8 Thud = 'A';
+  
   s8 sFoo  = -120;
   s8 sBar  = 7;
   s8 sBaz  = 115;
-  s8 sThud = 'A';
-
+  
   u8 uFoo  = 0;
   u8 uBar  = 17;
   u8 uBaz  = 247;
-  u8 uThud = 'A';
-  
+    
   // Shows padding a value with leading zeroes with use of width padding.
-  // sFoo is going to cause value rolling.
-  // Since %x defaults to the width needed, notice an unexpected side-effect
-  // when the compiler casts the s8 to s32 for the -120.
+  // sFoo is going to cause value rolling. Since %x defaults to the width
+  // needed, notice an unexpected side-effect when the compiler casts the
+  // s8 to s32 for the -120. Be cautious of displaying negative values
+  // using the %x specfier.
+  
+  printf("thud  [%%05x] %05x\n\n", thud);
   
   printf("sFoo  [%%05x] %05x\n", sFoo);
   printf("sBar  [%%05x] %05x\n", sBar);
-  printf("sBaz  [%%05x] %05x\n", sBaz);
-  printf("sThud [%%05x] %05x\n\n", sThud);
-
+  printf("sBaz  [%%05x] %05x\n\n", sBaz);
+  
   printf("uFoo  [%%05x] %05x\n", uFoo);
   printf("uBar  [%%05x] %05x\n", uBar);
-  printf("uBaz  [%%05x] %05x\n", uBaz);
-  printf("uThud [%%05x] %05x\n\n", uThud);
-
-  //no real difference, just uppercase
+  printf("uBaz  [%%05x] %05x\n\n", uBaz);
+  
+  // No real difference. just switching to uppercase.
+  printf("thud  [%%05X] %05X\n\n", thud);
+  
   printf("sFoo  [%%05X] %05X\n", sFoo);
   printf("sBar  [%%05X] %05X\n", sBar);
-  printf("sBaz  [%%05X] %05X\n", sBaz);
-  printf("sThud [%%05X] %05X\n\n", sThud);
-
+  printf("sBaz  [%%05X] %05X\n\n", sBaz);
+  
   printf("uFoo  [%%05X] %05X\n", uFoo);
   printf("uBar  [%%05X] %05X\n", uBar);
-  printf("uBaz  [%%05X] %05X\n", uBaz);
-  printf("uThud [%%05X] %05X\n\n", uThud);
+  printf("uBaz  [%%05X] %05X\n\n", uBaz);
 
   return 0;
 }
@@ -1347,25 +1372,25 @@ s32 main() {
 
 **Generated Output:**
 ```
+thud  [%05x] 00041
+
 sFoo  [%05x] ffffff88
 sBar  [%05x] 00007
 sBaz  [%05x] 00073
-sThud [%05x] 00041
 
 uFoo  [%05x] 00000
 uBar  [%05x] 00011
 uBaz  [%05x] 000f7
-uThud [%05x] 00041
+
+thud  [%05X] 00041
 
 sFoo  [%05X] FFFFFF88
 sBar  [%05X] 00007
 sBaz  [%05X] 00073
-sThud [%05X] 00041
 
 uFoo  [%05X] 00000
 uBar  [%05X] 00011
 uBaz  [%05X] 000F7
-uThud [%05X] 00041
 ```
 
 [Return to Index](#index)
@@ -1373,18 +1398,22 @@ uThud [%05X] 00041
 #### Example 7: Formating Floating Point Data Types with printf
 Basic program with output.
 
-
-All Integer Data Types follow what is shown above.  You can change the padding character, width padding, and interchange the Format Specifier with the appropriate type.  The next little program will show how to format Floating Point Data Types.  
+1. showing various typedef assignments
+2. general variable use
+3. using a portion of the C Standard Library to access Functions for output
+4. changing the character and width padding for floating point data
+5. using the literal suffix f to cast assigned values as 32-bit floats
+6. setup of function main.
 
 ```C
 #include <stdio.h>
 
-typedef int s32;
+typedef int   s32;
 typedef float f32;
 
 s32 main() {
   // This shows the introduction of estimation errors
-  // with floating point numbers. You will see output
+  // with floating point values. You will see output
   // that often does not match what you are assigning
   // to your variables. There are inaccuracy problems
   // since all floating point type values cannot always
@@ -1392,7 +1421,7 @@ s32 main() {
   // patterns like the integer types.
   
   // All floating point values assigned during declare
-  // are assumed to be double. You must use the f
+  // are assumed to be double. You must use the _f_
   // modifier on values to cast them to float instead.
   
   f32 f32Foo = 10.2f;
@@ -1400,29 +1429,35 @@ s32 main() {
   f32 f32Baz = 123456.0123456f;
   f32 f32Thud = 3.14159265358979323846f;
 
-  //left justify notice the trucation on output
+  // Left justify and notice the trucation on output.
+  
   printf("f32Foo  [%%-f] %-f\n", f32Foo);
   printf("f32Bar  [%%-f] %-f\n", f32Bar);
   printf("f32Baz  [%%-f] %-f\n", f32Baz);
-  printf("f32Thud [%%-f] %-f\n", f32Thud);
+  printf("f32Thud [%%-f] %-f\n\n", f32Thud);
 
-  //try to force more decimal places
-  //you will see more errors introduced at this point
-  printf("\nf32Foo  [%%-.10f] %-.10f\n", f32Foo);
+  // This forces more decimal places because we have
+  // higher precision with more decimal places. You
+  // can see there are errors being introduced when
+  // we extend more decimal places.
+  
+  printf("f32Foo  [%%-.10f] %-.10f\n", f32Foo);
   printf("f32Bar  [%%-.10f] %-.10f\n", f32Bar);
   printf("f32Baz  [%%-.10f] %-.10f\n", f32Baz);
-  printf("f32Thud [%%-.10f] %-.10f\n", f32Thud);
+  printf("f32Thud [%%-.10f] %-.10f\n\n", f32Thud);
 
-  //additional formatting
-  //note that the left alignment cancels any left
-  //padding values used in the format 
-  printf("\nf32Foo  [%%-9.2f] %-9.2f\n", f32Foo);
+  // An additional series of formatting.  Note that
+  // the left alignment cancels any left padding
+  // values used in the format.
+  
+  printf("f32Foo  [%%-9.2f] %-9.2f\n", f32Foo);
   printf("f32Bar  [%%-9.2f] %-9.2f\n", f32Bar);
   printf("f32Baz  [%%-9.2f] %-9.2f\n", f32Baz);
-  printf("f32Thud [%%-9.2f] %-9.2f\n", f32Thud);
+  printf("f32Thud [%%-9.2f] %-9.2f\n\n", f32Thud);
 
-  //alignment formatting
-  printf("\nf32Foo  [%%9.2f] %9.2f\n", f32Foo);
+  // General alignment formatting.
+  
+  printf("f32Foo  [%%9.2f] %9.2f\n", f32Foo);
   printf("f32Bar  [%%9.2f] %9.2f\n", f32Bar);
   printf("f32Baz  [%%9.2f] %9.2f\n", f32Baz);
   printf("f32Thud [%%9.2f] %9.2f\n", f32Thud);
@@ -1454,53 +1489,69 @@ f32Baz  [%9.2f] 123456.02
 f32Thud [%9.2f]      3.14
 ```
 
-This expands on the float example above showing we can get a bit more precision with double but things still get messy.  Since literals are double by default when dealing with Floating Point Types, you do not need to add anything to the end of the literals on initalisation.
+[Return to Index](#index)
+
+#### Example 8: Formating Floating Point Data Types with printf
+Basic program with output.
+
+1. showing various typedef assignments
+2. general variable use
+3. using a portion of the C Standard Library to access Functions for output
+4. changing the character and width padding for floating point data
+5. literals are _double_ by default when dealing with Floating Point Data Types
+6. setup of function main.
 
 ```C
 #include <stdio.h>
 
-typedef int s32;
+typedef int    s32;
 typedef double f64;
 
 s32 main() {
-  //this shows the introduction of estimation errors
-  //with floating point numbers
-  //you will see output that often does not match
-  //what you are assigning to your variables
-  //there are inaccuracy problems since all floating
-  //point type values cannot always be accurately
-  //represented with standard bit patterns like the
-  //integer types 
-    
+  // This shows the introduction of estimation errors
+  // with floating point numbers. You will see output
+  // that often does not match what you are assigning
+  // to your variables. There are inaccuracy problems
+  // with all Floating Point Types. Not all values
+  // can be accurately represented with standard bit
+  // patterns like the Integer Types.  This leads to
+  // all Floating Point Types being represented with
+  // approximations of their true value.
+  
   f64 f64Foo = 10.2;
   f64 f64Bar = 0.123456;
   f64 f64Baz = 123456.0123456;
   f64 f64Thud = 3.14159265358979323846;
 
-  //left justify notice the trucation on output
+  // Left justify and notice the trucation on output.
+  
   printf("f64Foo  [%%-lf] %-lf\n", f64Foo);
   printf("f64Bar  [%%-lf] %-lf\n", f64Bar);
   printf("f64Baz  [%%-lf] %-lf\n", f64Baz);
-  printf("f64Thud [%%-lf] %-lf\n", f64Thud);
+  printf("f64Thud [%%-lf] %-lf\n\n", f64Thud);
 
-  //forcing more decimal places because we have higher //precision with more bits
-  //you can still see there are errors being introduced
-  //when we extend more decimal places  
-  printf("\nf64Foo  [%%-.25lf] %-.25lf\n", f64Foo);
+  // This forces more decimal places because we have
+  // higher precision with more bits.  You can still
+  // see there are errors being introduced when we
+  // extend more decimal places.
+  
+  printf("f64Foo  [%%-.25lf] %-.25lf\n", f64Foo);
   printf("f64Bar  [%%-.25lf] %-.25lf\n", f64Bar);
   printf("f64Baz  [%%-.25lf] %-.25lf\n", f64Baz);
-  printf("f64Thud [%%-.25lf] %-.25lf\n", f64Thud);
+  printf("f64Thud [%%-.25lf] %-.25lf\n\n", f64Thud);
 
-  //additional formatting
-  //note that the left alignment cancels any left
-  //padding values used in the format 
-  printf("\nf64Foo  [%%-9.2lf] %-9.2lf\n", f64Foo);
+  // An additional series of formatting.  Note that
+  // the left alignment cancels any left padding
+  // values used in the format.
+  
+  printf("f64Foo  [%%-9.2lf] %-9.2lf\n", f64Foo);
   printf("f64Bar  [%%-9.2lf] %-9.2lf\n", f64Bar);
   printf("f64Baz  [%%-9.2lf] %-9.2lf\n", f64Baz);
-  printf("f64Thud [%%-9.2lf] %-9.2lf\n", f64Thud);
+  printf("f64Thud [%%-9.2lf] %-9.2lf\n\n", f64Thud);
 
-  //alignment formatting
-  printf("\nf64Foo  [%%9.2lf] %9.2lf\n", f64Foo);
+  // General alignment formatting.
+  
+  printf("f64Foo  [%%9.2lf] %9.2lf\n", f64Foo);
   printf("f64Bar  [%%9.2lf] %9.2lf\n", f64Bar);
   printf("f64Baz  [%%9.2lf] %9.2lf\n", f64Baz);
   printf("f64Thud [%%9.2lf] %9.2lf\n", f64Thud);
