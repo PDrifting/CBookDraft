@@ -112,9 +112,9 @@ These are the general arithmetic types that are broken down into integer and flo
 |short             |16 | 2|                -32768| to |32767|
 |unsigned short    |16 | 2|                     0| to |65353|
 |int               |32 | 4|        -2,147,483,648| to |2,147,483,647|
-|unsigned int      |32 | 4|                     0| to |4,294,967,295|U
-|long long         |64 | 8|  -9223372036854775808| to |9223372036854775807|LL
-|unsigned long long|64 | 8|                     0| to |18446744073709551615|LLU
+|unsigned int      |32 | 4|                     0| to |4,294,967,295|u
+|long long         |64 | 8|  -9223372036854775808| to |9223372036854775807|ll
+|unsigned long long|64 | 8|                     0| to |18446744073709551615|llu
 
 **NOTE:** GCC on Linux typically defaults to 64-bits.  On Windows, MinGW defaults to 32-bits.  For compatibility of code between 32-bit and 64-bit, make sure your _long_ Data Types are 64-bit by using _long long_ instead.  In 32-bit environments this will make _long_ 64-bit, and in 64-bit environments it will treat _long long_ as 64-bit _long_.
 
@@ -122,9 +122,9 @@ These are the general arithmetic types that are broken down into integer and flo
 
 |Keyword         |Bit Width|Byte Width|Low Range||High Range|Precision|Literal Suffix
 |:--|:--:|:--:|--:|---|:--|--:|:--:|
-|float           |32|  4 |    1.2E-38| to |3.4E+38    | 6 decimal places|F
+|float           |32|  4 |    1.2E-38| to |3.4E+38    | 6 decimal places|f
 |double          |64|  8 |   2.3E-308| to |1.7E+308   |15 decimal places|
-|long double     |80| 10 |  3.4E-4932| to |1.1E+4932  |19 decimal places|L
+|long double     |80| 10 |  3.4E-4932| to |1.1E+4932  |19 decimal places|l
 
 **NOTE:** The Literal Suffix fields for both Integral and Floating Point Types are used to apply a data format to values assigned to variables on declare to ensure they are recognised as a specific type.  GCC may throw warnings if you do not use them. This is specifically a case when it comes to 64-bit integral assignments, you must apply the suffix.  Also with floating point data, since _double_ is the default.  Examples in Chapter 2 will expand on the use of Literal Suffixes.
 
