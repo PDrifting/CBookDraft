@@ -57,12 +57,12 @@ C is also extremely portable, which is why it drives so many things.  The [GCC C
 [⠀⠀Putchar](#putchar)\
 [⠀⠀Printf](#printf)\
 [⠀⠀Format Specifier & Special Characters Table](#format-specifier-special-character-table)\
-[⠀⠀C Output & Expansion on Type Examples](#c-output-expansion-on-type-examples)\
+[⠀⠀C Output & Expansion on Type Examples](#c-output--expansion-on-type-examples)\
 [⠀⠀⠀⠀Example 1: Using puts](#example-1-using-puts)\
 [⠀⠀⠀⠀Example 2: Using Format Specifiers with printf](#example-2-using-format-specifiers-with-printf)\
 [⠀⠀⠀⠀Example 3: Using printf with %x](#example-3-using-printf-with-x)\
 [⠀⠀Format Modifiers](#format-modifiers)\
-[⠀⠀C Output & Format Modification Examples](#c-output-format-modification-examples)\
+[⠀⠀C Output & Format Modification Examples](#c-output--format-modification-examples)\
 [⠀⠀⠀⠀Example 1: Left Justification with printf](#example-1-left-justification-with-printf)\
 [⠀⠀⠀⠀Example 2: Zero Padding with printf](#examples-2-zero-padding-with-printf)\
 [⠀⠀⠀⠀Example 3: Side-Effects using printf %x and signed numbers](#example-3-side-effects-using-printf-x-and-signed-numbers)\
