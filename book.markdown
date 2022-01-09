@@ -18,7 +18,8 @@ It drives the world and is the foundation to pretty much everything in the moder
 C is also extremely portable, which is why it drives so many things.  The [GCC Compiler](https://gcc.gnu.org/) supports 70+ platforms and several architectures.  All of the code examples and C source code in this document will be largely focused on Linux and Windows development.  You can find the base manual for GCC [here](https://gcc.gnu.org/onlinedocs/). MinGW has been used for validation of sources on Windows, you can get it [here](https://sourceforge.net/projects/mingw/files/latest/download).  A general how to install MinGW and configure the path can be found [here](https://youtu.be/guM4XS43m4I). Unlike Unix-like environments, GCC does not come installed by default on Windows platforms. You can also turn on the [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/) and use the Microsoft App Store to install a Unix-Like operating system and use GCC natively.  If you're on a Linux or non-windows platform, this document assumes you have a decent command of that evironment.
 
 # index
-
+[Pre-Basics of GCC](#pre-basics-of-gcc)\
+[⠀⠀Stages of the Compiler](#stages-of-the-compiler)\
 [Chapter 1: A Tutorial Introduction](#chapter-1-a-tutorial-introduction)\
 [Part 1: Data Types](#part-1-data-types)\
 [⠀⠀Basic Type](#basic-types)\
@@ -50,7 +51,25 @@ C is also extremely portable, which is why it drives so many things.  The [GCC C
 [⠀⠀⠀⠀Example 15: Unions](#example-15-unions)\
 [⠀⠀⠀⠀Example 16: Problems with Unions](#example-16-problems-with-unions)\
 [⠀⠀⠀⠀Example 17: Ideas on Dealing with Union Troubles](#example-17-ideas-on-dealing-with-union-troubles)\
-[⠀⠀⠀⠀Example 18: Unions](#example-18-unions)
+[⠀⠀⠀⠀Example 18: Unions](#example-18-unions)\
+[Part 2: Console Output & Using #include](#part-2-console-output-using-include)\
+[⠀⠀Puts](#puts)\
+[⠀⠀Putchar](#putchar)\
+[⠀⠀Printf](#printf)\
+[⠀⠀Format Specifier & Special Characters Table](#format-specifier-special-character-table)\
+[⠀⠀C Output & Expansion on Type Examples](#c-output-expansion-on-type-examples)\
+[⠀⠀⠀⠀Example 1: Using puts](#example-1-using-puts)\
+[⠀⠀⠀⠀Example 2: Using Format Specifiers with printf](#example-2-using-format-specifiers-with-printf)\
+[⠀⠀⠀⠀Example 3: Using printf with %x](#example-3-using-printf-with-x)\
+[⠀⠀Format Modifiers](#format-modifiers)\
+[⠀⠀C Output & Format Modification Examples](#c-output-format-modification-examples)\
+[⠀⠀⠀⠀Example 1: Left Justification with printf](#example-1-left-justification-with-printf)\
+[⠀⠀⠀⠀Example 2: Zero Padding with printf](#examples-2-zero-padding-with-printf)\
+[⠀⠀⠀⠀Example 3: Side-Effects using printf %x and signed numbers](#example-3-side-effects-using-printf-x-and-signed-numbers)\
+[⠀⠀⠀⠀Example 4: Formating Floating Point Types with printf](#example-4-formating-floating-point-types-with-printf)\
+[⠀⠀⠀⠀Example 5: Formating double Floating Point Types with printf](#example-5-formating-double-floating-point-types-with-printf)\
+[⠀⠀⠀⠀Example 6: Formating long double Floating Point Types with printf](#example-6-formating-long-double-floating-point-types-with-printf)\
+[⠀⠀Zero is not always Zero](#zero-is-not-always-zero)
 
 # Pre-Basics of GCC
 ## Stages of the Compiler
@@ -112,9 +131,9 @@ These are the general arithmetic types that are broken down into integer and flo
 |short             |16 | 2|                -32768| to |32767|
 |unsigned short    |16 | 2|                     0| to |65353|
 |int               |32 | 4|        -2,147,483,648| to |2,147,483,647|
-|unsigned int      |32 | 4|                     0| to |4,294,967,295|u
-|long long         |64 | 8|  -9223372036854775808| to |9223372036854775807|ll
-|unsigned long long|64 | 8|                     0| to |18446744073709551615|llu
+|unsigned int      |32 | 4|                     0| to |4,294,967,295|U
+|long long         |64 | 8|  -9223372036854775808| to |9223372036854775807|LL
+|unsigned long long|64 | 8|                     0| to |18446744073709551615|LLU
 
 **NOTE:** GCC on Linux typically defaults to 64-bits.  On Windows, MinGW defaults to 32-bits.  For compatibility of code between 32-bit and 64-bit, make sure your _long_ Data Types are 64-bit by using _long long_ instead.  In 32-bit environments this will make _long_ 64-bit, and in 64-bit environments it will treat _long long_ as 64-bit _long_.
 
@@ -122,9 +141,9 @@ These are the general arithmetic types that are broken down into integer and flo
 
 |Keyword         |Bit Width|Byte Width|Low Range||High Range|Precision|Literal Suffix
 |:--|:--:|:--:|--:|---|:--|--:|:--:|
-|float           |32|  4 |    1.2E-38| to |3.4E+38    | 6 decimal places|f
+|float           |32|  4 |    1.2E-38| to |3.4E+38    | 6 decimal places|F
 |double          |64|  8 |   2.3E-308| to |1.7E+308   |15 decimal places|
-|long double     |80| 10 |  3.4E-4932| to |1.1E+4932  |19 decimal places|l
+|long double     |80| 10 |  3.4E-4932| to |1.1E+4932  |19 decimal places|L
 
 **NOTE:** The Literal Suffix fields for both Integral and Floating Point Types are used to apply a data format to values assigned to variables on declare to ensure they are recognised as a specific type.  GCC may throw warnings if you do not use them. This is specifically a case when it comes to 64-bit integral assignments, you must apply the suffix.  Also with floating point data, since _double_ is the default.  Examples in Chapter 2 will expand on the use of Literal Suffixes.
 
@@ -853,7 +872,7 @@ Console, or Terminal based output has been around since the advent of computer s
  
 The Standard I/O library gives us access to several useful predefined Functions.
 
-### Puts 
+### Puts
 
 This allows us to write a string of char to the Console and appends a newline character to the output automatically.  The function prototype for puts...  
 
@@ -882,9 +901,10 @@ The beast of Console output.  For formatted output printf is your friend.  Remem
 There is a complex concept shown in this prototype -- the ellipsis [...]. All you need to remember is the ellipsis means, can take an arbitrary list of comma separated arguments.  The char format string on the other hand is going to require some deeper discussion.
 
 The format string argument in printf can be a straight char string, but with Format Specifiers peppered throughout it.  Let's dissect the associated Data Types and their Format Specifiers. 
-```
-                    Format Specifier & Special Characters Table
 
+### Format Specifier & Special Characters Table
+
+```
 Integer             Value   Char       Pointer            Address
 ------------------------------------   ------------------------------------   
 char [1]            %hhu    %c         any pointer type   %p
@@ -1147,11 +1167,13 @@ Modified Format Specifier
 
 <sup>**NOTE [2]** Only valid with Floating Point Data Types</sup>
 
-Confused? Probably... so let's throw some more examples into the mix.  It's always easier to look at code to figure out how things work.  We'll need to break down every specifier with enough context to fully explore the last remaining pieces of _printf_.
+Confused? It's always easier to look at code to figure out how things work.  We'll need to break down every specifier with enough context to fully explore the last remaining pieces of _printf_.
 
 [Return to Index](#index)
 
-#### Example 4: Left Justification with printf
+### C Output & Format Modification Examples
+
+#### Example 1: Left Justification with printf
 Basic program with output.
 
 1. showing various typedef assignments
@@ -1229,7 +1251,7 @@ uThud [%-c] A
 
 [Return to Index](#index)
 
-#### Example 5: Zero Padding with printf
+#### Example 2: Zero Padding with printf
 Basic program with output.
 
 1. showing various typedef assignments
@@ -1311,7 +1333,7 @@ uThud [%5c]     A
 
 [Return to Index](#index)
 
-#### Example 6: Side-Effects using printf %x and signed numbers
+#### Example 3: Side-Effects using printf %x and signed numbers
 Basic program with output.
 
 1. showing various typedef assignments
@@ -1395,14 +1417,14 @@ uBaz  [%05X] 000F7
 
 [Return to Index](#index)
 
-#### Example 7: Formating Floating Point Data Types with printf
+#### Example 4: Formating Floating Point Types with printf
 Basic program with output.
 
 1. showing various typedef assignments
 2. general variable use
 3. using a portion of the C Standard Library to access Functions for output
 4. changing the character and width padding for floating point data
-5. using the literal suffix f to cast assigned values as 32-bit floats
+5. using the literal suffix F to cast assigned values as 32-bit floats
 6. setup of function main.
 
 ```C
@@ -1421,13 +1443,13 @@ s32 main() {
   // patterns like the integer types.
   
   // All floating point values assigned during declare
-  // are assumed to be double. You must use the _f_
+  // are assumed to be double. You must use the _F_
   // modifier on values to cast them to float instead.
   
-  f32 f32Foo = 10.2f;
-  f32 f32Bar = 0.123456f;
-  f32 f32Baz = 123456.0123456f;
-  f32 f32Thud = 3.14159265358979323846f;
+  f32 f32Foo = 10.2F;
+  f32 f32Bar = 0.123456F;
+  f32 f32Baz = 123456.0123456F;
+  f32 f32Thud = 3.14159265358979323846F;
 
   // Left justify and notice the trucation on output.
   
@@ -1491,14 +1513,14 @@ f32Thud [%9.2f]      3.14
 
 [Return to Index](#index)
 
-#### Example 8: Formating Floating Point Data Types with printf
+#### Example 5: Formating double Floating Point Types with printf
 Basic program with output.
 
 1. showing various typedef assignments
 2. general variable use
 3. using a portion of the C Standard Library to access Functions for output
 4. changing the character and width padding for floating point data
-5. literals are _double_ by default when dealing with Floating Point Data Types
+5. literals are double by default when dealing with Floating Point Types
 6. setup of function main.
 
 ```C
@@ -1583,59 +1605,83 @@ f64Baz  [%9.2lf] 123456.01
 f64Thud [%9.2lf]      3.14
 ```
 
-Lastly, we'll look at long double.  We need to tack on an 'L' to end of literals used for assignment.  Despite more precision, you will never be able to get absolutely true representations of your values.  All we are going to gain is some extra digits of accuracy.  We'll also look at using E Notation Fomat Specifiers with long double output.
+[Return to Index](#index)
+
+#### Example 6: Formating long double Floating Point Types with printf
+Basic program with output.
+
+1. showing various typedef assignments
+2. using the literal suffix L to cast assigned values as 80-bit floats
+3. using a portion of the C Standard Library to access Functions for output
+4. exploring E Notation format specifiers
+5. changing the character and width padding for floating point data
+6. setup of function main.
 
 ```C
 #include <stdio.h>
 
-typedef int s32;
+typedef int         s32;
 typedef long double f80;
 
 s32 main() {
-  //things do not get much better even with the highest precision
+  // Despite more precision, you will never be able to get absolutely true
+  // representations of your values.  All we are going to gain is some extra
+  // digits of accuracy.  This is the continued unfortunate consequences of
+  // approximating Floating Point Data Types.
+
   f80 f80Foo = 10.2L;
   f80 f80Bar = 0.123456L;
   f80 f80Baz = 123456.0123456L;
   f80 f80Thud = 3.14159265358979323846L;
 
-  //left justify notice the truncation on output
+  // Left justify and notice the trucation on output.
+  
   printf("f80Foo  [%%-Lf] %-Lf\n", f80Foo);
   printf("f80Bar  [%%-Lf] %-Lf\n", f80Bar);
   printf("f80Baz  [%%-Lf] %-Lf\n", f80Baz);
-  printf("f80Thud [%%-Lf] %-Lf\n", f80Thud);
+  printf("f80Thud [%%-Lf] %-Lf\n\n", f80Thud);
 
-  //even with long double there is still a shortage of precision
-  //and accuracy with the approximated values
-  printf("\nf80Foo  [%%-.40Lf] %-.40Lf\n", f80Foo);
+  // This forces more decimal places because we have
+  // higher precision with more bits.  You can still
+  // see there are errors being introduced when we
+  // extend more decimal places.
+  
+  printf("f80Foo  [%%-.40Lf] %-.40Lf\n", f80Foo);
   printf("f80Bar  [%%-.40Lf] %-.40Lf\n", f80Bar);
   printf("f80Baz  [%%-.40Lf] %-.40Lf\n", f80Baz);
-  printf("f80Thud [%%-.40Lf] %-.40Lf\n", f80Thud);
+  printf("f80Thud [%%-.40Lf] %-.40Lf\n\n", f80Thud);
 
-  //additional formatting
-  //note that the left alignment cancels any left
-  //padding values used in the format 
-  printf("\nf80Foo  [%%-9.2Lf] %-9.2Lf\n", f80Foo);
+  // An additional series of formatting.  Note that
+  // the left alignment cancels any left padding
+  // values used in the format.
+  
+  printf("f80Foo  [%%-9.2Lf] %-9.2Lf\n", f80Foo);
   printf("f80Bar  [%%-9.2Lf] %-9.2Lf\n", f80Bar);
   printf("f80Baz  [%%-9.2Lf] %-9.2Lf\n", f80Baz);
-  printf("f80Thud [%%-9.2Lf] %-9.2Lf\n", f80Thud);
+  printf("f80Thud [%%-9.2Lf] %-9.2Lf\n\n", f80Thud);
 
-  //alignment formatting
-  printf("\nf80Foo  [%%9.2Lf] %9.2Lf\n", f80Foo);
+  // General alignment formatting.
+  
+  printf("f80Foo  [%%9.2Lf] %9.2Lf\n", f80Foo);
   printf("f80Bar  [%%9.2Lf] %9.2Lf\n", f80Bar);
   printf("f80Baz  [%%9.2Lf] %9.2Lf\n", f80Baz);
-  printf("f80Thud [%%9.2Lf] %9.2Lf\n", f80Thud);
+  printf("f80Thud [%%9.2Lf] %9.2Lf\n\n", f80Thud);
 
-  //E Notation will ignore the left padding since there will
-  //only ever be a single digit to the left of the floating point
-  printf("\nf80Foo  [%%.3Le] %.6Le\n", f80Foo);
+  // E Notation will ignore the left padding since there
+  // will only ever be a single digit to the left of the
+  // floating point.
+  
+  printf("f80Foo  [%%.3Le] %.6Le\n", f80Foo);
   printf("f80Bar  [%%.3Le] %.6Le\n", f80Bar);
   printf("f80Baz  [%%.3Le] %.6Le\n", f80Baz);
   printf("f80Thud [%%.3Le] %.6Le\n", f80Thud);
 
   return 0;
 }
-(edited)
-General Output:
+```
+
+**General Output:**
+```
 f80Foo  [%-Lf] 10.200000
 f80Bar  [%-Lf] 0.123456
 f80Baz  [%-Lf] 123456.012346
@@ -1660,8 +1706,12 @@ f80Foo  [%.3Le] 1.020000e+01
 f80Bar  [%.3Le] 1.234560e-01
 f80Baz  [%.3Le] 1.234560e+05
 f80Thud [%.3Le] 3.141593e+00
+```
+[Return to Index](#index)
 
-More problems are created when we consider the case of 0 with floating point numbers.  Like every other value stored inside a Floating Point Type, it will be approximated.  This creates confusion when programmers assign a value of 0 and then attempt to do comparisons only to find out 0 does not equal 0 in the world of approximated values.  We'll explore this more when we get to if branching.
+### Zero is not always Zero
+
+More problems are created when we consider the case of 0 with floating point numbers.  Like every other value stored inside a Floating Point Type, it will be approximated.  This creates confusion when programmers assign a value of 0 and then attempt to do comparisons only to find out 0 does not equal 0 in the world of approximated values.  We'll explore this more when we get to if branching.  This will require 
 
 For now let's dig into the basics of Pointer Types. (edited)
 Avatar
@@ -5661,7 +5711,8 @@ As we can see with the #define isDebugging uncommented, or commented will either
 
 Basic program with output showing extensive use of macros to implement a very basic virtual machine. (edited)
 
-  #include <stdio.h>
+```
+#include <stdio.h>
 #include <stdint.h>
 
 #define false 0 
@@ -5765,8 +5816,10 @@ s32 main() {
   getc(stdin);
   return 0;
 }
+```
 
-Emitted by the Compiler Post Preprocessing:
+**Emitted by the Compiler Post Preprocessing:**
+```
 typedef int32_t  s32;
 typedef uint32_t u32;
 
@@ -5841,10 +5894,12 @@ s32 main() {
   _IO_getc(stdin);
   return 0;
 }
+```
 
+NOTE: This is a good example of code that has a lot of replication that can be easily replaced by macros.  Despite this code being relatively simplistic in nature, it relies heavily on case statements that have their associated break statements.  Code of this type generates a lot of extra typing.  Simple macros can save typing, help reduce errors in repetitive code, and in general be used to generate code for you.  One of the advantages of using the preprocessor, we can maintain tokens that make sense which will be replaced once the code in compiled.  The function getc in this case is used to get a single character from the keyboard, but has been replaced by the preprocessor with __IO_getc_.  This is because getc is implemented internally and is replaced by the compiler to the association within the C Standard Library implementation used.  The example code above does implement a very basic integral stack based virtual machine.  It is very limited in capabilities, but does support a decent subset of instructions.  An array called code[] is used to hold the program that will be executed by the virtual machine.  Output from the program executed is below.
 
-                                   NOTE: This is a good example of code that has a lot of replication that can be easily replaced by macros.  Despite this code being relatively simplistic in nature, it relies heavily on case statements that have their associated break statements.  Code of this type generates a lot of extra typing.  Simple macros can save typing, help reduce errors in repetitive code, and in general be used to generate code for you.  One of the advantages of using the preprocessor, we can maintain tokens that make sense which will be replaced once the code in compiled.  The function getc in this case is used to get a single character from the keyboard, but has been replaced by the preprocessor with __IO_getc_.  This is because getc is implemented internally and is replaced by the compiler to the association within the C Standard Library implementation used.  The example code above does implement a very basic integral stack based virtual machine.  It is very limited in capabilities, but does support a decent subset of instructions.  An array called code[] is used to hold the program that will be executed by the virtual machine.  Output from the program executed is below. (edited)
 General Output:
+```
 8
 9
 10
@@ -5857,8 +5912,10 @@ General Output:
 17
 [END]
 Press enter...
+```
 
-Part 11: Operator Precedence
+## Part 11: Operator Precedence
+
 The problem with C, the standard doesn't actually define Operator Precedence, so the following table is derived from the base grammar of the C language.  There are a few anomalies, but in general this can be regarded as the order things will fire in if you have complex or compound statements using multiple operators.  Operator order in the following table is first to last priority.
 
 Order  Operators                                                          Associativity
@@ -5880,10 +5937,9 @@ Order  Operators                                                          Associ
 15     = *= /= %= += -= <<= >>= &= ^= |=                                  Right to Left
 16     ,                                                                  Left to Right
 
+# Chapter 2: Queues, Stacks, Lists, Hash Maps... Oh My!
 
-    Chapter 2: Queues, Stacks, Lists, Hash Maps... Oh My! (edited)
-
-    The following implementations are not thread safe.  A static and dynamic allocation version is provided.  These examples are not documented.  Also due to their complexity and length, they will not have the traditional output examples or dissections.  The code will compile and provide basic use in an implementation of function main. If you need help reading the code, please refer to Chapter 1.
+The following implementations are not thread safe.  A static and dynamic allocation version is provided.  These examples are not documented.  Also due to their complexity and length, they will not have the traditional output examples or dissections.  The code will compile and provide basic use in an implementation of function main. If you need help reading the code, please refer to Chapter 1.
 
 
 Queues
