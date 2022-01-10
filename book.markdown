@@ -70,6 +70,7 @@ C is also extremely portable, which is why it drives so many things.  The [GCC C
 [⠀⠀⠀⠀Example 5: Formating double Floating Point Types with printf](#example-5-formating-double-floating-point-types-with-printf)\
 [⠀⠀⠀⠀Example 6: Formating long double Floating Point Types with printf](#example-6-formating-long-double-floating-point-types-with-printf)\
 [⠀⠀Zero is not always Zero](#zero-is-not-always-zero)
+[⠀⠀⠀⠀Example 1: Issues with Floating Point Types and Approximations](#examples-1-issues-with-floating-point-types-and-approximations)
 
 # Pre-Basics of GCC
 ## Stages of the Compiler
@@ -1443,7 +1444,7 @@ s32 main() {
   // patterns like the integer types.
   
   // All floating point values assigned during declare
-  // are assumed to be double. You must use the _F_
+  // are assumed to be double. You must use the F
   // modifier on values to cast them to float instead.
   
   f32 f32Foo = 10.2F;
@@ -1711,7 +1712,79 @@ f80Thud [%.3Le] 3.141593e+00
 
 ### Zero is not always Zero
 
-More problems are created when we consider the case of 0 with floating point numbers.  Like every other value stored inside a Floating Point Type, it will be approximated.  This creates confusion when programmers assign a value of 0 and then attempt to do comparisons only to find out 0 does not equal 0 in the world of approximated values.  We'll explore this more when we get to if branching.  This will require 
+More problems are created when we consider the case of 0 with floating point numbers.  Like every other value stored inside a Floating Point Type, it will be approximated.  This creates confusion when programmers assign a value of 0 and then attempt to do comparisons only to find out 0 does not equal 0 in the world of approximated values.  We'll explore this more when we get to if branching.  This will require a basic understand of using epsilon ranges to approximate a value realtionship to 0.
+
+#### Example 1: Issues with Floating Point Types and Approximations
+Basic program with output.
+
+1. showing various typedef assignments
+2. using a portion of the C Standard Library to access Functions for output
+3. exploring floating point representations of zero
+4. testing certain floating point states of approximations
+5. changing the character and width padding for floating point data
+6. setup of function main.
+
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+typedef int         s32;
+typedef float       f32;
+typedef double      f64;
+typedef long double f80;
+
+s32 main(int argc, char *argv[]) {
+  f32 fltZero = 0.0F;
+  f64 dblZero = 0.0;
+  f80 decZero = 0.0L;
+  
+  printf("%.10f\n", fltZero);
+  printf("%.10lf\n", dblZero);
+  printf("%.10Lf\n", decZero);
+
+  fltZero = 10.0F - 10.0F;
+  dblZero = 10.0 - 10.0;
+  decZero = 10.0L - 10.0L;
+
+  printf("%.10f\n", fltZero);
+  printf("%.10lf\n", dblZero);
+  printf("%.10Lf\n", decZero);
+
+  printf("(0.0 == 0.0F) %s\n", (0.0 == 0.0F) ? "True" : "False");
+
+  // Everything looks fine to this point. Floating Point Types
+  // do have a representation of 0.0 that can be exactly
+  // stored.  Things start to get janky when you start mixing
+  // Floating Point Types. The more you work with floating point
+  // data you are going to run into these results that produce
+  // approximations of zero. It is generally not considered
+  // good form to perform equality checks against various forms
+  // of floating point data.
+
+  printf("(23.45f == 23.45) %s\n", (23.45F == 23.45) ? "true" : "false");
+  
+  dblZero = 23.45F - 23.45;
+  printf("%.10lf\n", dblZero);
+ 
+  return 0;
+}
+```
+
+**General Output**
+```
+0.0000000000
+0.0000000000
+0.0000000000
+0.0000000000
+0.0000000000
+0.0000000000
+(0.0 == 0.0F) True
+(23.42f == 23.42) false
+0.0000000763
+```
+
+[Return to Index](#index)
 
 For now let's dig into the basics of Pointer Types. (edited)
 Avatar
