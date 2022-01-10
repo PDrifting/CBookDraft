@@ -1786,14 +1786,15 @@ s32 main(int argc, char *argv[]) {
 
 [Return to Index](#index)
 
-For now let's dig into the basics of Pointer Types. (edited)
-Avatar
-PDrifting 24-May-21 09:25 PM
-Part 4: Pointer Basics (edited)
-As mentioned prior, Pointer Types are a troubling subject for C programmers know matter their experience.  We'll cover some scenarios with code and hopefully demystify some of the confusion surrounding them.
-This is a basic program with output showing how to declare variables, structures, unions, an introduction to pointers, getting the address of things, and declaring function main. (edited)
-Avatar
-PDrifting 25-May-21 06:39 PM
+## Part 4: Pointer Basics
+
+As mentioned prior, Pointer Types are a troubling subject for C programmers no matter their experience.  We'll cover some scenarios with code and hopefully demystify some of the confusion surrounding them.
+
+Example 1: 
+
+This is a basic program with output showing how to declare variables, structures, unions, an introduction to pointers, getting the address of things, and declaring function main. 
+
+```
 #include <stdio.h>
 
 typedef int s32;
@@ -1862,8 +1863,10 @@ s32 main() {
 
   return 0;
 }
-(edited)
-General Output:
+```
+
+**General Output:**
+```
 Address of  u32Foo = 0x7ffd0424af08
 Address at *u32Bar = 0x7ffd0424af08
 Address of *u32Bar = 0x7ffd0424af00
@@ -1886,20 +1889,28 @@ Address of *grault = 0x7ffe28e72538
 Address of  main() = 0x400540
 Address at     *fp = 0x400540
 Address of     *fp = 0x7ffd0424aed0
+```
 
 NOTE: Everytime you execute this program these memory addresses will be different.  This is only the current snapshot of the memory layout at the time the example was executed.  You should expect things to move around in memory.  The references that follow are based on this current snapshot for the machine it was executed on. (edited)
-Avatar
-PDrifting 26-May-21 11:37 AM
+
+[Return to Index](#index)
+
+#### Deeper Dissection of Example 1: 
+
 If we remember back when we were looking our bitwidths and byte requirements of individual Types there are some things we can glean from what we're seeing in this output.  Let's dissect this a little to figure out what the computer this is running on has done and things to be mindful of.
+
+```
 s32 u32Foo = 12;
 s32 *u32Bar = &u32Foo;
 
 Address of  u32Foo = 0x7ffd0424af08
 Address at *u32Bar = 0x7ffd0424af08
 Address of *u32Bar = 0x7ffd0424af00
-In the code we declared u32Foo before *u32Bar, yet in memory based on the addresses we can see *u32Bar was placed in memory before u32Foo.  How can we determine this from those addresses?  Like any representation of a number, those hex formatted addresses are still read from right to left.  We can split them up into byte pairs and then determine the most significant portion of what we are looking at.
-Avatar
-PDrifting 26-May-21 11:47 AM
+```
+
+In the code we declared u32Foo before \*u32Bar, yet in memory based on the addresses we can see \*u32Bar was placed in memory before u32Foo.  How can we determine this from those addresses?  Like any representation of a number, those hex formatted addresses are still read from right to left.  We can split them up into byte pairs and then determine the most significant portion of what we are looking at.
+
+```
 Byte Pairs
 01 02 03 04 05 06
 7f|fd|04|24|af|08 u32Foo appears 8 bytes after *u32Bar in memory
@@ -1907,28 +1918,34 @@ Byte Pairs
 
 //we are only looking at byte pair 06 when determining the 8 bytes used [08 - 00 = 8]
 //or by looking at the addresses as a whole [7ffd0424af08 - 7ffd0424af00 = 8]
-(edited)
-Avatar
-PDrifting 26-May-21 11:59 AM
-The next problem we should address is the out of order problem in memory.  Any time you declare something in C it can cause Memory Fragmentation depending on how it was declared.  Memory Fragmentation will be discussed in more detail when we begin dealing with malloc and free a bit later.  Individual variables in this case clearly show the order they are declared in does not guarantee that same order in memory.  We can also learn from looking at this, that any declared pointer is using 8 bytes of memory.  So pointers are 64-bit based on the architecture this code was compiled on.  This can change depending on your system configuration, and compiler setup also.  Let's look at another feature of the addresses shown. (edited)
+```
+
+The next problem we should address is the out of order problem in memory.  Any time you declare something in C it can cause Memory Fragmentation depending on how it was declared.  Memory Fragmentation will be discussed in more detail when we begin dealing with malloc and free a bit later.  Individual variables in this case clearly show the order they are declared in does not guarantee that same order in memory.  We can also learn from looking at this, that any declared pointer is using 8 bytes of memory.  So pointers are 64-bit based on the architecture this code was compiled on.  This can change depending on your system configuration, and compiler setup also.  Let's look at another feature of the addresses shown.
+
+```
 Address of  u32Foo = 0x7ffd0424af08
 Address at *u32Bar = 0x7ffd0424af08
 Address of *u32Bar = 0x7ffd0424af00
-When we say pointers store an address of something, we can clearly see this is true.  The address stored at *u32Bar is the same address of the variable u32Foo.  This should be the case because we assigned the address of u32Foo to *u32Bar when we declared *u32Bar.  By using the amperstand [&] we fetched the address of u32Foo.  We will see this replicates in the same way when we deal with the other pieces of this examples. (edited)
+```
+
+When we say pointers store an address of something, we can clearly see this is true.  The address stored at \*u32Bar is the same address of the variable u32Foo.  This should be the case because we assigned the address of u32Foo to \*u32Bar when we declared \*u32Bar.  By using the amperstand \[&] we fetched the address of u32Foo.  We will see this replicates in the same way when we deal with the other pieces of this examples.
+
 Let's take a look at how the struct TFCP and the pointer we coupled it with look in memory.  
+
+```
 Address of    thud = 0x7ffd0424aef0
         thud.flob  = 0x7ffd0424aef0
         thud.corge = 0x7ffd0424aef4
         thud.plugh = 0x7ffd0424aef8
 Address at    *qux = 0x7ffd0424aef0
 Address of    *qux = 0x7ffd0424aee8
-Avatar
-PDrifting 26-May-21 12:23 PM
-We can see from the addresses of u32Foo and *u32Bar and the addresses here that we have moved to a different region of memory.  The struct TFCP  appears before those other variables.  Byte pair 05 changed from AF [175] to AE [174], where 175 > 174, so we know we are in an early region of memory.  Since memory on any computer is addressed in bytes, smaller memory addresses are always going to be in a region of memory before the next largest memory address. This is what allows us to actually look at memory layouts and figure out where something is, and based on things around it, approximate how many bytes it may be consuming.  In the case of  struct TFCP we'll also be able to figure something else out.  The members thud.flob, thud.corge, thud.plugh, and byte pair 06 show they are laid out in order by fours.  This makes sense, because they are declared as s32 which was typedefed from an int which we know uses 4 bytes of memory.  Also, remember that *qux holds the address pointing to the start of struct TFCP, but the address of *qux, like any pointer is going to have its own address as well. 
+```
 
-NOTE:  The C Standard guarantees that any struct declaration will always have member layout in the order it is declared unless you use an alternate alignment modifier on the struct. (edited)
-Avatar
-PDrifting 26-May-21 12:31 PM
+We can see from the addresses of u32Foo and \*u32Bar and the addresses here that we have moved to a different region of memory.  The struct TFCP  appears before those other variables.  Byte pair 05 changed from AF \[175] to AE \[174], where 175 > 174, so we know we are in an early region of memory.  Since memory on any computer is addressed in bytes, smaller memory addresses are always going to be in a region of memory before the next largest memory address. This is what allows us to actually look at memory layouts and figure out where something is, and based on things around it, and approximate how many bytes it may be consuming.  In the case of struct TFCP we'll also be able to figure something else out.  The members thud.flob, thud.corge, thud.plugh, and byte pair 06 show they are laid out in order by fours.  This makes sense, because they are declared as s32 which was typedefed from an int, which we know uses 4 bytes of memory.  Also, remember that \*qux holds the address pointing to the start of struct TFCP, but the address of \*qux, like any pointer is going to have its own address as well. 
+
+NOTE:  The C Standard guarantees that any struct declaration will always have member layout in the order it is declared unless you use an alternate alignment modifier on the struct.
+
+```
 If unions give you problems visualising, hopefully this will help sort it out.  Next we'll look at the union TEHS which we created in the example.  
 Address of  garply = 0x7ffd0424aee0
     garply.eggs    = 0x7ffd0424aee0
@@ -1937,10 +1954,11 @@ Address of  garply = 0x7ffd0424aee0
     garply.spam[1] = 0x7ffd0424aee4
 Address at *grault = 0x7ffd0424aee0
 Address of *grault = 0x7ffe28e72538
-(edited)
-Avatar
-PDrifting 26-May-21 02:44 PM
+```
+
 Unions as we know, can share regions of memory with other members depending on how the union was declared.
+
+```
 typedef union {
   struct {
     s32 eggs;
@@ -1948,18 +1966,21 @@ typedef union {
   };
   s32 spam[2];
 } TEHS;
-Avatar
-PDrifting 26-May-21 03:44 PM
-The union declares a group of member variables inside a nameless struct.  Then we declare spam as an array with 2 elements as another member.  Logically, we should be able to conclude from this declaration layout that eggs will map to spam[0] and ham will map to spam[1].  By looking at the addresses of each of the member variables we can see this is the case.  This is the basic fundamental concept of a pointer.  When you update a union member, the associated union member will also update.  A pointer will do the same thing since it points to the address of something. We can also conclude that anything we do with the pointer has the potential to update what the pointer is pointing to.  Before we explore this, we'll finish reviewing the *fp declare. (edited)
+```
+
+The union declares a group of member variables inside a nameless struct.  Then we declare spam as an array with 2 elements as another member.  Logically, we should be able to conclude from this declaration layout that eggs will map to spam\[0] and ham will map to spam\[1].  By looking at the addresses of each of the member variables we can see this is the case.  This is the basic fundamental concept of a pointer.  When you update a union member, the associated union member will also update.  A pointer will do the same thing since it points to the address of something. We can also conclude that anything we do with the pointer has the potential to update what the pointer is pointing to.  Before we explore this, we'll finish reviewing the \*fp declare.
+
+```
 Address of  main() = 0x400540
 Address at     *fp = 0x400540
 Address of     *fp = 0x7ffd0424aed0
-Avatar
-PDrifting 26-May-21 03:52 PM
-As mentioned, everything pretty much has an address, right down to the compiled byte code encoded internally to the executable.  Function main() is no different.  There are cases where this will prove to be very useful.  Like all pointers *fp points to something and has its own address.  Pointers can point to other pointers.  Unlike other pointers though, a function pointer is able to call/invoke the function its pointing too.  This will be covered later when we go over functions.  It's important that we finish going over pointers.
-Avatar
-PDrifting 29-May-21 04:22 PM
+```
+
+As mentioned, everything pretty much has an address, right down to the compiled byte code encoded internally to the executable.  Function main() is no different.  There are cases where this will prove to be very useful.  Like all pointers \*fp points to something and has its own address.  Pointers can point to other pointers.  Unlike other pointers though, a function pointer is able to call/invoke the function its pointing too.  This will be covered later when we go over functions.  It's important that we finish going over pointers.
+
 Basic program with output, showing how we can use pointers to map different data types, output showing that when we update the pointer the thing we point to also updates, and a method for determining what Endianness your current hardware is using, and layout for function main. (edited)
+
+```
 #include <stdio.h>
 
 typedef unsigned char u8;
@@ -2016,8 +2037,10 @@ s32 main() {
   
   return 0;
 }
-(edited)
-General Output:
+```
+
+**General Output:**
+```
 foo = ffeeddccbbaa9988
 
 bar[0] u64Map[0] = 88 88
@@ -2028,11 +2051,13 @@ bar[4] u64Map[4] = cc cc
 bar[5] u64Map[5] = dd dd
 bar[6] u64Map[6] = ee ee
 bar[7] u64Map[7] = ff ff
-Avatar
-PDrifting 29-May-21 04:40 PM
-Looking at the way the array mapped byte by byte from the integer we can see it mapped backwards.  Depending on the architecture you are using this may change.  What we see here is an effect caused by Little-Endianness.  If we were on a Big-Endianness architecture the array would be mapped from left to right and would appear as it is displayed.  Here's a basic table on which architectures are which. (edited)
-Endianness
+```
 
+Looking at the way the array mapped byte by byte from the integer we can see it mapped backwards.  Depending on the architecture you are using this may change.  What we see here is an effect caused by Little-Endianness.  If we were on a Big-Endianness architecture the array would be mapped from left to right and would appear as it is displayed.  Here's a basic table on which architectures are which.
+
+### Endianness
+
+```
 Little                  Max Bits    Big               Max Bits    Bi/Mixed/Other    Max Bits
 ---------------------------------------------------------------------------------------------
 PDP-11                  16          CDC 3000 Series   48          CDC 6000 Series   12 -> 60
@@ -2062,13 +2087,13 @@ Nintendo Switch         64
 XBox One                64
 Atari Consoles          8  -> 64
 Sony PS4/PS5            64
-(edited)
-Avatar
-PDrifting 30-May-21 12:34 AM
-The problem with this might not be apparent immediately, however, if we store data in binary formats, pass information across networks, store data in some other way that may do encoding with a certain Endianness, things are going get a little wonky.  It's unlikely you'll be coding on a majority of these platforms, but a career in software engineering might have you crossing paths with older systems still in the wild running legacy code.  Migrating data from one architecture to another will require you have some understanding of how integer data will be stored.  Modern coding does create some problems specifically when creating games, especially ones that are multi-player crossing platforms.  If you support phones, you're going to be running into ARM based architecture which is BI-Endianness and will be determined by the operating system installed on the device.  While your server may be running on some other architecture that will be different Endianness.  Regardless, you are encouraged to do research to determine the hardware and operating system limitations that will effect how things are stored in memory. (edited)
+```
+
+The problem with this might not be apparent immediately, however, if we store data in binary formats, pass information across networks, store data in some other way that may do encoding with a certain Endianness, things are going get a little wonky.  It's unlikely you'll be coding on a majority of these platforms, but a career in software engineering might have you crossing paths with older systems still in the wild running legacy code.  Migrating data from one architecture to another will require you have some understanding of how integer data will be stored.  Modern coding does create some problems specifically when creating games, especially ones that are multi-player crossing platforms.  If you support phones, you're going to be running into ARM based architecture which is BI-Endianness and will be determined by the operating system installed on the device.  While your server may be running on some other architecture that will be different Endianness.  Regardless, you are encouraged to do research to determine the hardware and operating system limitations that will effect how things are stored in memory.
+
 Here's another table showing Endianness by Operating Systems.
-Avatar
-PDrifting 30-May-21 01:55 AM
+
+```
 Endianness
 
 Little                  Big                     Determined by Hardware
@@ -2079,15 +2104,18 @@ iOS                     Amiga OS                IBM Linux
 Microsoft Windows
 HP VMS
 OS/2
-(edited)
-Generally most architectures and operating systems are moving exclusively towards Little-Endianness.  Neither of the above tables should be considered complete or exhaustive, but are provided merely to show examples that there are different circumstances where you should be considering how you think about data storage on your given platform.  There are cases where networking protocols, specifically TCP come to mind that are Big-Endian.  For the time being we'll cover a few more basics of pointers showing how we might take Endianness into consideration.  Future examples of code will generally ignore Endianess unless specifically required. (edited)
-Avatar
-PDrifting 30-May-21 08:36 PM
-Part 5: Using sizeof() (edited)
-Avatar
-PDrifting 30-May-21 09:12 PM
-As we expand into our understanding of pointers and memory, there is a useful Operator called sizeof.  It is calculated during compile time and will result in the compiler returning a value that will be representative of the size in bytes of the things you requested the sizeof. (edited)
+```
+
+Generally most architectures and operating systems are moving exclusively towards Little-Endianness.  Neither of the above tables should be considered complete or exhaustive, but are provided merely to show examples that there are different circumstances where you should be considering how you think about data storage on your given platform.  There are cases where networking protocols, specifically TCP come to mind that are Big-Endian.  For the time being we'll cover a few more basics of pointers showing how we might take Endianness into consideration.  Future examples of code will generally ignore Endianess unless specifically required.
+
+## Part 5: Using sizeof()
+
+As we expand into our understanding of pointers and memory, there is a useful Operator called sizeof.  It is calculated during compile time and will result in the compiler returning a value that will be representative of the size in bytes of the things you requested the sizeof.
+
+#### Example 1:
 Basic program with output, showing the use of sizeof, a brief introduction to padding and working with addresses, an introduction malloc, also free, and the basic use of main.
+
+```
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -2147,8 +2175,10 @@ s32 main() {
   
   return 0;
 }
-(edited)
-General Output:
+```
+
+**General Output:**
+```
 size of s8  = 1
 size of u8  = 1
 size of s16 = 2
@@ -2168,21 +2198,22 @@ address of TFoobar.foo = 0x7ffdd45a3bc8
 address of TFoobar.bar = 0x7ffdd45a3c30
 gap between addresses  = 104
 padding in TFooBar  = 4
-Avatar
-PDrifting 30-May-21 10:19 PM
+```
+
 Each of the values displayed by the example program above, short of the addresses, are measured in bytes.  If we recall back in the early part of this text, we had a table of Integer and Float Types and their associated byte/bitwidths.  All the base types in this case should show the corresponding matching byte requirements.  The exception in this case is the f80 which was mapped from long double.  It shows 16 bytes being used, however, it should be known that only 10 bytes will ever be used according to the C Standard for precision.  Some padding has taken place.  This is a good way to figure out what your bitwidths will be for given types in the future if you're unsure of your given limitations on a given platform, architecture or under a given operating system.
 
 The other section of the output deals with the sizeof a struct and it's members.  As shown in this case, the C Standard dictates that the compiler for memory alignment can add padding.  In this case the 100 elements that we declared for TFooBar.foo, created a gap filled by padding of 4 bytes.  Despite the struct having a sizeof 112, the members of TFooBar only actually use 108 bytes in total.  These are useful ways to find out how your struct is using memory.  For now, your understanding is unlikely to take advantage of what all this means, but this is strictly for exposure to how you can determine these things later when you need to.
 
-Finally, we have the malloc and free that didn't really have any side-effects or purpose in this code, other than to show why we needed to cover sizeof.  We will be covering proper use of malloc and free later.  For now we're going to tie up our basics on pointers and continue on to Functions.  Pointers were needed in basic understanding so we could continue on to the next part of our programming understanding. (edited)
-Avatar
-PDrifting 30-May-21 10:30 PM
-Part 6: Introduction to Functions (edited)
-Avatar
-PDrifting 30-May-21 11:57 PM
+Finally, we have the malloc and free that didn't really have any side-effects or purpose in this code, other than to show why we needed to cover sizeof.  We will be covering proper use of malloc and free later.  For now we're going to tie up our basics on pointers and continue on to Functions.  Pointers were needed in basic understanding so we could continue on to the next part of our programming understanding.
+
+## Part 6: Introduction to Functions
+
 It has taken a bit longer than normal to get to this part, but one of the purposes of the order of this text is to make sure we are not covering anything without first knowing or having exposure to the base concepts prior.  Functions are a very useful feature of programming.  They allow splitting up code, creating sections that are reusable, or just in general grouping code by purpose for what it does.  Let's dive into some examples and cover some basics.
 
+#### Example 1:
 Basic program with output, showing how to create and call a Function from main.
+
+```
 #include <stdio.h>
 
 typedef int s32;
@@ -2198,6 +2229,7 @@ typedef int s32;
 //this goes for functions as well so we must make sure
 //that our functions like anything else appear before
 //we use them
+
 void foo() {
   puts("Hello World!");
 }
@@ -2210,10 +2242,18 @@ s32 main() {
   foo();  
   return 0;
 }
-(edited)
-General Output:
+```
+
+**General Output:**
+```
 Hello World!
+```
+
+#### Example 2:
+
 Let's carry on with another basic program with out, showing how to create and call a function with arguments from main. (edited)
+
+```
 #include <stdio.h>
 
 typedef int s32;
@@ -2224,6 +2264,7 @@ typedef int s32;
 //we have an argument in the argument list
 //arguments follow the base form a normal variable
 //declare in that they have a type and a name
+
 void foo(s32 bar) {
   printf("value of bar = %i\n", bar);
 }
@@ -2250,14 +2291,20 @@ s32 main() {
   
   return 0;
 }
-(edited)
-General Output:
+```
+
+**General Output:**
+```
 value of bar = 1
 value of bar = -2344
 value of bar = 90
-Hopefully now based on what we've covered prior, this should be relatively easy so far.  Here's another basic program with output, showing how to create and call a function with multiple arguments from main. (edited)
-Avatar
-PDrifting 31-May-21 10:22 AM
+```
+
+#### Example 3:
+
+Hopefully now based on what we've covered prior, this should be relatively easy so far.  Here's another basic program with output, showing how to create and call a function with multiple arguments from main.
+
+```
 #include <stdio.h>
 
 typedef int s32;
@@ -2280,8 +2327,10 @@ s32 main() {
 
   return 0;
 }
+```
 
-General Output: 
+**General Output:**
+```
 value of bar  = 1
 value of thud = 0.030000
 
@@ -2290,14 +2339,15 @@ value of thud = 1.245670
 
 value of bar  = 90
 value of thud = -7.410000
-(edited)
-Avatar
-PDrifting 31-May-21 10:53 AM
+```
+
+#### Example 4:
+
 What happens if we want to use a Function to update a value? This is called passing by reference.  Normally arguments are merely copied, or passed by value, and disposed once the Function has finished and exits.  There are ways we can create persistent states.  Over the next few examples we explore this.
 
 Basic program with output, showing how to pass a value by reference to a function that uses a pointer from main. (edited)
-Avatar
-PDrifting 31-May-21 01:46 PM
+
+```
 #include <stdio.h>
 
 typedef int s32;
@@ -2352,17 +2402,23 @@ s32 main() {
 
   return 0;
 }
-(edited)
-General Output:
+```
+
+**General Output:**
+```
 value of bar  = 2
 value of thud = 2.000000
-Avatar
-PDrifting 06-Jun-21 12:08 AM
+```
+
 What happens if we have a lot of arguments that we need to pass to a function? In terms of much of the Linux or Windows Application Programming Interface [LAPI or WAPI] we will be running into Functions that require a lot of parameters.  There isn't much we can do when it comes to how things have been written in the past, but we can be mindful of how future programmers deal with these sorts of problems.  For instance if we look at XCreateWindow from Linux, we will see something that looks like this for a rough outline of a prototype.  
-Window XCreateWindow(display, parent, x, y, width, height, border_width, depth, 
-                     class, visual, valuemask, attributes)
-(edited)
+
+
+>> Window XCreateWindow(display, parent, x, y, width, height, border_width, depth, 
+>>                      class, visual, valuemask, attributes)
+
 Many of the LAPI and WAPI Functions have very wide argument lists.  When you begin to look at what many of these are defined as, you will begin to get a little overwhelmed.
+
+```
 Window XCreateWindow(
   Display *display,
   Window parent,
@@ -2377,15 +2433,17 @@ Window XCreateWindow(
   unsigned long valuemask,
   XSetWindowAttributes *attributes
 )
-(edited)
-Avatar
-PDrifting 06-Jun-21 12:23 AM
+```
+
 This idea was to create flexibility, but created a cost to programmers with additional complexity.  Without typedefs, we create wide declarations, coupled with custom Type Definitions such as Display, Window, Visual and XSetWindowAttributes.  Each of these will add overhead to the program that must be used and populated.   While also remembering the order and what each argument is expecting.  This may have been acceptable in the past, not so sure we should be designing things this way for the preservation of sanity to next generations of programmers.  This a primary reason C has a bad reputation, generated from this type of low level nightmare.
 
-Another problem we face when looking at C code is when it was written.  Types did not always have the same bit widths as they do now.  Up to this point we have made the assumption that we are running on modern 64-bit platforms.  When the LAPI code was written that includes XCreateWindow, int would have been 16-bit [2 bytes], and long would have been 32-bit [4 bytes].  Upto this point we have been using typedef statements and creating aliases such as s32 or s64.  One of the reasons this is done is to make it clear what bit width we are coding against for a given Type.  Depending on the age of C code, you must take these things into consideration.  Since architecture in the future is likely to expand from 64-bit to 128-bit, or higher we should be mindful that like in the past, Types are going to change bit widths. (edited)
-Generally in this case it would be preferable to write something in this way.  Basic general program that will not run showing a model of how this might be addressed in the future.  NOTE: WILL NOT COMPILE.  This is only for reference.
-Avatar
-PDrifting 06-Jun-21 12:57 AM
+Another problem we face when looking at C code is when it was written.  Types did not always have the same bit widths as they do now.  Up to this point we have made the assumption that we are running on modern 64-bit platforms.  When the LAPI code was written that includes XCreateWindow, int would have been 16-bit \[2 bytes], and long would have been 32-bit \[4 bytes].  Upto this point we have been using typedef statements and creating aliases such as s32 or s64.  One of the reasons this is done is to make it clear what bit width we are coding against for a given Type.  Depending on the age of C code, you must take these things into consideration.  Since architecture in the future is likely to expand from 64-bit to 128-bit, or higher we should be mindful that like in the past, Types are going to change bit widths. 
+
+Generally in this case it would be preferable to write something in this way.  Basic general program that will not run showing a model of how this might be addressed in the future.
+
+NOTE: WILL NOT COMPILE.  This is only for reference.
+
+```
 //long is a good indicator this code was written before 64-bit architecture
 //which would make types shift where long is modern int
 //and int would be modern short
@@ -2443,15 +2501,15 @@ s32 main() {
 
   return 0;
 }
-(edited)
-Avatar
-PDrifting 07-Jun-21 03:29 PM
-Over the next few examples we'll cover initialising things inside Functions and passing them back.  We have not really handled return values yet, so those will also be explored.  Depending on what we are dealing with, there are different methods for each to consider. (edited)
+```
+
+Over the next few examples we'll cover initialising things inside Functions and passing them back.  We have not really handled return values yet, so those will also be explored.  Depending on what we are dealing with, there are different methods for each to consider.
+
 NOTE: As we start switching over to using stdint.h for portability there are a few caveats to remember.  There is no equivalent to char or _wchar_t_ for fixed bit width types.  The _uint8_t_ and _int8_t_ have no overlap as char is not signed or unsigned and is treated as a third unique 8-bit type.  Type _uint16_t_ and _int16_t_ also do not overlap with _wchar_t_.
 
-Basic program with output showing how to initialise a structure from a function, return it, printing out some of its member values, and setting up function main. (edited)
-Avatar
-PDrifting 11-Jun-21 08:05 AM
+Basic program with output showing how to initialise a structure from a function, return it, printing out some of its member values, and setting up function main.
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -2527,8 +2585,10 @@ s32 main() {
 
   return 0;
 }
-(edited)
-General Output: 
+```
+
+**General Output:**
+```
 bazz.foo = -26
 bazz.bar = 12
 buzz.foo = -26
@@ -2541,10 +2601,11 @@ arr[2].foo = -30
 arr[2].bar = 80
 arr[3].foo = -26
 arr[3].bar = 12
+```
 
-Basic program with output showing how to use malloc to initialise memory from a function, assigning some values within context of the allocated memory, using free, and setup of function main. (edited)
-Avatar
-PDrifting 11-Jun-21 08:54 AM
+Basic program with output showing how to use malloc to initialise memory from a function, assigning some values within context of the allocated memory, using free, and setup of function main.
+
+```
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -2624,8 +2685,10 @@ s32 main() {
 
   return 0;
 }
-(edited)
-General Output:
+```
+
+**General Output:**
+```
 buzz 0x7ffd5b98c5d8
  r   0x7ffd5b98c5d8
 *r   (nil)
@@ -2635,14 +2698,13 @@ bazz.foo = 23
 bazz.bar = A
 buzz.foo = 23
 buzz.bar = A
-(edited)
-Avatar
-PDrifting 11-Jun-21 09:27 AM
-A little more dissection of the address outputs will hopefully clarify what is actually happening when we are calling function newTFBAlt and passing pointer buzz to it.  Since pointer buzz is merely type TFB and a single pointer, meaning we do not have an array, in the case of TFB *buzz[] and we do not have any pointers to pointers in the case of TFB **buzz, we must satisfy the conversion to the **r argument expected in the call.  The easiest way to do this is to pass the address of buzz.  In this case the address of the pointer buzz is shown to be 0x7ffd5b98c5d8.   When we enter the function the address of **r becomes the address of buzz as shown by the address matching.  When we call the malloc it will request a section of memory that also has an address that we need to store.  That address passed back from the malloc is shown to be 0x2091690.  The reason we need to use (*r) in this case is because **r points to the address of &buzz, and we know when we take *ptr we are looking at the value of what is stored there, giving us access to the pointer being pointed to.  The first pointer is buzz, and it points to the address returned by the malloc.
+```
+
+A little more dissection of the address outputs will hopefully clarify what is actually happening when we are calling function newTFBAlt and passing pointer buzz to it.  Since pointer buzz is merely type TFB and a single pointer, meaning we do not have an array, in the case of TFB \*buzz[] and we do not have any pointers to pointers in the case of TFB \*\*buzz, we must satisfy the conversion to the \*\*r argument expected in the call.  The easiest way to do this is to pass the address of buzz.  In this case the address of the pointer buzz is shown to be 0x7ffd5b98c5d8.   When we enter the function the address of \*\*r becomes the address of buzz as shown by the address matching.  When we call the malloc it will request a section of memory that also has an address that we need to store.  That address passed back from the malloc is shown to be 0x2091690.  The reason we need to use (\*r) in this case is because \*\*r points to the address of &buzz, and we know when we take \*ptr we are looking at the value of what is stored there, giving us access to the pointer being pointed to.  The first pointer is buzz, and it points to the address returned by the malloc.
 
 Here is an example with output showing the side-effects of the above and further explaining why this fails to further reinforce the concept above. (edited)
-Avatar
-PDrifting 11-Jun-21 01:34 PM
+
+```
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -2676,53 +2738,62 @@ s32 main() {
 
   return 0;
 }
-(edited)
-General Output:
+```
+
+**General Output:**
+```
 &buzz 0x7ffe55680c10
  buzz (nil)
 &r 0x7ffe55680be8
  r (nil)
 &r 0x7ffe55680be8
  r 0x9f1670
-Avatar
-PDrifting 11-Jun-21 02:17 PM
-The second example shows how we would normally pass a pointer to a function so we can update its value.  We can see the address of buzz is 0x7ffe55680c10.  Things get janky when we enter the function and realise that the address of the pointer argument *r is 0x7ffe55680be8.  This is because pointers are passed by value, and so a copy of the pointer was made locally and placed on the stack.  Even though we are passing by reference, we are only able to update the value stored at what buzz is pointing to.  In this case we can see the (nil) value stored there, however, it is stored at a different address.  Where buzz and *r exist in memory does not match.  So the address of the pointer can never truly be updated, because we do not actually have the true address of the thing we are trying to assign it to.  This is why we need the second indirection with a pointer to a pointer.  We must be able to preserve the address in the by reference call, not just the value being passed by reference. (edited)
-Avatar
-PDrifting 11-Jun-21 02:29 PM
-The *r creates a pointer to an address of a value.  What we need for preservation of the malloc address is a pointer to an address of a pointer to an address of a value.  That is where the **r comes in.   Because we must pass the address of something as the argument not just what the pointer is pointing to we have changed the conditions of the by reference call.   The second indirection gives us the ability to access address.
+```
 
-If we think about how we normally would deal with a variable, then a pointer, and accessing the value at that pointer. (edited)
+The second example shows how we would normally pass a pointer to a function so we can update its value.  We can see the address of buzz is 0x7ffe55680c10.  Things get janky when we enter the function and realise that the address of the pointer argument \*r is 0x7ffe55680be8.  This is because pointers are passed by value, and so a copy of the pointer was made locally and placed on the stack.  Even though we are passing by reference, we are only able to update the value stored at what buzz is pointing to.  In this case we can see the (nil) value stored there, however, it is stored at a different address.  Where buzz and \*r exist in memory does not match.  So the address of the pointer can never truly be updated, because we do not actually have the true address of the thing we are trying to assign it to.  This is why we need the second indirection with a pointer to a pointer.  We must be able to preserve the address in the by reference call, not just the value being passed by reference.
+
+The \*r creates a pointer to an address of a value.  What we need for preservation of the malloc address is a pointer to an address of a pointer to an address of a value.  That is where the \*\*r comes in.   Because we must pass the address of something as the argument not just what the pointer is pointing to we have changed the conditions of the by reference call.   The second indirection gives us the ability to access address.
+
+If we think about how we normally would deal with a variable, then a pointer, and accessing the value at that pointer.
+
+```
 int buzz = 0;
 int *bar = &buzz;
 printf("buzz  %i\n", *bar);
-We know buzz has an address on the stack and holds a value of 0.  Assigning the address of buzz to bar allows us to access the value of buzz through a dereference to the value stored at what bar is pointing to by using *bar. (edited)
+```
+
+We know buzz has an address on the stack and holds a value of 0.  Assigning the address of buzz to bar allows us to access the value of buzz through a dereference to the value stored at what bar is pointing to by using \*bar.
+
+```
 int buzz = 0;
 int *foo = &buzz;
 int **bar = &foo;
 printf("foo   %i\n", *foo);
 printf("buzz  %i\n", **bar);
-Double indirection of pointers above is what we are actually requiring.  We need a point that can point to the value it holds.  When we call the function with 
-newTFBAlt(&buzz);
- we end up with something like this. (edited)
-Avatar
-PDrifting 11-Jun-21 02:52 PM
+```
+
+Double indirection of pointers above is what we are actually requiring.  We need a point that can point to the value it holds.  When we call the function with _newTFBAlt(&buzz);_ we end up with something like this.
+
+```
 TFB *buzz = NULL;
 TFB **r = &buzz;
 *r = (TFB *)malloc(sizeof(TFB));
-In this case we have built the proper chain for the persistence of the address passed back by the malloc.  When passing things as arguments to functions we need to be mindful of where things are pointing, and what they are pointing to.  This is a perfect example of pointer complexity that creates immense confusion.  Just remember, if you must malloc something inside a function and pass it by reference as an argument, always add one more level of pointer indirection than what the pointer has been declared as.  Make sure you pass the address, and use the proper level of dereferencing. (edited)
-Avatar
-PDrifting 11-Jun-21 03:04 PM
+```
+
+In this case we have built the proper chain for the persistence of the address passed back by the malloc.  When passing things as arguments to functions we need to be mindful of where things are pointing, and what they are pointing to.  This is a perfect example of pointer complexity that creates immense confusion.  Just remember, if you must malloc something inside a function and pass it by reference as an argument, always add one more level of pointer indirection than what the pointer has been declared as.  Make sure you pass the address, and use the proper level of dereferencing.
+
 Image attachment
-Avatar
-PDrifting 11-Jun-21 03:14 PM
+
 NOTE: The last thing we need to remember, POINTERS ARE ALWAYS PASSED BY VALUE.  You will never be able to update an address of a pointer because of this.  To accomplish this, ADD ONE EXTRA LEVEL OF INDIRECTION SO THE POINTER CAN BE PASSED BY REFERENCE.  When calling the function, PASS THE ADDRESS OF THE POINTER YOU ARE TRYING TO UPDATE.   Then make sure you DEREFERENCE ONE LEVEL OF INDIRECTION TO ACCESS THE ORIGINAL POINTER.  Everything should be okay. (edited)
 If you fail to remember this, you will end up seeing a lot of this...
-Segmantation fault (core dumped)
-Avatar
-PDrifting 12-Jun-21 05:39 PM
+
+>> Segmantation fault
+
 One last group of examples will cover passing arrays and their special treatment within C.  Arrays are treated as pointers when referred to by their name and always passed by reference.
 
 Basic program with output showing how to pass an array, setup a function call, use sizeof for basic length calculations, and general setup of function main. (edited)
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -2761,14 +2832,18 @@ s32 main() {
 
   return 0;
 }
-(edited)
-General Output:
+```
+
+**General Output:**
+```
 len = 13
 [Hello World!]
 post foo [hello world!]
-Avatar
-PDrifting 13-Jun-21 02:16 AM
+```
+
 Passing multi-dimensional arrays is little more complicated, you just need to remember that the last dimension needs to match element bounds of the array you will be passing.  Other than that, no fancy pointer stuffs required.  Here's another basic program with output showing how to use strlen, pass a multi-dimensional array to a function, modify a some things in it verifying the by reference state of arrays, and the general setup of function main.
+
+```
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h> //just for strlen()
@@ -2833,8 +2908,10 @@ s32 main() {
   printf("thud[2] [%s]\n", thud[2]);
   return 0;
 }
-(edited)
-General Output:
+```
+
+**General Output:**
+```
 len = 60
 bar[0] len = 12 [Hello World!]
 bar[1] len =  6 [Foobar]
@@ -2844,9 +2921,11 @@ post foo
 thud[0] [hello world!]
 thud[1] [foobar]
 thud[2] [multi-dimensional]
-Avatar
-PDrifting 13-Jun-21 05:17 PM
+```
+
 Basic program with output showing how to pass data between functions, allocate a buffer, introduction to memset, and general setup of function main. (edited)
+
+```
 #include <stdio.h>
 #include <stdlib.h> //for malloc()
 #include <stdint.h> 
@@ -2855,7 +2934,6 @@ Basic program with output showing how to pass data between functions, allocate a
 typedef char c8;
 typedef int32_t s32;
 typedef size_t length;
-
 
 //remember we need to declare functions before we use
 //them to avoid the need to for janky forward prototypes
@@ -2910,11 +2988,13 @@ s32 main() {
   
   return 0;
 }
-(edited)
-General Output:
+```
+
+**General Output:**
+```
 len = 12 address = 0x7fff7842e370 [aaaaaaaaaaaa]
-Avatar
-PDrifting 13-Jun-21 06:05 PM
+```
+
 So far we have only been dealing with one form of function main.  The following example will be the last one we explore for Function use.  There are times when we need to pass information to a program when it starts.  This is done with command line arguments.  The next basic example has output, and shows how to reconfigure main to accept arguments from the command line. (edited)
 Avatar
 PDrifting 13-Jun-21 06:20 PM
