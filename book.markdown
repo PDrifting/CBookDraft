@@ -2782,12 +2782,10 @@ TFB **r = &buzz;
 
 In this case we have built the proper chain for the persistence of the address passed back by the malloc.  When passing things as arguments to functions we need to be mindful of where things are pointing, and what they are pointing to.  This is a perfect example of pointer complexity that creates immense confusion.  Just remember, if you must malloc something inside a function and pass it by reference as an argument, always add one more level of pointer indirection than what the pointer has been declared as.  Make sure you pass the address, and use the proper level of dereferencing.
 
-Image attachment
-
 NOTE: The last thing we need to remember, POINTERS ARE ALWAYS PASSED BY VALUE.  You will never be able to update an address of a pointer because of this.  To accomplish this, ADD ONE EXTRA LEVEL OF INDIRECTION SO THE POINTER CAN BE PASSED BY REFERENCE.  When calling the function, PASS THE ADDRESS OF THE POINTER YOU ARE TRYING TO UPDATE.   Then make sure you DEREFERENCE ONE LEVEL OF INDIRECTION TO ACCESS THE ORIGINAL POINTER.  Everything should be okay. (edited)
 If you fail to remember this, you will end up seeing a lot of this...
 
->> Segmantation fault
+> Segmantation fault
 
 One last group of examples will cover passing arrays and their special treatment within C.  Arrays are treated as pointers when referred to by their name and always passed by reference.
 
@@ -2995,9 +2993,9 @@ s32 main() {
 len = 12 address = 0x7fff7842e370 [aaaaaaaaaaaa]
 ```
 
-So far we have only been dealing with one form of function main.  The following example will be the last one we explore for Function use.  There are times when we need to pass information to a program when it starts.  This is done with command line arguments.  The next basic example has output, and shows how to reconfigure main to accept arguments from the command line. (edited)
-Avatar
-PDrifting 13-Jun-21 06:20 PM
+So far we have only been dealing with one form of function main.  The following example will be the last one we explore for Function use.  There are times when we need to pass information to a program when it starts.  This is done with command line arguments.  The next basic example has output, and shows how to reconfigure main to accept arguments from the command line.
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -3030,24 +3028,32 @@ s32 main(s32 count, c8 *args[]) {
   
   return 0;
 }
-(edited)
-Command Line Input: (edited)
+```
+
+**Command Line Input:**
+```
 ./main foo bar
-General Output:
+```
+
+**General Output:**
+```
 number of arguments received = 3
 args[0] = [./main]
 args[1] = [foo]
 args[2] = [bar]
-(edited)
-Avatar
-PDrifting 13-Jun-21 06:30 PM
+```
+
 Now that we have hit some the basic building blocks of coding, in order to move forward there is a need to understand some other basic concepts around Operators and Expression building.  In order to move into branching and flow control these topics need to be addressed first.
-Part 7: Operators and Expressions
-Avatar
-PDrifting 18-Jun-21 11:05 AM
-In C, there are several types of Operators to explore.  They fall into groups, such as Mathematical, Unary, Relational, Logical, Bitwise, Assignment, Comma and Conditional.  Each group of Operators are used to create Expressions.  Expressions in C are made up of Variables, Functions and Operators. These are important for various flow and branch control uses in our programs.  Let's begin with exploring what we can do with these and how they will relate to future examples and programs we will be exploring in the book. (edited)
-Mathematical Operators
+
+## Part 7: Operators and Expressions
+
+In C, there are several types of Operators to explore.  They fall into groups, such as Mathematical, Unary, Relational, Logical, Bitwise, Assignment, Comma and Conditional.  Each group of Operators are used to create Expressions.  Expressions in C are made up of Variables, Functions and Operators. These are important for various flow and branch control uses in our programs.  Let's begin with exploring what we can do with these and how they will relate to future examples and programs we will be exploring in the book. 
+
+### Mathematical Operators
+
 Useful for basic maths operations.
+
+```
 Operator     Description
 ------------------------------------------------
   +          Adds
@@ -3055,9 +3061,13 @@ Operator     Description
   *          Multiplies
   /          Divides
   %          Modulus [Remainder from Division]
+```
+
+#### Example
+
 Basic program with ouput showing how to use each of the Mathematical Operators, and general setup of function main.
-Avatar
-PDrifting 18-Jun-21 12:51 PM
+
+```
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
@@ -3131,7 +3141,10 @@ s32 main() {
 
   return 0;
 }
-General Output:
+```
+
+**General Output:**
+```
 Addition
 -----------------
 foo  = 14
@@ -3174,17 +3187,23 @@ Modulus [groupZ]
 -----------------------
        0 1 2 3 4 5 6
 result 0 1 2 3 0 1 2
+```
+
 The only Operator that tends to cause confusion is the Modulus Operator [%].  Let's dissect the output from the arrays that we built help in groupX, groupY and groupZ.
+
+```
 s32 groupX[] = {0 % 2, 1 % 2, 2 % 2, 3 % 2, 4 % 2, 5 % 2, 6 % 2};
 
 Modulus [groupX]
 -----------------------
        0 1 2 3 4 5 6
 result 0 1 0 1 0 1 0
+```
+
 Modulus works by producing the remainder result from a division operation.
-Avatar
-PDrifting 18-Jun-21 01:04 PM
-        R     
+
+```
+        R
 0 / 2 = 0
 1 / 2 = 1
 2 / 2 = 0
@@ -3192,20 +3211,89 @@ PDrifting 18-Jun-21 01:04 PM
 4 / 2 = 0
 5 / 2 = 1
 6 / 2 = 0
-Avatar
-PDrifting 18-Jun-21 01:26 PM
-This is useful if you need to restrict numbers to a range.  It will create a repeating cycle that has great utility.  We'll see the modulus operator in use when we get to writing some of our Containers, specifically in the Queue example.  One other thing we need to address is the side-effect of the following Expression.  
-u64 sBaz  = 6754 - 8653;
- This caused what is known as Roll Over.  Since u64 is declared as _typedef uint64_t u64_, this is an unsigned type.  The value of 8653 is greater than 6754, so when the subtraction operation takes place, C does not complain at all, it just rolls over to 18446744073709551615 which is the unsigned long long maximum value and continues the subtraction beyond 0.  This is why we see a strange value when we look at the result for sBaz.  
-baz  = 18446744073709549717
- There are no exceptions, or any warnings of any kind, where other languages would throw something like an out of bounds error.  C does not guarantee errors of this nature.  If you see strange results, you have likely caused Roll Over, some other form of Undefined Behaviour or you caused a segmantation fault and crashed your program.
-"The handling of overflow, divide check, and other exceptions in expression evaluation is not defined by the language.  Most existing implementations of C ignore overflow in evaluation of signed integral expressions and assignments, but this behavior is not guaranteed."
+```
 
-K&R (Second Edition) [Page 200]
-(edited)
-This has not been updated in the C standard for the most part either.  This is compiler dependent.  Below we'll look at some of things you might encounter as side-effects.  Here is a basic program with output showing features of Roll Over, and setup of function main. (edited)
-Avatar
-PDrifting 18-Jun-21 01:51 PM
+This is useful if you need to restrict numbers to a range.  It will create a repeating cycle that has great utility.  We'll see the modulus operator in use when we get to writing some of our Containers, specifically in the Queue example.
+
+### Roll Over and Value Side-Effects
+
+One other thing we need to address is the side-effect of the following Expression.  
+
+```
+u64 sBaz  = 6754 - 8653;
+```
+
+This causes what is known as Roll Over.  Since u64 is declared as _typedef uint64_t u64_, this is an unsigned type.  The value of 8653 is greater than 6754, so when the subtraction operation takes place, C does not complain at all, it just rolls over to 18446744073709551615 which is the unsigned long long maximum value and continues the subtraction beyond 0.  This is why we see a strange value when we look at the result for sBaz.  
+
+```
+baz  = 18446744073709549717
+```
+
+There are no exceptions, or any warnings of any kind, where other languages would throw something like an out of bounds error.  C does not guarantee errors of this nature.  If you see strange results, you have likely caused Roll Over, some other form of Undefined Behaviour or you caused a segmantation fault and crashed your program.
+
+```
+#include <stdio.h>
+#include <stdint.h>
+
+typedef int32_t  s32;
+typedef int64_t  s64;
+typedef uint64_t u64;
+
+int main() {
+  // If we take the unsigned long long max value and subtract
+  // the roll over value that was output above we see another
+  // peculiarty that is likely to trip up programmers.
+  
+  u64 uFoo = 18446744073709551615ULL - 18446744073709549717ULL;
+
+  printf("%Lu\n", foo);
+
+  // The original expression above that showed the roll over
+  u64 uBaz  = 6754 - 8653;
+
+  printf("%Lu\n", sBaz);
+
+  // Taking a signed long long and doing the same is going to
+  // create a value that has a signed part and be larger by
+  // one than the rolled over expression using the ULL values.
+  
+  s64 sFoo = 6754 - 8653;
+
+  printf("%Ld\n", sBaz);
+  
+  return 0;
+}
+```
+
+**Generated Output:**
+```
+1898
+18446744073709549717
+-1899
+```
+
+We need to consider the range of values to understand what is actually taking place here.
+
+> u64 uBaz  = 6754 - 8653;
+
+Then ranges to consider are the 0 to 6754.  We need to remember there is 0 here.  Before the Roll Over takes place, we cross the 0 accounting for our off by one error.
+
+> u64 uFoo = 18446744073709551615ULL - 18446744073709549717ULL;
+
+When we takes the above expression, this has already crossed the 0 to 6754 and then subtracted 1898 from the _unsigned long long_ max which gives us the Roll Over value of 18446744073709549717.  This is a problem if you forget during the ranges we actually had 6755 numbers that were passed through during the subtraction before we took the remaining value of 1898 from the _unsigned long long_ max.  
+
+You can see the values do not match on the expressions with uFoo and sFoo when you try to account for what is going on.
+
+> 1898 and abs(-1899) are off by one
+
+NOTE: Do not forget to account for these types of annomalies when you're trying to figure out what happened.  This is another area where off by one errors are most likely to occur.  Side-effects of Roll Over can be problematic if you're trying to maths out what is happening.  Remember to always take into account if you underflowed you crossed 0. This also goes for overflows depending the sign of your variable. 
+
+> "The handling of overflow, divide check, and other exceptions in expression evaluation is not defined by the language.  Most existing implementations of C ignore overflow in evaluation of signed integral expressions and assignments, but this behavior is not guaranteed."
+> K&R (Second Edition) [Page 200]
+
+This has not been updated in the C standard for the most part either.  This is compiler dependent.  Below we'll look at some of things you might encounter as side-effects.  Here is a basic program with output showing features of Roll Over, and setup of function main.
+
+```
 #include <stdio.h>
 #include <stdint.h>
 #include <limits.h>
@@ -3224,17 +3312,26 @@ s32 main() {
 
   return 0;
 }
-(edited)
-Compiler Output:
+```
+
+**Compiler Output:**
+```
 main.c: In function ‘main’:
 main.c:16:18: warning: division by zero [-Wdiv-by-zero]
    printf("%d", 3 / 0);
                   ^
-General Output:
+```
+
+**General Output:**
+```
 -32768 - 1 = 32767
 32767 + 1 = -32768
 Floating point exception (core dumped)
+```
+
 C is going to require you get to know your compiler.  As you can see from the warning, it is complaining about the divide by zero.  Which is Undefined Behaviour so every compiler is going to do something different.  In the case of GCC, it causes a segmentation fault (core dump) in relation to floating point maths.  We can clearly see the Roll Over taking place on the minimum and maximum values.  Here's another basic program with output showing other features of Roll Over, and setup of function main.
+
+```
 #include <stdio.h>
 #include <stdint.h>
 #include <limits.h>
@@ -3243,7 +3340,8 @@ typedef int32_t s32;
 typedef uint16_t u16;
 
 s32 main() {
-  u16 foo = 0; //all unsigned types default to 0 as their minimum
+  // All unsigned types default to 0 as their minimum.
+  u16 foo = 0; 
   u16 bar = UINT16_MAX;
   
   printf("%u - 1 = %u\n", foo, (u16)(foo - 1));
@@ -3251,14 +3349,21 @@ s32 main() {
 
   return 0;
 }
-General Output:
+```
+
+**General Output:**
+```
 0 - 1 = 65535
 65535 + 1 = 0
-Avatar
-PDrifting 18-Jun-21 02:17 PM
-NOTE: If you are encountering oddities, check your maths, range, limits, bounds, operators, casts, and heed warnings from the compiler.  This did not cover Not A Number [NAN], Infinity [INF] and other things that go wrong with Floating Point Types.  You are encouraged to explore with code what your specific compiler is going to do in relation to what you are expecting.  They may not always agree.  If things are still exploding, ask for help. (edited)
-Unary Operators
+```
+
+NOTE: If you are encountering oddities, check your maths, range, limits, bounds, operators, casts, and heed warnings from the compiler.  This did not cover Not A Number [NAN], Infinity [INF] and other things that go wrong with Floating Point Types.  You are encouraged to explore with code what your specific compiler is going to do in relation to what you are expecting.  They may not always agree.  If things are still exploding, hit godbolt, dump debug values, worst case ask for help if you're just lost. 
+
+### Unary Operators
+
 These Operators come in a few different contexts.
+
+```
 Operator  Prefix  Postfix  Description
 -------------------------------------------------------------------------------------
   -         Y        N     declares a value as negative
@@ -3269,12 +3374,11 @@ Operator  Prefix  Postfix  Description
   &         Y        N     get the address of something
   *         Y        N     get the value stored at a pointer address [dereference]
   sizeof    Y        N     get the size of something
-(edited)
-Avatar
-PDrifting 18-Jun-21 06:45 PM
-As always, let's write some code.  We'll gloss over &, *, and sizeof operator, since we already covered those in the Pointer Basics section.  Here is a basic program with output covering the - and + Unary Operators, and setup of function main. (edited)
-Avatar
-PDrifting 19-Jun-21 11:32 AM
+```
+
+As always, let's write some code.  We'll gloss over &, \*, and sizeof operator, since we already covered those in the Pointer Basics section.  Here is a basic program with output covering the - and + Unary Operators, and setup of function main. (edited)
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -3309,15 +3413,20 @@ s32 main() {
 
   return 0;
 }
-General Output:
+```
+
+**General Output:**
+```
 (s32)+foo  [-23]
 bar        [-12]
 +bar       [-12]
 -bar       [12]
 bar = -bar [12]
+```
+
 In conclusion, the +  prefix operator, at least in the context of GCC, is useless.  This may differ based on the compiler you are using.  Next we will look at the decrement and increment operators. (edited)
-Avatar
-PDrifting 19-Jun-21 12:48 PM
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -3380,7 +3489,10 @@ s32 main() {
 
   return 0;
 }
-General Output:
+```
+
+**General Output:**
+```
 foo [7]
 
 ++foo [8]
@@ -3400,8 +3512,13 @@ after [6]
 
 foo-- [7]
 after [6]
-We do need to address some common problems programmers get into with the increment and decrement operators.  They are famous for creating undefined behaviour and other oddities.  Let's explore a few of them.  Keep in mind in each of these scenarios it will be impossible to predict what the compiler is going to do, or the sequence modern processes may execute it.  The following are guaranteed to produce unpredictable results and should be avoided.  The following examples may produce the results you are expecting, but this is not going to be consistently predictable everywhere. (edited)
-Examples of Undefined Behaviour from Increment or Decrement Side-Effects (edited)
+```
+
+We do need to address some common problems programmers get into with the increment and decrement operators.  They are famous for creating undefined behaviour and other oddities.  Let's explore a few of them.  Keep in mind in each of these scenarios it will be impossible to predict what the compiler is going to do, or the sequence modern processes may execute it.  The following are guaranteed to produce unpredictable results and should be avoided.  The following examples may produce the results you are expecting, but this is not going to be consistently predictable everywhere.
+
+#### Examples of Undefined Behaviour from Increment or Decrement Side-Effects
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -3415,12 +3532,21 @@ s32 main() {
 
   return 0;
 }
-Compiler Output [compiled with -Wall]: (edited)
+```
+
+**Compiler Output [compiled with -Wall]:**
+```
 main.c: In function ‘main’:
 main.c:10:31: warning: operation on ‘bar’ may be undefined [-Wsequence-point]
    printf("%i\n\n", ++foo + bar++ - ++bar);
-General Output:
+```
+
+**General Output:**
+```
 41
+```
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -3434,14 +3560,21 @@ s32 main() {
 
   return 0;
 }
-Compiler Output [compiled with -Wall]:
+```
+
+**Compiler Output [compiled with -Wall]:**
+```
 main.c: In function ‘main’:
 main.c:8:7: warning: operation on ‘foo’ may be undefined [-Wsequence-point]
    foo = ++foo;
-General Output:
+```
+
+**General Output:**
+```
 43
-Avatar
-PDrifting 19-Jun-21 01:30 PM
+```
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -3461,8 +3594,10 @@ s32 main() {
   
   return 0;
 }
-(edited)
-Compiler Output [compiled with -Wall]:
+```
+
+**Compiler Output [compiled with -Wall]:**
+```
 main.c:10:12: warning: unsequenced modification and access to 'i' [-Wunsequenced]
   foo[i] = ++i;
       ~    ^
@@ -3473,13 +3608,16 @@ main.c:12:12: warning: unsequenced modification and access to 'i' [-Wunsequenced
   foo[i] = ++i;
       ~    ^
 3 warnings generated.
-General Output:
+```
+
+**General Output:**
+```
 foo[0] = 0
 foo[1] = 1
 foo[2] = 2
-(edited)
-Avatar
-PDrifting 19-Jun-21 01:55 PM
+```
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -3500,19 +3638,27 @@ s32 main() {
   
   return 0;
 }
-Compiler Output [compiled with -Wall]
+```
+
+**Compiler Output [compiled with -Wall]:**
+```
 main.c: In function ‘main’:
 main.c:17:27: warning: operation on ‘foo’ may be undefined [-Wsequence-point]
    undefinedBehaviour(foo, ++foo);
-General Output:
+```
+
+**General Output:**
+```
 4
+```
+
 NOTE: When you introduce a side-effect of this nature, you cause UNDEFINED BEHAVIOUR across your entire program.  The moment you lose the ability to predict what your code will do, and why, you can no longer guarantee stability, or expected results.  This is very bad.  There are other scenarios created with pointers and other things.  We'll explore those when we get to strings.  Do not use or reference something and modify it in the same expression, this will guarantee potential for unwanted side-effects.
-Avatar
-PDrifting 19-Jun-21 05:34 PM
+
 Now that we have tackled some of the problems and basics of the increment and decrement operator lets go over some examples of the ! operator.
-Avatar
-PDrifting 19-Jun-21 08:39 PM
+
 Basic program with output showing how the ! operator works, and setup of function main.
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -3550,22 +3696,27 @@ s32 main() {
   
   return 0;
 }
-(edited)
-General Output:
+```
+
+**General Output:**
+```
 bar  0
 baz  0
 thud 0
 fuzz 0
 foo  1
+```
+
 We are going to skip over the & and sizeof operators as we've covered them prior and end this group with looking at the unary bitwise operator ~.
 
 Basic program with output showing how the ~ operator works, and general setup of function main.  
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
 typedef char c8;
 typedef int32_t s32;
-
 
 void dumpFoo(char where[], c8 foo) {
   printf("%s\n", where);
@@ -3585,7 +3736,10 @@ s32 main() {
   
   return 0;
 }
- General Output: 
+```
+
+**General Output:**
+```
 Base
 foo [%c]  (
 foo [%hhu] 40     //bit wise 00101000
@@ -3597,11 +3751,15 @@ foo [%hhu] 215    //bit wise 11010111
 Post 2nd ~
 foo [%c]  (
 foo [%hhu] 40     //bit wise 00101000
- Useful when you want to completely flip the bits of something you're working on.  When you're dealing with a scenario that needs flags, or attributes, or some other things inside an API, you'll find bitwise operators to be very useful. (edited)
-Relational Operators
-Avatar
-PDrifting 20-Jun-21 12:30 AM
+```
+
+Useful when you want to completely flip the bits of something you're working on.  When you're dealing with a scenario that needs flags, or attributes, or some other things inside an API, you'll find bitwise operators to be very useful. (edited)
+
+### Relational Operators
+
 Below is a table of each of the operators in this group.  As always, we'll keep it brief, then dive into some code.
+
+```
 Operator   Definition
 --------------------------------------
    >       greater than
@@ -3610,7 +3768,11 @@ Operator   Definition
   <=       less than or equal to
   ==       tests for equality
   !=       tests for inequality
+```
+
 Basic program with output showing how each of the Relational Operators works, a trick on how to use an array and some strings to fetch values based on tests conditions, and setup of function main.
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -3655,7 +3817,10 @@ s32 main() {
 
   return 0;
 }
-General Output:
+```
+
+**General Output:**
+```
 1 >  1 = false
 1 <  1 = false
 1 >= 1 = true
@@ -3697,15 +3862,22 @@ General Output:
 42 <= 16 = false
 42 == 16 = false
 42 != 16 = true
-Logical Operators
+```
+
+### Logical Operators
+
 This is a short group, we have already explored one with the Unary Operator !.  The other two logical operators are as follows.
+
+```
 Operator   Description
   &&       logical and
   ||       logical or
    !       logical not
+```
+
 Basic program with output showing how the Logical Operators function, and general setup of function main.
-Avatar
-PDrifting 20-Jun-21 12:50 AM
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -3756,8 +3928,10 @@ s32 main() {
 
   return 0;
 }
-(edited)
-General Output:
+```
+
+**General Output:**
+```
 1 > 1 && 3 != 4 = false
 1 > 1 || 3 != 4 = true
 1 > 1 && 3 == 4 = false
@@ -3787,15 +3961,17 @@ General Output:
 42 > 16 || 6 != 6 = true
 42 > 16 && 6 == 6 = true
 42 > 16 || 6 == 6 = true
-Avatar
-PDrifting 20-Jun-21 02:16 PM
-As mentioned we're skipping the ! operator and moving on to the next group of operators.
-Bitwise Operators
-Avatar
-PDrifting 20-Jun-21 09:02 PM
-C provides six bit manipulation operators and are listed in the table below.  These are most effectively used on Integer Types.  Floating Point Types do not store their data in linear order and are made up of parts.
+```
 
-NOTE: Performing bitwise operations on Float Types without a strong understanding of their parts will cause Undefined Behaviour. (edited)
+As mentioned we're skipping the ! operator and moving on to the next group of operators.
+
+### Bitwise Operators
+
+C provides six bit manipulation operators and are listed in the table below. These are most effectively used on Integer Types. Floating Point Types do not store their data in linear order and are made up of parts.
+
+NOTE: Performing bitwise operations on Float Types without a strong understanding of their parts will cause Undefined Behaviour.
+
+```
 Operator  Description
 --------------------------------------
    &      bitwise and
@@ -3804,10 +3980,11 @@ Operator  Description
    <<     bitwise left shift
    >>     bitwuse right shift 
    ~      bitwise not
-(edited)
-Avatar
-PDrifting 21-Jun-21 04:05 AM
+```
+
 Basic program with output showing the use of operators right shift, and, or, xor, and the general setup of function main. (edited)
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -3906,8 +4083,10 @@ s32 main() {
 
   return 0;
 }
-(edited)
-General Output:
+```
+
+**General Output:**
+```
 a [ 97]  - 01100001 [97]
 b [ 41]  - 00101001 [41]
 
@@ -3949,9 +4128,11 @@ a or b   - 11101110 [238]
 a xor b  - 01100110 [102]
 not a    - 01010101 [85]
 not b    - 00110011 [51]
+```
+
 Basic program with output showing how the left and right shift operators function, and general setup of function main.
-Avatar
-PDrifting 21-Jun-21 04:21 AM
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -4025,8 +4206,10 @@ s32 main() {
 
   return 0;
 }
-(edited)
-General Output:
+```
+
+**General Output:**
+```
 Right shift...
 10000000 [128]
 01000000 [64]
@@ -4065,9 +4248,10 @@ baz = 28
 00100011 [35]
 01000110 [70]
 baz = 70
-Avatar
-PDrifting 26-Jun-21 12:18 PM
+```
+
 Assignment Operators
+
 There are a total of 11 operators of this kind available in C.  Now that we have covered the a majority of the basic operators the table below will show how they can be combined with the simple equals Assignment Operator to form Compound Assignment Operators. (edited)
            Operator   Equivalence          Description
 --------------------------------------------------------------------------------            
