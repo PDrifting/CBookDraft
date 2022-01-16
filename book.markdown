@@ -69,7 +69,7 @@ C is also extremely portable, which is why it drives so many things.  The [GCC C
 [⠀⠀⠀⠀Example 4: Formating Floating Point Types with printf](#example-4-formating-floating-point-types-with-printf)\
 [⠀⠀⠀⠀Example 5: Formating double Floating Point Types with printf](#example-5-formating-double-floating-point-types-with-printf)\
 [⠀⠀⠀⠀Example 6: Formating long double Floating Point Types with printf](#example-6-formating-long-double-floating-point-types-with-printf)\
-[⠀⠀Zero is not always Zero](#zero-is-not-always-zero)
+[⠀⠀Zero is not always Zero](#zero-is-not-always-zero)\
 [⠀⠀⠀⠀Example 1: Issues with Floating Point Types and Approximations](#examples-1-issues-with-floating-point-types-and-approximations)
 
 # Pre-Basics of GCC
@@ -2413,8 +2413,8 @@ value of thud = 2.000000
 What happens if we have a lot of arguments that we need to pass to a function? In terms of much of the Linux or Windows Application Programming Interface [LAPI or WAPI] we will be running into Functions that require a lot of parameters.  There isn't much we can do when it comes to how things have been written in the past, but we can be mindful of how future programmers deal with these sorts of problems.  For instance if we look at XCreateWindow from Linux, we will see something that looks like this for a rough outline of a prototype.  
 
 
->> Window XCreateWindow(display, parent, x, y, width, height, border_width, depth, 
->>                      class, visual, valuemask, attributes)
+> Window XCreateWindow(display, parent, x, y, width, height, border_width, depth, 
+>                      class, visual, valuemask, attributes)
 
 Many of the LAPI and WAPI Functions have very wide argument lists.  When you begin to look at what many of these are defined as, you will begin to get a little overwhelmed.
 
@@ -2702,7 +2702,7 @@ buzz.bar = A
 
 A little more dissection of the address outputs will hopefully clarify what is actually happening when we are calling function newTFBAlt and passing pointer buzz to it.  Since pointer buzz is merely type TFB and a single pointer, meaning we do not have an array, in the case of TFB \*buzz[] and we do not have any pointers to pointers in the case of TFB \*\*buzz, we must satisfy the conversion to the \*\*r argument expected in the call.  The easiest way to do this is to pass the address of buzz.  In this case the address of the pointer buzz is shown to be 0x7ffd5b98c5d8.   When we enter the function the address of \*\*r becomes the address of buzz as shown by the address matching.  When we call the malloc it will request a section of memory that also has an address that we need to store.  That address passed back from the malloc is shown to be 0x2091690.  The reason we need to use (\*r) in this case is because \*\*r points to the address of &buzz, and we know when we take \*ptr we are looking at the value of what is stored there, giving us access to the pointer being pointed to.  The first pointer is buzz, and it points to the address returned by the malloc.
 
-Here is an example with output showing the side-effects of the above and further explaining why this fails to further reinforce the concept above. (edited)
+Here is an example with output showing the side-effects of the above and further explaining why this fails to further reinforce the concept above.
 
 ```
 #include <stdlib.h>
@@ -3286,7 +3286,7 @@ You can see the values do not match on the expressions with uFoo and sFoo when y
 
 > 1898 and abs(-1899) are off by one
 
-NOTE: Do not forget to account for these types of annomalies when you're trying to figure out what happened.  This is another area where off by one errors are most likely to occur.  Side-effects of Roll Over can be problematic if you're trying to maths out what is happening.  Remember to always take into account if you underflowed you crossed 0. This also goes for overflows depending the sign of your variable. 
+NOTE: Do not forget to account for these types of annomalies when you're trying to figure out what happened.  This is another area where off by one errors are most likely to occur.  Side-effects of Roll Over can be problematic if you're trying to maths out what is happening.  Remember to always take into account signed and unsigned minimum and maximums. When in doubt, always write code that tests what the compiler is doing on your given hardware.  It is the only way to get an authoritive answer.
 
 > "The handling of overflow, divide check, and other exceptions in expression evaluation is not defined by the language.  Most existing implementations of C ignore overflow in evaluation of signed integral expressions and assignments, but this behavior is not guaranteed."
 > K&R (Second Edition) [Page 200]
@@ -4250,9 +4250,11 @@ baz = 28
 baz = 70
 ```
 
-Assignment Operators
+### Assignment Operators
 
-There are a total of 11 operators of this kind available in C.  Now that we have covered the a majority of the basic operators the table below will show how they can be combined with the simple equals Assignment Operator to form Compound Assignment Operators. (edited)
+There are a total of 11 operators of this kind available in C.  Now that we have covered the a majority of the basic operators the table below will show how they can be combined with the simple equals Assignment Operator to form Compound Assignment Operators.
+
+```
            Operator   Equivalence          Description
 --------------------------------------------------------------------------------            
 Simple         =      var = value          general assignment
@@ -4266,12 +4268,11 @@ Compound      +=      var = var + value    addition and assignment
               &=      var = var & mask     bitwise and with assignment
               |=      var = var | mask     bitwise or with assignment
               ^=      var = var ^ mask     bitwise xor with assignment
-(edited)
-Avatar
-PDrifting 26-Jun-21 12:43 PM
+```
+
 Basic program with output showing the general use of the Assignment Operators, several functions, and as always setup of function main.
-Avatar
-PDrifting 26-Jun-21 03:16 PM
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -4313,7 +4314,10 @@ s32 main() {
 
   return 0;
 }
-General Output:
+```
+
+**General Output:**
+```
 foo = 0
 foo = 1
 foo = -11
@@ -4325,20 +4329,19 @@ foo = 2
 foo = 2
 foo = 16711935
 foo = 0
-Avatar
-PDrifting 27-Jun-21 10:56 AM
-Comma Operator
-Avatar
-PDrifting 27-Jun-21 11:24 AM
-We are only going to introduce it here.  No code showing its use will follow at this point.  This is technically an Unary Operator, and has very limited places where it can be used.  Its primary use is for sequencing side-effects from other expressions or operations.  Like many other operators in C, it shares multiple purposes generating confusion if context is not understood.  The , operator in this context should not be confused with compound variable declarations, function arguments lists, or structure or union layouts.  Our use of the , operator will be limited in the future to for loops, macros, auxiliary computations of expressions in the same statement, complex returns, and avoiding the need for blocks and associated { block } braces.  Since we have not covered most of the parts of where this operator is used, it will be detailed later in each of the future programming concepts as we go over them.
-Conditional Operator
-Avatar
-PDrifting 27-Jun-21 11:33 AM
+```
+
+### Comma Operator
+
+We are only going to introduce it here.  No code showing its use will follow at this point.  This is technically an Unary Operator, and has very limited places where it can be used.  Its primary use is for sequencing side-effects from other expressions or operations.  Like many other operators in C, it shares multiple purposes generating confusion if context is not understood.  The , operator in this context should not be confused with compound variable declarations, function arguments lists, structure or union layouts.  Our use of the , operator will be limited in the future to for loops, macros, auxiliary computations of expressions in the same statement, complex returns, and avoiding the need for blocks and associated { block } braces.  Since we have not covered most of the parts of where this operator is used, it will be detailed later in each of the future programming concepts as we go over them.
+
+### Conditional Operator
+
 Sometimes we need to make assignments based on a decision. This is our introductory branching operator.  It's made up a few parts that must follow a specific order.  It uses an evaluation expression and has two state expressions representing true and false based on the logical result of the expression.  You will also hear the Conditional Operator commonly referred to as a ternary if statement.
 
 Basic program with output showing an example using the ternary if statement, and the general setup of function main. (edited)
-Avatar
-PDrifting 27-Jun-21 04:18 PM
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -4412,8 +4415,10 @@ s32 main() {
 
   return 0;
 }
-(edited)
-General Output:
+```
+
+**General Output:**
+```
 minV1(3,15) = 3
 minV2(3,15) = 3
 minV3(3,15) = 3
@@ -4433,11 +4438,11 @@ minV1(9,8) = 8
 minV2(9,8) = 8
 minV3(9,8) = 8
 minV4(9,8) = 8
-Avatar
-PDrifting 27-Jun-21 09:41 PM
+```
+
 Basic program with output showing some other examples of ternary if statements, and general setup of function main.
-Avatar
-PDrifting 28-Jun-21 02:08 PM
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -4487,12 +4492,16 @@ s32 main() {
 
   return 0;
 }
-(edited)
-Avatar
-PDrifting 28-Jun-21 02:29 PM
-General Output:
+```
+
+**General Output:**
+```
 12
+```
+
 NOTE: Many online tutorials, books, and manuals may show something along the lines of this as a possible correct usage of ternary if statements.  
+
+```
 #include <stdio.h>
 
 int main() {
@@ -4506,7 +4515,11 @@ int main() {
 
   return 0;
 }
+```
+
 This is not a good usage.  Basic example with output showing a better form of the above, and general setup of function main.
+
+```
 #include <stdio.h>
 
 int main() {
@@ -4520,25 +4533,26 @@ int main() {
   
   return 0;
 }
-(edited)
-General Output:
+```
+
+**General Output:**
+```
 if
-Avatar
-PDrifting 28-Jun-21 04:26 PM
+```
+
 And this leads us into the next section beyond operators.
-Part 8: Introduction to Branching (edited)
-Avatar
-PDrifting 28-Jun-21 05:38 PM
+
+## Part 8: Introduction to Branching
+
 In C there are if, else if and else statements that can make up one for of branching.  There is also the switch, case, default statements.  The ternary if operator we just went over, return statements we have been we have been using in every one of our examples to this point, and a few others that are generally discouraged from use.  These include continue, goto, labels and the function exit.  One last but slightly deficient important statement is break.  Limitations of the break statement in some contexts requires we drag the goto statement into use.
 
 As we have already found, there are many cases where an if statement is easily replaced.  But we will start with it, and show alternatives if available. (edited)
-Avatar
-PDrifting 28-Jun-21 07:15 PM
+
 Basic example with output showing how to create the simplest form of a branching setup for loop control using goto, and a general setup of function main.
 
 NOTE: This is merely for example, and not a general recommendation on how to solve a problem.  It's a prime example of the mess goto statements make.  Early programming languages did not have the syntax to create better models of code structure.  The Assembly Language uses a lower model of this style of label and goto statement, except they are a series of instructional codes based on jmp which is short for jump. (edited)
-Avatar
-PDrifting 28-Jun-21 07:31 PM
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -4568,7 +4582,10 @@ s32 main() {
   afterLoop:
   return 0;
 }
-General Output:
+```
+
+**General Output:**
+```
 0
 1
 2
@@ -4580,11 +4597,11 @@ General Output:
 8
 9
 10
-Avatar
-PDrifting 28-Jun-21 07:47 PM
-Now that we know what not to do with a basic introduction to the goto and labels, we'll move on to more basic examples of using if, else if, and else, and general setup of function main. (edited)
-Avatar
-PDrifting 28-Jun-21 08:01 PM
+```
+
+Now that we know what not to do with a basic introduction to the goto and labels, we'll move on to more basic examples of using if, else if, and else, and general setup of function main.
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -4609,30 +4626,51 @@ s32 main(s32 count, c8 *args[]) {
   
   return 0;
 }
-(edited)
-Command Line Input:
+```
+
+**Command Line Input:**
+```
 ./main
-General Output:
+```
+
+**General Output:**
+```
 Not enough arguments passed from the command line.
+```
 
-Command Line Input:
+**Command Line Input 1:**
+```
 ./main foo
-General Output:
+```
+
+**General Output:**
+```
 count = 2
+```
 
-Command Line Input:
+**Command Line Input 2:**
+```
 ./main foo bar
-General Output:
-count = 3
+```
 
-Command Line Input:
+**General Output:**
+```
+count = 3
+```
+
+**Command Line Input 3:**
+```
 ./main foo bar baz
-General Output:
+```
+
+**General Output:**
+```
 Too many arguments passed from the command line.
-(edited)
-Avatar
-PDrifting 28-Jun-21 09:23 PM
+```
+
 Basic example with output showing how to setup another basic if, else if block of statements and condition where thinking about initialisation of a declare can take the place of an else, also general setup of function main.
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -4672,15 +4710,20 @@ s32 main() {
 
   return 0;
 }
-General Output:
+```
+
+**General Output:**
+```
 A
 F
 D
 B
 C
+```
+
 Basic example showing how to test for the failure of a malloc call, and general setup of function main.
-Avatar
-PDrifting 28-Jun-21 10:03 PM
+
+```
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -4761,24 +4804,25 @@ s32 main() {
 
   return 0;
 }
-(edited)
-General Output:
+```
+
+**General Output:**
+```
 Got 1 MB of memory successfully.
 Got 500 MB of memory successfully.
 Got 1 GB of memory successfully.
 Got 1 TB of memory successfully.
 Got 10 TB of memory successfully.
 Failed to get 100 TB of memory.
-Avatar
-PDrifting 28-Jun-21 10:16 PM
+```
+
 We don't know actually how much memory we could allocate on this given system, but it's somewhere between 10 terabytes and less than 100 terabytes of RAM.  This is pretty considerable.  The typical modern desktop computer maxes out as of the writing of this manual between 8 GB and 16 GB according to the latest Steam Hardware Survey [May 2021].  When the code above was run it was executed on a cloud based server which has considerably more memory than a computer you may have access to.
 
-NOTE: Remember that the Operating System, Drivers, Services, and other Software that may be running on the system will be consuming memory.  Just because your machine may have 8 GB of RAM, you may at any given point in time only have access to about 4 GB of RAM that are not in use.  RAM is not unlimited like many courses teach, and should be treated as a finite resource and managed accordingly. (edited)
-Avatar
-PDrifting 29-Jun-21 10:44 AM
-Basic program with output showing how to read and parse simple arguments from the command line, nest if statements, format complex expressions for readability, and general setup of function main. (edited)
-Avatar
-PDrifting 29-Jun-21 11:43 AM
+NOTE: Remember that the Operating System, Drivers, Services, and other Software that may be running on the system will be consuming memory.  Just because your machine may have 8 GB of RAM, you may at any given point in time only have access to about 4 GB of RAM that are not in use.  RAM is not unlimited like many courses teach, and should be treated as a finite resource and managed accordingly.
+
+Basic program with output showing how to read and parse simple arguments from the command line, nest if statements, format complex expressions for readability, and general setup of function main.
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -4880,12 +4924,15 @@ s32 main(s32 count, c8 *args[]) {
   
   return 0;
 }
-(edited)
-Avatar
-PDrifting 29-Jun-21 11:58 AM
-Command Line Input: 
+```
+
+**Command Line Input 1:**
+```
 ./main
-General Output:
+```
+
+**General Output:**
+```
 Please supply a single character from the command line.
 Example:
   ././main [a..z]|[A..Z]|[0..9]
@@ -4896,30 +4943,53 @@ Or a number followed by an operator and another number
 
 Example:
   ././main 5 a 9
+```
 
-Command Line Input:
+**Command Line Input 2:**
+```
 ./main a
+```
+
 General Output:
 Lower case letter.
 
-Command Line Input:
+**Command Line Input 3:**
+```
 ./main Z
-General Output:
+```
+
+**General Output:**
+```
 Upper case letter.
+```
 
-Command Line Input:
+**Command Line Input 4:**
+```
 ./main 7
-General Output:
+```
+
+**General Output:**
+```
 Number
+```
 
-Command Line Input:
+**Command Line Input 5:**
+```
 ./main {
-General Output:
-Unrecognised
+```
 
-Command Line Input:
+**General Output:**
+```
+Unrecognised
+```
+
+**Command Line Input 6:**
+```
 ./main foo bar this
-General Output:
+```
+
+**General Output:**
+```
 Malformed command line arguments...
 
 Please supply a single character from the command line.
@@ -4932,15 +5002,25 @@ Or a number followed by an operator and another number
 
 Example:
   ././main 5 a 9
+```
 
-Command Line Input:
+**Command Line Input 7:**
+```
 ./main 5 a 9
-General Output:
-14
+```
 
-Command Line Input:
+**General Output:**
+```
+14
+```
+
+**Command Line Input 8:**
+```
 ./main 5 d 0
-General Output:
+```
+
+**General Output:**
+```
 Undefined Behaviour - Cannot divide by zero...
 
 Please supply a single character from the command line.
@@ -4953,10 +5033,15 @@ Or a number followed by an operator and another number
 
 Example:
   ././main 5 a 9
+```
 
-Command Line Input:
+**Command Line Input 9:**
+```
 ./main 5 p 2
-General Output:
+```
+
+**General Output:**
+```
 Malformed command line arguments...
 
 Please supply a single character from the command line.
@@ -4969,33 +5054,30 @@ Or a number followed by an operator and another number
 
 Example:
   ././main 5 a 9
-(edited)
-Avatar
-PDrifting 29-Jun-21 12:17 PM
-Introduction to Switch, Case, Default and Break
+```
+
+### Introduction to Switch, Case, Default and Break
+
 There's a few things we need go over in the basics, but otherwise, switch statements are a much cleaner mechanism than if statements generally.  Once you learn to use ternary if statements and switch statements, you won't be using if statements that much.
 
 Basic example with output showing the basic setup of a switch statement, function pointer review, and general setup of function main. (edited)
-Avatar
-PDrifting 29-Jun-21 02:50 PM
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
 typedef char c8;
 typedef int32_t s32;
 
-//NOTE: janky old school comments because discord be broke
+\\ special typedef for a function pointer type to handle
+\\ each of the calls inside the caller function and
+\\ satisfy a format for the function we can accept
+\\
+\\ void callSwitchFunc(c8 *name, switchDelegate func)
+\\
+\\ this will let us pass individual functions and invoke
+\\ them reusing the output capabilities of that function
 
-/*
-special typedef for a function pointer type to handle
-each of the calls inside the caller function and
-satisfy a format for the function we can accept
-
-void callSwitchFunc(c8 *name, switchDelegate func)
-
-this will let us pass individual functions and invoke
-them reusing the the output capabilities of that function
-*/
 typedef s32 (*switchDelegate)(s32);
 
 //NOTE: none of the following examples of switch statements
@@ -5003,43 +5085,42 @@ typedef s32 (*switchDelegate)(s32);
 
 s32 standardSwitch(s32 foo) {
   s32 r = 0;
-  
-/*
-  as mentioned above the code here would be a better
-  solution to the following and you could do something
-  like this for each of these other examples also
-  but as mentioned the idea is just to show form and
-  layout of each basic switch state
-  
-  s32 val[] = {-1,2,3,6,1,4,5};  
-  return val[(foo < 1 || foo > 6) ? : 0 : foo];
+ 
+\\ as mentioned above the code here would be a better
+\\ solution to the following and you could do something
+\\ like this for each of these other examples also
+\\ but as mentioned the idea is just to show form and
+\\ layout of each basic switch state
+\\  
+\\ s32 val[] = {-1,2,3,6,1,4,5};  
+\\ return val[(foo < 1 || foo > 6) ? : 0 : foo];
+\\
+\\ the basic standard switch statement starts off with
+\\ switch (expression)
+\\ switch statements must contain their case and default
+\\ options inside a brace block {}  
+\\ each option of a switch statement is denoted by
+\\ case value:
+\\ followed by C statements of code and must end each
+\\ case option with a break statement to prevent a
+\\ side-effect called waterfalling
+\\ if you are familiar with other programming languages
+\\ most will treat each case statement independently
+\\ exiting the switch statement without processing any
+\\ other case options
+\\ this is not the case with C and you must be mindful
+\\ of your break statements
+\\ the method of catching your else conditions in switch
+\\ is by using the default option
+\\ it should be your last case option in the switch block
 
-  the basic standard switch statement starts off with
-  switch (expression)
-  switch statements must contain their case and default
-  options inside a brace block {}  
-  each option of a switch statement is denoted by
-  case value:
-  followed by C statements of code and must end each
-  case option with a break statement to prevent a
-  side-effect called waterfalling
-  if you are familiar with other programming languages
-  most will treat each case statement independently
-  exiting the switch statement without processing any
-  other case options
-  this is not the case with C and you must be mindful
-  of your break statements
-  the method of catching your else conditions in switch
-  is by using the default option
-  it should be your last case option in the switch block
-*/
   switch (foo) {
-    case 1: r = 2; break;
-    case 2: r = 3; break;
-    case 3: r = 6; break;
-    case 4: r = 1; break;
-    case 5: r = 4; break;
-    case 6: r = 5; break;
+    case 1:  r = 2; break;
+    case 2:  r = 3; break;
+    case 3:  r = 6; break;
+    case 4:  r = 1; break;
+    case 5:  r = 4; break;
+    case 6:  r = 5; break;
     default: r = -1;
   }
 
@@ -5050,17 +5131,18 @@ s32 waterfallSwitch(s32 foo) {
   s32 r = 0;
     
   switch (foo) {
-    //if a case statement does not invoke a break
-    //it will carry onto the next case automatically
-    //until it hits a break somewhere
-    //this can be advantageous if you want a series
-    //of case options to perform the same option
+    // if a case statement does not invoke a break
+    // it will carry onto the next case automatically
+    // until it hits a break somewhere
+    // this can be advantageous if you want a series
+    // of case options to perform the same option
+    
     case 1: 
     case 2:
     case 3:
     case 4:
     case 5:
-    case 6: r = 1; break;
+    case 6:  r =  1; break;
     default: r = -1; break;
   }
 
@@ -5077,6 +5159,7 @@ s32 rangeSwitch(s32 foo) {
   //waterfalling behaviour and clearly defines a
   //range for the case using the special ... [range]
   //modifier for the case statement
+
   switch (foo) {
     case 1 ... 6 : r = 1; break;
     default: r = -1; break;
@@ -5088,6 +5171,7 @@ s32 rangeSwitch(s32 foo) {
 //takes a name to build the function name string
 //and a function that follows the form of our function
 //delegate type we created above
+
 void callSwitchFunc(c8 *name, switchDelegate func) {
   puts("\n");
   printf("%sSwitch(0) = %d\n", name, func(0));
@@ -5109,10 +5193,10 @@ s32 main() {
 
   return 0;
 }
-(edited)
-Avatar
-PDrifting 29-Jun-21 05:00 PM
-General Output:
+```
+
+**General Output:**
+```
 standardSwitch(0) = -1
 standardSwitch(1) = 2
 standardSwitch(2) = 3
@@ -5141,9 +5225,11 @@ rangeSwitch(4) = 1
 rangeSwitch(5) = 1
 rangeSwitch(6) = 1
 rangeSwitch(7) = -1
-Let's quickly cover the things you can't do with case options. (edited)
-Avatar
-PDrifting 29-Jun-21 05:11 PM
+```
+
+Let's quickly cover the things you can't do with case options.
+
+```
 case "string":       //strings comparisons are not valid in this context
 
 s32 var = 2; 
@@ -5154,17 +5240,18 @@ case arr[0]:         //again values must be constant
 
 case >2              //you cannot use any logical operators
 
-case 1.1f:           //floating point types are not allowed, integer type only
+case 1.1f:           //floating point types are not allowed, integer types only
 
 case 1: int x = 2;   //declares within scope cannot be declared like this
                      //they must be encapsulated in braces [see below]
 
 case 2:              //all values within the switch block must have unique
 case 2:              //case options or undefined behaviour will result
-(edited)
-Things you can do with case options. (edited)
-Avatar
-PDrifting 29-Jun-21 05:23 PM
+```
+
+Things you can do with case options.
+
+```
 case 'a':              //char literals
 
 case 'a' ... 'z':      //ranges with char literals
@@ -5194,13 +5281,12 @@ case var+1:            //constants you can use mathematical operator based
 case var*2:            //expressions
 
 case 1 << 2:           //bitwise operators can also be used to make expressions
-case 0xf & 20:         //as long as the values used in those expressions
-case 0xfe >> 1:        //are constant
+case 0xF & 20:         //as long as the values used in those expressions
+case 0xFE >> 1:        //are constant
 
 case 1 << 2 + 4:       //you are able to create complex expressions also
-(edited)
-Avatar
-PDrifting 29-Jun-21 08:05 PM
+```
+
 We're going to revisit some code we just wrote going over if, else if and else statements to show swtich statements can clean up code.
 
 Basic sample program excluding output, as it would replicate the output from the prior example, showing how to refactor using switch statements, and general setup of function main.
@@ -5283,7 +5369,8 @@ s32 main(s32 count, c8 *args[]) {
   }
     
   return 0;
-}```
+}
+```
 
 General Output for this example above is identical to the prior version of the code.
 Most of the basic branching methods have been explained to this point.  We are not going to cover continue, or exit, as these are considered violations of either spaghetti code or single-entrance single-exit.
@@ -5344,15 +5431,18 @@ s32 main() {
   puts("");
 
   return 0;
-}```
+}
+```
 
 > General Output:
 
-```abcdefghijklmnopqrstuvwxyz
+```
+abcdefghijklmnopqrstuvwxyz
 
 01 02 03 04 05 06 07 08 09 10 
 
-0.00 0.20 0.40 0.60 0.80```
+0.00 0.20 0.40 0.60 0.80
+```
 
 Basic program with output showing forward and backward counting examples using a for loop, and general setup of function main.
 
@@ -5406,11 +5496,14 @@ s32 main() {
   for (--foo; foo > -12; --foo) printf("%i ", foo);
   
   return 0;
-}```
+}
+```
 
 > General Output:
 
-```3 2 1 0 -1 -6 -7 -8 -9 -10 -11```
+```
+3 2 1 0 -1 -6 -7 -8 -9 -10 -11
+```
 
 Basic program with output showing how to use nested for loops, general implementation of the Bubble Sort algorithm, some functions, tying ideas together, and the general setup of function main.
 
@@ -5501,11 +5594,13 @@ s32 main() {
   printArray(numbers, n);
   
   return 0;
-}```
+}
+```
 
 > General Output:
 
-```Ascending
+```
+Ascending
 
 ordered array:
 10 11 21 27 46 63 92 
@@ -5513,7 +5608,8 @@ ordered array:
 Descending
 
 ordered array:
-92 63 46 27 21 11 10```
+92 63 46 27 21 11 10
+```
 
 Basic program with output showing the difference between do and while loops, and general setup of function main.
 
@@ -5552,12 +5648,15 @@ s32 main() {
   }
 
   return 0;
-}```
+}
+```
 
 > General Output:
 
-```0 1 2 3 4 5 6 7 8 9 
-0 1 2 3 4 5 6 7 8 9```
+```
+0 1 2 3 4 5 6 7 8 9 
+0 1 2 3 4 5 6 7 8 9
+```
 
 A major problem exists with nested loops in C, caused by limitations with the break statement.  It is only capable of escaping one nested layer at a time.  Unfortunately with C there is no other way to escape multiple nested loops, unless the exit conditions are met for each of them, or a goto statement is used.  This can, and will create some spaghetti in your code.
 
@@ -5568,7 +5667,8 @@ for (...) {
   }
 }
 
-label:```
+label:
+```
 
 NOTE: The same problem exists for any nested code that relies on the break statement.  It is very rare that you will need to use this special case, but it is presented, for example of what to do when you have no other choice.
 
@@ -5576,8 +5676,10 @@ NOTE: The same problem exists for any nested code that relies on the break state
 
 There are plenty of ways you can abuse the C language when writing code.  The Preprocessor is by far the most abused and abusive feature of the language.  When referring to the Preprocessor, we have been using at least one directive in our programs so far called #include.  All Preprocessor directives are preceded by the # symbol.  GCC executes all Preprocessor directives before any processing of your program syntax.  The most useful process we can derive from the Preprocessor is Meta-Programming.  We can literally use the Preprocessor to write C syntax in our code, manage constants, and even determine system architecture we might be running on.  This is useful if we plan on writing cross-platform code beyond the basic C syntax we have covered so far.  Libraries we can #include are determined by the Operating System and the Architecture we are compiling against.
 
+### Preprocessor Directives in GCC
+
+```
 //TODO: NEED TO TABLE THIS
-Preprocessor Directives in GCC
 #include                 //includes a library in your code
 #define                  //defines a named macro
 #undef                   //destroys a macro by name
@@ -5587,11 +5689,14 @@ Preprocessor Directives in GCC
 #else                    //works just like the else in a regular if
 #endif                   //ends an #if directive
 #pragma                  //allows you to provide additional information to the compiler
+```
 
 There are some other handy features of the Preprocessor when it comes to GCC as it has some things predefined to make things a little easier for you.
 
+### Predefined Macros in GCC
+
+```
 //TODO: need to table this
-Predefined Macros in GCC
 __FILE__             //expands the full path of the current input file as string constant
 __FILENAME__         //expands the current input file name only as a string constant
 __BASE_FILE__        //expands the main input file supplied on the command line as a string constant
@@ -5628,23 +5733,28 @@ __i586__             //GNU C identifier for old intel 5x86 architecture
 __i686__             //GNU C identifier for old intel 6x86 architecture
 _X86_                //only defined in Mingw for intel x86 based architecture
 __VA_ARGS__          //used as an extension in GCC to represent a list of arguments where an ellipsis was used
+```
 
 This is far from a complete list, but generally depending on your architecture, cpu, and otherwise, there will be some way to tell what you're running on.  Unfortunately, there is no way to get a complete list, even the GCC manual excludes most of the macros it establishes for a given compilation environment. As we require them, or you develop a need, there is always information somewhere for context.  The list above is just most of the more common ones you might need to reference.
 
 When using GCC you can use -dM with -E on a file to see what is predefined.  This will need to be done from a terminal on Windows or Linux.
 
 > For Windows/DOS: 
-```echo | gcc -dM -E -```
+```
+echo | gcc -dM -E -
+```
 
 > For Non-Windows that supports /dev/null: 
-```gcc -dM -E - < /dev/null```
+```
+gcc -dM -E - < /dev/null
+```
 
-# \#include
-There are two forms for an #include directive.  Filenames declared as <stdio.h> and "myheader.h".  The <header> form searches for a file by that name from an internal list of system directories.  These are typically part of the C Standard Library or other packages that you have installed alongside your compiler.  When including using this form "header", the compiler will search the directory that contains the file \_BASE_FILE__.  If you need to modify directories the compiler should be searching for with either form, you can use the -I_ option from the command line. (edited)
-
+### \#include
+There are two forms for an \#include directive.  Filenames declared as <stdio.h> and "myheader.h".  The \<header> form searches for a file by that name from an internal list of system directories.  These are typically part of the C Standard Library or other packages that you have installed alongside your compiler.  When including using this form "header", the compiler will search the directory that contains the file \_\_BASE\_FILE\_\_.  If you need to modify directories the compiler should be searching for with either form, you can use the -I option from the command line.
   
-Common C Standard Library Headers
+### Common C Standard Library Headers
 
+```
 Name            ISO   Description
 -----------------------------------------------------------------------------------------
 <assert.h>            Conditional macros for testing and comparison of things
@@ -5676,14 +5786,15 @@ Name            ISO   Description
 <uchar.h>       [C11] UTF-16 and UTF-32 conversion utilities
 <wchar.h>       [C95] Extended multibyte and wide character utilities
 <wctype.h>      [C95] Functions to determine the type contained in wide character information
+```
+   
+Most of these you will never use, and many of these we will be going over how to rewrite, or deal with the specifics in other ways.  Most of the C Standard Libraries are janky, poorly written or generic.  Modern equivalents rely on an understanding of each platform you are coding on and for.  This is especially prevalent when dealing with input and output, memory management, and threading models.  For more information on what is and isn't contained in each of these headers, you can find them on the web.  Since our concern will be more detailed and fine grained, these are merely supplied for reference when you are starting from scratch, or just need something quick and dirty.  In general you are advised to mostly avoid the C Standard Library methods, that pretty much goes for any language.
 
-Most of these you will never use, and many of these we will be going over how to rewrite, or deal with the specifics in other ways.  Most of the C Standard Libraries are janky, poorly written or generic.  Modern equivalents rely on an understanding of each platform you are coding on and for.  This is especially prevalent when dealing with input and output, memory management, and threading models.  For more information on what is and isn't contained in each of these headers, you can find them on the web.  Since our concern will be more detailed and fine grained, these are merely supplied for reference when you are starting from scratch, or just need something quick and dirty.  In general you are advised to mostly avoid the C Standard Library methods, that pretty much goes for any language. (edited)
-
-# \#define
+### \#define
 
 This is the basic fundamental way we define macros in C.  It allows us to #define named and value constants, expressions, and meta-functions.  Since #define, along with all other Preprocessor Directives are not processed by any IDE or in real-time, they tend to cause massive confusion amongst programmers.  The C++ language actually frowns on the use of Preprocessor Directives in general, citing they are a direct cause for Undefined Behaviour.  Regardless, they are incredibly powerful, can help reduce errors, and keep code tidy.  Most often they are used to avoid single line functions, having to use the inline keyword, and guarantee that code will be directly replaced.
 
-JANKY EXAMPLE: Basic program with output showing general use of #define statements, and general setup of function main. (edited)
+JANKY EXAMPLE: Basic program with output showing general use of #define statements, and general setup of function main.
 
 ```C
 #include <stdio.h>
@@ -5721,15 +5832,17 @@ s32 main () {
   }
 
   return 0;
-}```
+}
+```
 
 > General Output:
+```
+foo and bar checked out.
+```
 
-```foo and bar checked out.```
+By using the -E command line argument to the compiler we can trigger the compiler to emit the Preprocessor stage of compiling.  All of the \#define statements without a constant or represented value were removed from the code.  All other \#define macros were replaced at this point with the values they represented.  We can see the constant values of foo and bar, the start and end, equals, and the and macros were all replaced.
 
-By using the -E command line argument to the compiler we can trigger the compiler to emit the Preprocessor stage of compiling.  All of the #define statements without a constant or represented value were removed from the code.  All other #define macros were replaced at this point with the values they represented.  We can see the constant values of foo and bar, the start and end, equals, and the and macros were all replaced.
-
-JANKY EXAMPLE: Basic program with output showing how to create an argument based #define macro, and general setup of function main. (edited)
+JANKY EXAMPLE: Basic program with output showing how to create an argument based #define macro, and general setup of function main.
 
 ```C
 #include <stdio.h>
@@ -5756,8 +5869,10 @@ s32 main() {
 
   return 0;
 }
-(edited)
-Emitted by the Compiler Post Preprocessing: (edited)
+```
+
+**Emitted by the Compiler Post Preprocessing:**
+```
 typedef int32_t s32;
 
 s32 main() {
@@ -5773,23 +5888,27 @@ s32 main() {
   printf("bar = %d\n", bar);
 
   return 0;
-}```
+}
+```
 
 > General Output:
-
-```bar = 1```
+```
+bar = 1
+```
 
 As we can see the buildCase and buildExpress macros can be called or used just like a function.  Argument substitution happens as direct literal replacement.  There are no conversions or casts done on what is passed to a macro.  This allows you to pass things you would not normally be allowed to pass to a standard function as an argument.  The #define directive has many uses which we will explore in later examples.
 
 There are a few operators we should cover that allow us to do some other neat things.  They are useful for concatenating strings, or casting something passed to a macro as a string.
 
+```
 Operator   Purpose
 ------------------------------------------------
  #         casts to a string
  ##        joins what is to the left and right regardless of type
  \         used to denote a multi-line macro [used to escape new lines]
+```
 
-JANKY EXAMPLE: Basic program with output showing how to use the #define directive, use of the # operator, and setup of function main.
+JANKY EXAMPLE: Basic program with output showing how to use the \#define directive, use of the \# operator, and setup of function main.
 
 ```C
 #include <stdio.h>
@@ -5803,7 +5922,8 @@ s32 main() {
   puts(joinStr(hello,world));
 
   return 0;
-}```
+}
+```
 
 > Emitted by the Compiler Post Preprocessing:
 
@@ -5819,11 +5939,14 @@ s32 main() {
 
 > General Output:
 
-```hello world!```
+```
+hello world!
+```
 
 NOTE: Remember that C will join String Literals in this way automatically.
 
 JANKY EXAMPLE: Basic program with output showing how to use the #define directive, use the ## operator, and setup of function main. (edited)
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -5838,7 +5961,10 @@ s32 main() {
 
   return 0;
 }
-Emitted by the Compiler Post Preprocessing: (edited)
+```
+
+**Emitted by the Compiler Post Preprocessing:**
+```
 typedef int32_t s32;
 
 s32 main() {
@@ -5848,11 +5974,16 @@ s32 main() {
 
   return 0;
 }
-General Output:
+```
+
+**General Output:**
+```
 4
+```
+
 JANKY EXAMPLE: Basic program with output showing how to use the #define directive, use the \ operator, and setup of function main.
-Avatar
-PDrifting 08-Aug-21 01:27 PM
+
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -5899,21 +6030,25 @@ y = 4
 z = 0
 z = 1
 z = 2
-We need to use the \ operator with multi-line macros because the \n [new line] character is used as the line delimiter for macros.  They do not use the traditional ; end of statement terminator on the last line of a macro.  You do not need to use it on the last line of the macro definition.  Hopefully from this, you can begin to see the capabilities of the Preprocessor. (edited)
-Avatar
-PDrifting 08-Aug-21 02:02 PM
+```
+
+We need to use the \ operator with multi-line macros because the \n [new line] character is used as the line delimiter for macros.  They do not use the traditional ; end of statement terminator on the last line of a macro.  You do not need to use it on the last line of the macro definition.  Hopefully from this, you can begin to see the capabilities of the Preprocessor.
+
 DOES NOT RUN: Stub code showing how to use the #define, #undef directives.
+```
 #define foo 3
 #undef foo
 
 #define combine(left,right) left##right
 #undef combine
+```
 
 The #undef directive is useful if you need remove a macro from the known list, or to redefine a macro.  It is good practice to remove the old #define using #undef in either of these cases.
 
 JANKY EXAMPLE: Basic program with output showing how to use the #if, #elif, #else, #endif, defined and general setup of function main. (edited)
 
-  #include <stdio.h>
+```
+#include <stdio.h>
 #include <stdint.h>
 
 typedef int32_t s32;
@@ -5952,9 +6087,12 @@ s32 main() {
 
   return 0;
 }
-(edited)
+```
+
 NOTE: Keep in mind the way this code is setup, the code will emit variations depending on what Operating System this code has been executed on.  This should not to be regarded as the best way to detect these variations, but this merely a general idea on some of the basic uses of these features of the preprocessor.
-Emitted by the Compiler Post Preprocessing [Unix]: (edited)
+
+**Emitted by the Compiler Post Preprocessing [Unix]:**
+```
 typedef int32_t s32;
 
 s32 main() {
@@ -5963,9 +6101,15 @@ s32 main() {
 
   return 0;
 }
-General Output:
+```
+
+**General Output:**
+```
 the build environment is unix
-Emitted by the Compiler Post Preprocessing [Windows]:
+```
+
+**Emitted by the Compiler Post Preprocessing [Windows]:**
+```
 typedef int32_t s32;
 
 s32 main() {
@@ -5974,11 +6118,15 @@ s32 main() {
 
   return 0;
 }
-(edited)
-General Output:
+```
+
+**General Output:**
+```
 the build environment is windows
+```
 
 JANKY EXAMPLE: Basic program showing how you might setup debug output and control it with #define, #if, #else, #endif and the general setup of function main. (edited)
+```
 #include <stdio.h>
 #include <stdint.h>
 
@@ -6007,10 +6155,12 @@ s32 main() {
 
   return 0;
 }
+```
 
 NOTE: This introduces the \_VA_ARGS__ macro and the use of the ellipsis [...].  When using the ellipsis, this is effectively a variable set of arguments of arbitrary length.  GCC uses the __VA_ARGS___ macro to represent all the arguments that were passed to the method that uses the ellipsis as part of its argument list.  Since debugArgV takes a full argument list like printf normally would, we can use the ellipsis and the associated \_VA_ARGS___ macro to pass the variable argument making this macro as flexible as printf would be normally.  We will explore this later in greater detail in the Intermediate coding section of the book.
 
-Emitted by the Compiler Post Preprocessing [#define isDebugging]: (edited)
+**Emitted by the Compiler Post Preprocessing [#define isDebugging]:**
+```
 typedef int32_t s32;
 typedef float f32;
 
@@ -6024,11 +6174,17 @@ s32 main() {
 
   return 0;
 }
-General Output:
+```
+
+**General Output:**
+```
 This is a test
 int val = 12
 int val = 12    float val = 78.12
-Emitted by the Compiler Post Preprocessor [//#define isDebugging]:
+```
+
+**Emitted by the Compiler Post Preprocessor [//#define isDebugging]:**
+```
 typedef int32_t s32;
 typedef float f32;
 
@@ -6042,11 +6198,16 @@ s32 main() {
 
   return 0;
 }
-General Output:
+```
+
+**General Output:**
+```
+
+```
  
 As we can see with the #define isDebugging uncommented, or commented will either leave in or completely remove our debug statements.  This is a much better method than littering your code with older style #if isDebugging wrapped around each block of code you are using for debug output.  This method can be expanded to suit your needs.
 
-Basic program with output showing extensive use of macros to implement a very basic virtual machine. (edited)
+Basic program with output showing extensive use of macros to implement a very basic virtual machine.
 
 ```
 #include <stdio.h>
@@ -6235,7 +6396,7 @@ s32 main() {
 
 NOTE: This is a good example of code that has a lot of replication that can be easily replaced by macros.  Despite this code being relatively simplistic in nature, it relies heavily on case statements that have their associated break statements.  Code of this type generates a lot of extra typing.  Simple macros can save typing, help reduce errors in repetitive code, and in general be used to generate code for you.  One of the advantages of using the preprocessor, we can maintain tokens that make sense which will be replaced once the code in compiled.  The function getc in this case is used to get a single character from the keyboard, but has been replaced by the preprocessor with __IO_getc_.  This is because getc is implemented internally and is replaced by the compiler to the association within the C Standard Library implementation used.  The example code above does implement a very basic integral stack based virtual machine.  It is very limited in capabilities, but does support a decent subset of instructions.  An array called code[] is used to hold the program that will be executed by the virtual machine.  Output from the program executed is below.
 
-General Output:
+**General Output:**
 ```
 8
 9
@@ -6255,6 +6416,7 @@ Press enter...
 
 The problem with C, the standard doesn't actually define Operator Precedence, so the following table is derived from the base grammar of the C language.  There are a few anomalies, but in general this can be regarded as the order things will fire in if you have complex or compound statements using multiple operators.  Operator order in the following table is first to last priority.
 
+```
 Order  Operators                                                          Associativity
 ----------------------------------------------------------------------------------------
 1      #define                                                            Replacement
@@ -6273,20 +6435,292 @@ Order  Operators                                                          Associ
 14     **TERNARY IF** (exp) ? (true) : (false)                            Right to Left
 15     = *= /= %= += -= <<= >>= &= ^= |=                                  Right to Left
 16     ,                                                                  Left to Right
+```
 
 # Chapter 2: Queues, Stacks, Lists, Hash Maps... Oh My!
 
 The following implementations are not thread safe.  A static and dynamic allocation version is provided.  These examples are not documented.  Also due to their complexity and length, they will not have the traditional output examples or dissections.  The code will compile and provide basic use in an implementation of function main. If you need help reading the code, please refer to Chapter 1.
 
+## Part 1: Queues
 
-Queues
 Traditional queue examples use linked lists and other jank.  We all should understand this leads to poor cache performance and memory fragmentation.  The following queue implementation shows a different model using a cyclical array structure that amortizes in the dynamic model a possible growth malloc and series of calculated memcpy calls to reogranise and linearly structure the array only when it runs out of space.  The static version of the queue should be used most times calculated to your specific requirements.
 
-This method goes one step further and removes the typical modulus calls and replaces them with a prebaked lookup.  It adds a minor performance gain, there is test code shown for each.  The tests are not complete, and only showing plausible ways to use it, and ideas on how to write efficient code in your projects.  There are likely to be improvements that can be made, but this is a much less terrible implementation than you will find elsewhere. (edited)
-Avatar
+This method goes one step further and removes the typical modulus calls and replaces them with a prebaked lookup.  It adds a minor performance gain, there is test code shown for each.  The tests are not complete, and only showing plausible ways to use it, and ideas on how to write efficient code in your projects.  There are likely to be improvements that can be made, but this is a much less terrible implementation than you will find elsewhere.
 
 STATIC IMPLEMENTATION WITH JANKY TESTS
-static_queue_with_junk_tests.c
-17.19 KB
+
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <time.h>
+
+typedef int32_t s32;
+typedef float   f32;
+typedef size_t  length;
+
+//user record struct for example queue construction and use
+typedef struct {
+  f32 foo;
+  f32 bar;
+  s32 state;
+} TF32Record;
+
+//
+//only used for the #define buildNewStaticQueueContext(recordType)
+//
+
+#define begin {
+#define elsewise } else {
+#define elseIf } else if
+#define next }
+#define endIf }
+#define end }
+
+#define queueRecordPopped 4            //used to set an element to popped state
+#define queueRecordPushed 3            //used to set an element to pushed state
+#define queueEmptyDataElement 2        //used to set an element to empty
+#define queueSuccess 1                 //returned by all queueMethods if successful
+#define queueGeneralFailure 0          //returned by all queueMethods on general failure
+#define queueArrayMallocFailed -1      //returned when initialising the queue
+#define queueResizeFailed -2           //returned by queueSize [dynamic only]
+#define queueEmpty -3                  //returned by queuePop and queuePeek when empty
+#define queueRemallocGrowthFailed -4   //used only by queueSize [dynamic only]
+#define queueRecordNotFound -5         //returned by qeueueGetItem and queueContains
+#define queueRecordFound -6            //returned by queueContains
+#define queueOutOfBounds -7            //returned by queueGetItem when element is invalid
+#define queueFull -8                   //returned on a queuePush if queue is full
+
+#define queueMaxBuffSize 2500
+
+#define buildNewStaticQueueContext(recordType)                                  \
+                                                                                \
+typedef s32  (recordType##Comparator)(recordType *left, recordType *right);     \
+typedef void (recordType##Stringify) (recordType *record, char *buff);          \
+                                                                                \
+typedef struct {                                                                \
+  s32 head;                                                                     \
+  s32 tail;                                                                     \
+  s32 size;                                                                     \
+  s32 count;                                                                    \
+  s32 *preBaked;                                                                \
+  recordType *array;                                                            \
+  recordType##Comparator *compare;                                              \
+  recordType##Stringify  *toString;                                             \
+} recordType##Queue;                                                            \
+                                                                                \
+void recordType##QueueDebug(recordType##Queue *queue) {                         \
+  printf("size  %d\n"                                                           \
+         "count %d\n"                                                           \
+         "head  %d\n"                                                           \
+         "tail  %d\n",                                                          \
+         queue->size, queue->count, queue->head, queue->tail                    \
+  );                                                                            \
+                                                                                \
+  for (s32 i = 0; i < queue->size; ++i) begin                                   \
+    char buff[queueMaxBuffSize] = {};                                           \
+    queue->toString(&queue->array[i], buff);                                    \
+    printf("[%06d] %s\n", i, buff);                                             \
+  next                                                                          \
+                                                                                \
+  puts("");                                                                     \
+}                                                                               \
+                                                                                \
+s32 recordType##NewQueue(recordType##Queue *queue, s32 capacity) {              \
+  s32 r           = queueArrayMallocFailed;                                     \
+  s32 baseSize    = (sizeof(recordType) * capacity);                            \
+  s32 preBakeSize = (sizeof(s32) * capacity);                                   \
+                                                                                \
+  queue->array = malloc(baseSize + preBakeSize);                                \
+  if (queue->array) begin                                                       \
+    queue->preBaked = (s32 *)(queue->array + (baseSize + 1));                   \
+    for (s32 index = 0; index < capacity; ++index)                              \
+      queue->preBaked[index] = (index + 1) % capacity;                          \
+    queue->head = 0;                                                            \
+    queue->tail = 0;                                                            \
+    queue->size = capacity;                                                     \
+    queue->count = 0;                                                           \
+    r = queueSuccess;                                                           \
+  endIf                                                                         \
+                                                                                \
+  return r;                                                                     \
+}                                                                               \
+                                                                                \
+s32 recordType##NewQueueDefault(recordType##Queue *queue) {                     \
+  return recordType##NewQueue(queue, 32);                                       \
+}                                                                               \
+                                                                                \
+s32 recordType##NewQueueDefaultCapacity(                                        \
+  recordType##Queue *queue,                                                     \
+  s32 capacity) {                                                               \
+  return recordType##NewQueue(queue, capacity);                                 \
+}                                                                               \
+                                                                                \
+void recordType##QueueClear(recordType##Queue *queue) {                         \
+  memset(queue->array, 0, sizeof(recordType) * queue->size);                    \
+  queue->head = 0;                                                              \
+  queue->tail = 0;                                                              \
+  queue->count = 0;                                                             \
+}                                                                               \
+                                                                                \
+s32 recordType##QueuePush(recordType##Queue *queue, recordType *record) {       \
+  s32 r = queueSuccess;                                                         \
+  if (queue->count < queue->size) begin                                         \
+    record->state = queueRecordPushed;                                          \
+    memcpy(&queue->array[queue->tail], record, sizeof(recordType));             \
+    queue->tail = queue->preBaked[queue->tail];                                 \
+    queue->count++;                                                             \
+  elsewise                                                                      \
+    r = queueFull;                                                              \
+  endIf                                                                         \
+                                                                                \
+  return r;                                                                     \
+}                                                                               \
+                                                                                \
+s32 recordType##QueuePop(recordType##Queue *queue, recordType *record) {        \
+  s32 r = queueSuccess;                                                         \
+                                                                                \
+  if (queue->count) begin                                                       \
+    *record = queue->array[queue->head];                                        \
+    record->state = queueRecordPopped;                                          \
+    queue->array[queue->head].state = queueEmptyDataElement;                    \
+    queue->head = queue->preBaked[queue->head];                                 \
+    queue->count--;                                                             \
+  elsewise                                                                      \
+    r = queueEmpty;                                                             \
+    record->state = queueEmptyDataElement;                                      \
+  endIf                                                                         \
+                                                                                \
+  return r;                                                                     \
+}                                                                               \
+                                                                                \
+s32 recordType##PeekQueue(recordType##Queue *queue, recordType *record) {       \
+  s32 r = queueSuccess;                                                         \
+                                                                                \
+  if (queue->count) begin                                                       \
+    *record = queue->array[queue->head];                                        \
+  elsewise                                                                      \
+    r = queueEmpty;                                                             \
+    record->state = queueEmptyDataElement;                                      \
+  endIf                                                                         \
+                                                                                \
+  return r;                                                                     \
+}                                                                               \
+                                                                                \
+s32 recordType##PeekQueueIndex(                                                 \
+  recordType##Queue *queue,                                                     \
+  s32 index,                                                                    \
+  recordType *record) {                                                         \
+                                                                                \
+  s32 r = queueOutOfBounds;                                                     \
+                                                                                \
+  if ((index + 1) <= queue->count) begin                                        \
+    *record = queue->array[queue->preBaked[index - 1]];                         \
+    r = queueRecordFound;                                                       \
+  endIf                                                                         \
+                                                                                \
+  return r;                                                                     \
+}                                                                               \
+                                                                                \
+s32 recordType##QueueContains(                                                  \
+  recordType##Queue *queue,                                                     \
+  recordType *record,                                                           \
+  s32 *index) {                                                                 \
+                                                                                \
+  s32 r = queueRecordNotFound;                                                  \
+  s32 count = queue->size;                                                      \
+  *index = queue->head;                                                         \
+                                                                                \
+  while (count-- > 0) begin                                                     \
+    if (record->state == queueEmptyDataElement) begin                           \
+      if (queue->array[*index].state == queueEmptyDataElement) begin            \
+        r = queueRecordFound; break;                                            \
+      endIf                                                                     \
+    elseIf (queue->compare(&queue->array[*index],record)) begin                 \
+      r = queueRecordFound; break;                                              \
+    endIf                                                                       \
+                                                                                \
+    *index = queue->preBaked[*index];                                           \
+  end                                                                           \
+                                                                                \
+  return r;                                                                     \
+}
+
+//constructs the qeueue based on the type specified to the macro
+//all methods will be prefixed with this type
+buildNewStaticQueueContext(TF32Record);
+
+//will need to create two functions
+
+//
+//** compare **
+//
+//@RETURNS - 1 for equal, 0 for not equal
+s32 TF32RecordCompare(TF32Record *left, TF32Record *right) {
+  return (left->foo == right->foo) &&
+         (left->bar == right->bar);
+}
+
+//
+//** toString **
+//
+//NOTES: char *buff is max length 2500 bytes - 1 byte not useable for null termination
+//       array should be passed initialised with nulls
+void TF32RecordToString(TF32Record *record, char *buff) {  
+  snprintf(buff, 2500, "[foo = %.2f | bar = %.2f | state = %d]", record->foo, record->bar, record->state);
+}
+
+s32 main() {
+  //create a queue record on the stack  
+  TF32RecordQueue queue = {};
+  //initialise it
+  TF32RecordNewQueueDefault(&queue);
+
+  //set the internal comparator method
+  queue.compare  = &TF32RecordCompare;
+  //set the internel to string method
+  queue.toString = &TF32RecordToString;
+
+  //create a record to hold anything popped from the queue
+  TF32Record popped = {};
+
+  //
+  //run tests...
+  //
+
+  //create a bunch of records on the stack for testing purposes
+  TF32Record records[42] = {};
+
+  //populate a mock record
+  records[0] = (TF32Record){ .foo = 1.1f, .bar = 2.0f };
+  //push it to the queue
+  TF32RecordQueuePush(&queue,&records[0]);
+
+  records[1] = (TF32Record){ .foo = 2.1f, .bar = 3.0f };
+  TF32RecordQueuePush(&queue,&records[1]);
+
+  //pop a record from the queue
+  TF32RecordQueuePop(&queue, &popped);
+
+  //there is a define setting the to string limit
+  char buff[queueMaxBuffSize] = {};
+  queue.toString(&popped, buff);
+  printf("%s\n\n", buff);
+
+  TF32RecordQueuePop(&queue, &popped);
+  queue.toString(&popped, buff);
+  printf("%s\n\n", buff);
+
+  //populate a bunch of records in the test array
+  for (s32 i = 2, result; i < 42; ++i) {
+    records[i] = (TF32Record) { .foo = i, .bar = i*2 };
+    //TF32RecordQueueDebug(&queue);
+  }
+  
+  return 0;
+}
+```
+
 
 DYNAMIC IMPLEMENTATION WITH JANKY TESTS
