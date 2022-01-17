@@ -5444,6 +5444,56 @@ abcdefghijklmnopqrstuvwxyz
 0.00 0.20 0.40 0.60 0.80
 ```
 
+#### Example ?: More than one way to skin a for loop
+
+```
+#include <stdio.h>
+#include <stdint.h>
+
+typedef int32_t s32;
+
+s32 main() {
+  for (int x = 0; x < 100; ++x) {
+    if (!(x % 10)) puts("");
+    printf("%03i ", x);
+  }
+  puts("\n");
+
+  for (int x = 0, y = 2; x < 100; ++x, ++y) {    
+    printf("%03i ", x);
+    if (y > 10) y = 1, puts("");
+  }
+  puts("");
+
+  return 0;
+}
+```
+
+**General Output:**
+```
+000 001 002 003 004 005 006 007 008 009 
+010 011 012 013 014 015 016 017 018 019 
+020 021 022 023 024 025 026 027 028 029 
+030 031 032 033 034 035 036 037 038 039 
+040 041 042 043 044 045 046 047 048 049 
+050 051 052 053 054 055 056 057 058 059 
+060 061 062 063 064 065 066 067 068 069 
+070 071 072 073 074 075 076 077 078 079 
+080 081 082 083 084 085 086 087 088 089 
+090 091 092 093 094 095 096 097 098 099 
+
+000 001 002 003 004 005 006 007 008 009 
+010 011 012 013 014 015 016 017 018 019 
+020 021 022 023 024 025 026 027 028 029 
+030 031 032 033 034 035 036 037 038 039 
+040 041 042 043 044 045 046 047 048 049 
+050 051 052 053 054 055 056 057 058 059 
+060 061 062 063 064 065 066 067 068 069 
+070 071 072 073 074 075 076 077 078 079 
+080 081 082 083 084 085 086 087 088 089 
+090 091 092 093 094 095 096 097 098 099
+```
+
 Basic program with output showing forward and backward counting examples using a for loop, and general setup of function main.
 
 ```C
@@ -5823,7 +5873,10 @@ function that returns s32 named main that has noArgs start
 
   return 0;
 end
-Emitted by the Compiler Post Preprocessing: (edited)
+```
+
+> Emitted by the Compiler Post Preprocessing:
+```
 typedef int32_t s32;
 
 s32 main () {
@@ -6441,7 +6494,90 @@ Order  Operators                                                          Associ
 
 The following implementations are not thread safe.  A static and dynamic allocation version is provided.  These examples are not documented.  Also due to their complexity and length, they will not have the traditional output examples or dissections.  The code will compile and provide basic use in an implementation of function main. If you need help reading the code, please refer to Chapter 1.
 
-## Part 1: Queues
+## Part 1: Lists
+
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct {
+  char name[100];
+  int flags;
+} TNode;
+
+typedef struct {
+  TNode *nodes;  
+  int    count;
+  int    tail;
+  int    limit;
+  int    lastError;
+} TVectorList;
+
+#define listFull -1
+#define failed    0
+#define success   1
+
+int newVectoredList(TVectorList *list, TNode **nodes, int size) {
+  int r = failed;
+  printf("sizeof(TNode) = %lu\n", sizeof(TNode));
+  int requestSize = sizeof(TNode) * size;
+  printf("requested size = %u\n", requestSize);
+  *nodes = (TNode *)malloc(sizeof(TNode) * size);
+  if (*nodes) {
+    printf("nodes %p\n", *nodes);
+    list->limit = size;
+    list->count = 0;
+    list->tail  = 0;
+    list->lastError = success;
+    memset(*nodes, 0, requestSize);
+    r = success;
+  }
+
+  return r;
+}
+
+int vectorListAdd(TVectorList *list, TNode data) {
+  int r = success;
+  
+  list->count++;
+  if (list->count <= list->limit) {
+    list->tail = list->count - 1;
+    strcpy(list->nodes[list->tail].name, data.name);
+    list->nodes[list->tail].flags = 1;
+  } else {
+    list->lastError = listFull;
+    r = failed;
+  }
+  
+  return r;
+}
+
+
+int main() {
+  TVectorList list;
+  if (newVectoredList(&list, &list.nodes, 50)) {
+    printf("nodes out %p\n", list.nodes[0].name);
+    
+    vectorListAdd(&list, (TNode) { .name = "Blah Blah", .flags = 2 });
+    vectorListAdd(&list, (TNode) { .name = "2nd rec name", .flags = 2 });
+    vectorListAdd(&list, (TNode) { .name = "3rd rec name", .flags = 4 });
+
+    printf("list.nodes[0]->name = [%s]\n", list.nodes[0].name);
+    printf("list.nodes[1]->name = [%s]\n", list.nodes[1].name);
+
+    for (int i = 0; i < list.count; ++i) {
+      printf("rec #%u\n", i);
+      printf(".name  = %s\n", list.nodes[i].name);
+      printf(".flags = %i\n\n", list.nodes[i].flags);
+    }
+  }
+
+  return 0;
+}
+```
+
+## Part 2: Queues
 
 Traditional queue examples use linked lists and other jank.  We all should understand this leads to poor cache performance and memory fragmentation.  The following queue implementation shows a different model using a cyclical array structure that amortizes in the dynamic model a possible growth malloc and series of calculated memcpy calls to reogranise and linearly structure the array only when it runs out of space.  The static version of the queue should be used most times calculated to your specific requirements.
 
