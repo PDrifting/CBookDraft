@@ -1146,6 +1146,39 @@ uThud [%Lx] = 36ccacba3
 
 [Return to Index](#index)
 
+#### Example 
+```
+#include <stdio.h>
+
+typedef unsigned int s32;
+
+typedef union {
+  struct {
+    s32 state;
+    s32 active;
+    s32 amount;
+    s32 frameNo;
+  };
+  s32 array[4];
+} unionTest;
+
+s32 main() {
+  unionTest foo = { .array = {1,2,3,4}};
+  
+  printf("%d %d %d %d\n", foo.array[0], foo.array[1], foo.array[2], foo.array[3]);
+  printf("%d %d %d %d", foo.state, foo.active, foo.amount, foo.frameNo);
+  return 0;
+}
+```
+
+**General Output:**
+```
+1 2 3 4
+1 2 3 4
+```
+
+[Return to Index](#index)
+
 ### Format Modifiers
 
 Now that we have a general handle on the basics of printf, there is another part we need to discuss that deals with modifiers that can be applied to format specifiers.  These modifiers control justification, number of decimal places to show with floats, and control padding with characters of the output.  We'll need to create another table for some of the rules.  Then we'll go over some examples.
@@ -2119,13 +2152,13 @@ Basic program with output, showing the use of sizeof, a brief introduction to pa
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef char s8;
-typedef unsigned char u8;
-typedef short s16;
-typedef unsigned short u16;
-typedef int s32;
-typedef unsigned int u32;
-typedef long long s64;
+typedef char               s8;
+typedef unsigned char      u8;
+typedef short              s16;
+typedef unsigned short     u16;
+typedef int                s32;
+typedef unsigned int       u32;
+typedef long long          s64;
 typedef unsigned long long u64;
 
 typedef float f32;
@@ -5381,13 +5414,42 @@ In order to save typing, handle deeper states of flow and control over our code 
 
 Basic program with output showing how to setup and use basic for loops, and general setup of function main. (edited)
 
+```
+#include <stdio.h>
+#include <stdint.h>
+
+typedef int32_t s32;
+
+s32 main() {
+  for (s32 i = 0; i < 10; ++i) {
+    printf("%d %% 9 = %d\n", i, i % 9);
+  }
+  
+  return 0;
+}
+```
+
+**General Output:**
+```
+0 % 9 = 0
+1 % 9 = 1
+2 % 9 = 2
+3 % 9 = 3
+4 % 9 = 4
+5 % 9 = 5
+6 % 9 = 6
+7 % 9 = 7
+8 % 9 = 8
+9 % 9 = 0
+```
+
 ```C
 #include <stdio.h>
 #include <stdint.h>
 
-typedef char c8;
+typedef char    c8;
 typedef int32_t s32;
-typedef float f32;
+typedef float   f32;
 
 s32 main() {
   //for loops have 3 parts separated by a semi-colon
@@ -5549,10 +5611,71 @@ s32 main() {
 }
 ```
 
-> General Output:
-
+**General Output:**
 ```
 3 2 1 0 -1 -6 -7 -8 -9 -10 -11
+```
+
+```
+#include <stdio.h>
+#include <stdint.h>
+
+typedef int32_t s32;
+
+s32 main() {
+  for (s32 x, counter = 1; x < 8; ++x)
+    for (s32 y = x + 1; y < 9; ++y)
+      for (s32 z = y + 1; z < 10; printf("%d%d%d ", x, y, z), ++z, ++counter)
+        if (counter > 8) counter = 1, puts("");
+
+  return 0;
+}
+```
+
+**General Output:**
+```
+012 013 014 015 016 017 018 019 
+023 024 025 026 027 028 029 034 
+035 036 037 038 039 045 046 047 
+048 049 056 057 058 059 067 068 
+069 078 079 089 123 124 125 126 
+127 128 129 134 135 136 137 138 
+139 145 146 147 148 149 156 157 
+158 159 167 168 169 178 179 189 
+234 235 236 237 238 239 245 246 
+247 248 249 256 257 258 259 267 
+268 269 278 279 289 345 346 347 
+348 349 356 357 358 359 367 368 
+369 378 379 389 456 457 458 459 
+467 468 469 478 479 489 567 568 
+569 578 579 589 678 679 689 789
+```
+
+```
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdint.h>
+
+typedef int32_t s32;
+
+s32 main() {
+  char list[] = {'a', 'b', 0, 'c', 0, 'd', 0 };
+  char *array[] = { &list[0], &list[3], &list[5]};
+
+  for (int index = 0; index < 3; ++index)
+    for (int offset = 0; array[index][offset]; ++offset)
+      printf("[%d] %c\n", index + 1, array[index][offset]);
+  
+  return 0;
+}
+```
+
+**General Output:**
+```
+[1] a
+[1] b
+[2] c
+[3] d
 ```
 
 Basic program with output showing how to use nested for loops, general implementation of the Bubble Sort algorithm, some functions, tying ideas together, and the general setup of function main.
@@ -5865,7 +5988,6 @@ typedef int32_t s32;
 #define equals == //define a macro named equals that represents the == operator
 #define and    && //define a macro named and that represents the && operator
 
-
 function that returns s32 named main that has noArgs start
   if (foo equals 2 and bar equals 4) start
     puts("foo and bar checked out.");
@@ -5875,7 +5997,7 @@ function that returns s32 named main that has noArgs start
 end
 ```
 
-> Emitted by the Compiler Post Preprocessing:
+**Emitted by the Compiler Post Preprocessing:**
 ```
 typedef int32_t s32;
 
@@ -5978,8 +6100,7 @@ s32 main() {
 }
 ```
 
-> Emitted by the Compiler Post Preprocessing:
-
+**Emitted by the Compiler Post Preprocessing:**
 ```C
 typedef int32_t s32;
 
@@ -5990,8 +6111,7 @@ s32 main() {
 }
 ```
 
-> General Output:
-
+**General Output:**
 ```
 hello world!
 ```
@@ -6053,13 +6173,16 @@ s32 main() {
   buildLoop(z, 3);
   return 0;
 }
-Emitted by the Compiler Post Preprocessing:
+```
+
+**Emitted by the Compiler Post Preprocessing:**
+```
 typedef int32_t s32;
 
 s32 main() {
   for (int x = 0; x < 10; ++x) printf("x" " = %i\n", x); puts("");
-  for (int y = 0; y < 5; ++y) printf("y" " = %i\n", y); puts("");
-  for (int z = 0; z < 3; ++z) printf("z" " = %i\n", z); puts("");
+  for (int y = 0; y < 5;  ++y) printf("y" " = %i\n", y); puts("");
+  for (int z = 0; z < 3;  ++z) printf("z" " = %i\n", z); puts("");
   return 0;
 }
 General Output:
@@ -6085,7 +6208,7 @@ z = 1
 z = 2
 ```
 
-We need to use the \ operator with multi-line macros because the \n [new line] character is used as the line delimiter for macros.  They do not use the traditional ; end of statement terminator on the last line of a macro.  You do not need to use it on the last line of the macro definition.  Hopefully from this, you can begin to see the capabilities of the Preprocessor.
+We need to use the \ operator with multi-line macros because the \n \[new line\] character is used as the line delimiter for macros.  They do not use the traditional ; end of statement terminator on the last line of a macro.  You do not need to use it on the last line of the macro definition.  Hopefully from this, you can begin to see the capabilities of the Preprocessor.
 
 DOES NOT RUN: Stub code showing how to use the #define, #undef directives.
 ```
