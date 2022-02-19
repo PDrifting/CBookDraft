@@ -525,19 +525,19 @@ Alternate basic program that has no output.
 3. setup of function main
 
 ```C
-typedef int          s32;                       // Associate type signed int with s32.
-typedef unsigned int u32;                       // Associate type unsigned int with u32.
+typedef int          s32;                      // Associate type signed int with s32.
+typedef unsigned int u32;                      // Associate type unsigned int with u32.
 
-s32 main() {                                    // Main program entry.
-  u32 foo[7] = {};                              // Declare type u32 named data.
-                                                // In this case we are declaring 7 elements.
-                                                // C is a 0 index based language
-                                                // this will have a range of 0 to 6.
-                                                // We are assigning default data to it.
-                                                // With GCC this is a method of
-                                                // automatic initialisation to 0 of all
-                                                // elements in the array.
-  return 0;                                     // Return status successful      
+s32 main() {                                   // Main program entry.
+  u32 foo[7] = {};                             // Declare type u32 named data.
+                                               // In this case we are declaring 7 elements.
+                                               // C is a 0 index based language
+                                               // this will have a range of 0 to 6.
+                                               // We are assigning default data to it.
+                                               // With GCC this is a method of
+                                               // automatic initialisation to 0 of all
+                                               // elements in the array.
+  return 0;                                    // Return status successful      
 }
 ```
 
@@ -553,26 +553,26 @@ Basic program that has no output.
 5. setup of function main
 
 ```C
-typedef int          s32;                       // Associate type signed int with s32.
-typedef unsigned int u32;                       // Associate type unsigned int with u32.
+typedef int          s32;                      // Associate type signed int with s32.
+typedef unsigned int u32;                      // Associate type unsigned int with u32.
 
-typedef struct _TFoobar TFoobar;                // Associate struct _TFoobar with TFoobar.
-                                                // We need this forward typedef because
-                                                // the struct has a member data type
-                                                // of itself.
+typedef struct _TFoobar TFoobar;               // Associate struct _TFoobar with TFoobar.
+                                               // We need this forward typedef because
+                                               // the struct has a member data type
+                                               // of itself.
 
-struct _TFoobar {                               // You cannot use the standard typedef
-  u32 foo;                                      // method of declaration when your struct
-  u32 bar;                                      // contains a member of itself.
-  TFoobar *foobar;                              // Members that are struct data types
-};                                              // must be declared as pointers.
+struct _TFoobar {                              // You cannot use the standard typedef
+  u32 foo;                                     // method of declaration when your struct
+  u32 bar;                                     // contains a member of itself.
+  TFoobar *foobar;                             // Members that are struct data types
+};                                             // must be declared as pointers.
 
-s32 main() {                                    // Main program entry.
-  TFoobar data[15] = {};                        // Arrays of structs can be default initialised
-                                                // in this case we have declared 15 elements.
-                                                // This will have a range of 0 to 14.
-                                                // All fields will be set to a value of 0.
-  return 0;                                     // Return status successful.
+s32 main() {                                   // Main program entry.
+  TFoobar data[15] = {};                       // Arrays of structs can be default initialised
+                                               // in this case we have declared 15 elements.
+                                               // This will have a range of 0 to 14.
+                                               // All fields will be set to a value of 0.
+  return 0;                                    // Return status successful.
 }
 ```
 
@@ -588,38 +588,38 @@ Basic program that has no output.
 5. setup of function main
 
 ```C
-typedef int          s32;                       // Associate type signed int with s32.
-typedef unsigned int u32;                       // Associate type unsigned int with u32.
+typedef int          s32;                      // Associate type signed int with s32.
+typedef unsigned int u32;                      // Associate type unsigned int with u32.
 
-typedef struct _TFoobar TFoobar;                // Associate struct _TFoobar with TFoobar
-                                                // we need this forward typedef because the
-                                                // struct has a member data type of itself.
+typedef struct _TFoobar TFoobar;               // Associate struct _TFoobar with TFoobar
+                                               // we need this forward typedef because the
+                                               // struct has a member data type of itself.
 
-struct _TFoobar {                               // You cannot use the standard typedef
-  u32 foo;                                      // method of declaration when your struct
-  u32 bar;                                      // contains a member of itself.
-  TFoobar *foobar;                              // Members that are struct data types
-};                                              // must be declared as pointers.
+struct _TFoobar {                              // You cannot use the standard typedef
+  u32 foo;                                     // method of declaration when your struct
+  u32 bar;                                     // contains a member of itself.
+  TFoobar *foobar;                             // Members that are struct data types
+};                                             // must be declared as pointers.
 
-s32 main() {                                    // Main program entry.
-  TFoobar data[15] = {                          // Arrays of structs can be default
-    { .foo = 12, .bar = 8 },                    // initialised. Each element must be
-    {},                                         // contained in a secondary block of {}
-    { .foo = 1 }                                // and then it can follow the rules
-  };                                            // defined earlier in examples for
-                                                // initialisation. Commas are used to
-                                                // seperate a list of consecutive
-                                                // initialisations. Even though this
-                                                // has 15 elements the reamaining
-                                                // elements will be default initialised
-                                                // to 0. This is mererly one method for
-                                                // initialisationduring declare.
+s32 main() {                                   // Main program entry.
+  TFoobar data[15] = {                         // Arrays of structs can be default
+    { .foo = 12, .bar = 8 },                   // initialised. Each element must be
+    {},                                        // contained in a secondary block of {}
+    { .foo = 1 }                               // and then it can follow the rules
+  };                                           // defined earlier in examples for
+                                               // initialisation. Commas are used to
+                                               // seperate a list of consecutive
+                                               // initialisations. Even though this
+                                               // has 15 elements the reamaining
+                                               // elements will be default initialised
+                                               // to 0. This is mererly one method for
+                                               // initialisationduring declare.
 
-  data[12] = (TFoobar){                         // Accesses element 13 [12+1 from 0 index].
-    .foo = 5, .bar = 6                          // We need to perform a cast (TFoobar) then
-  };                                            // it's possible to use the standard struct
-                                                // field initialisation.
-  return 0;                                     // Return status successful.
+  data[12] = (TFoobar){                        // Accesses element 13 [12+1 from 0 index].
+    .foo = 5, .bar = 6                         // We need to perform a cast (TFoobar) then
+  };                                           // it's possible to use the standard struct
+                                               // field initialisation.
+  return 0;                                    // Return status successful.
 }
 ```
 
@@ -636,32 +636,32 @@ Alternate basic program that has no output.
 6. setup of function main
 
 ```C
-typedef int          s32;                       // Associate type signed int with s32.
-typedef unsigned int u32;                       // Associate type unsigned int with u32.
+typedef int          s32;                      // Associate type signed int with s32.
+typedef unsigned int u32;                      // Associate type unsigned int with u32.
 
-typedef struct _TFoobar TFoobar;                // Associate struct _TFoobar with TFoobar.
-                                                // We need this forward typedef because
-                                                // the struct has a member data type
-                                                // of itself.
+typedef struct _TFoobar TFoobar;               // Associate struct _TFoobar with TFoobar.
+                                               // We need this forward typedef because
+                                               // the struct has a member data type
+                                               // of itself.
 
-struct _TFoobar {                               // You cannot use the standard typedef.
-  u32 foo;                                      // Method of declaration when your struct
-  u32 bar;                                      // contains a member of itself.
-  TFoobar *foobar;                              // Members that are struct data types
-};                                              // must be declared as pointers.
+struct _TFoobar {                              // You cannot use the standard typedef.
+  u32 foo;                                     // Method of declaration when your struct
+  u32 bar;                                     // contains a member of itself.
+  TFoobar *foobar;                             // Members that are struct data types
+};                                             // must be declared as pointers.
 
-s32 main() {                                    // Main program entry.
-  TFoobar data[15] = {                          // Arrays of structs can be default initialised.
-    [0].foo  = 12,  [0].bar = 8,                // Each element and member can be referenced
-                    [2].bar = 3,                // by element index in this manner also, then
-    [12].foo = 5,  [12].bar = 5                 // follow rules defined earlier in examples
-  };                                            // for member initialisation. Commas are used
-                                                // to seperate a list of consecutive 
-                                                // initialisations. Even though this has 15, the
-                                                // remaining elements will be default initialised
-                                                // to 0. This is another method for initialisation
-                                                // during declare.
-  return 0;                                     // Return status successful.
+s32 main() {                                   // Main program entry.
+  TFoobar data[15] = {                         // Arrays of structs can be default initialised.
+    [0].foo  = 12,  [0].bar = 8,               // Each element and member can be referenced
+                    [2].bar = 3,               // by element index in this manner also, then
+    [12].foo = 5,  [12].bar = 5                // follow rules defined earlier in examples
+  };                                           // for member initialisation. Commas are used
+                                               // to seperate a list of consecutive 
+                                               // initialisations. Even though this has 15, the
+                                               // remaining elements will be default initialised
+                                               // to 0. This is another method for initialisation
+                                               // during declare.
+  return 0;                                    // Return status successful.
 }
 ```
 
@@ -676,18 +676,18 @@ Basic program that has no output.
 4. setup of function main
 
 ```C
-typedef int          s32;                       // Associate type signed int with s32.
-typedef unsigned int u32;                       // Associate type unsigned int with u32.
+typedef int          s32;                      // Associate type signed int with s32.
+typedef unsigned int u32;                      // Associate type unsigned int with u32.
 
-s32 main() {                                    // Main program entry.
-  u32 data[] = {                                // Arrays can be default initialised using
-    [ 0 ... 10] = 1,                            // ranges for specific values in this manner.
-    [11 ... 20] = 3,                            // This will define an arbitrary array with
-    [21 ... 99] = 5,                            // 101 elements ranging from 0 to 100. It also 
-    [100]       = 0                             // works for fixed element declares of arrays
-  };                                            // provided indexes fall within range of
-                                                // elements defined by the fixed value.
-  return 0;                                     // Return status successful.
+s32 main() {                                   // Main program entry.
+  u32 data[] = {                               // Arrays can be default initialised using
+    [ 0 ... 10] = 1,                           // ranges for specific values in this manner.
+    [11 ... 20] = 3,                           // This will define an arbitrary array with
+    [21 ... 99] = 5,                           // 101 elements ranging from 0 to 100. It also 
+    [100]       = 0                            // works for fixed element declares of arrays
+  };                                           // provided indexes fall within range of
+                                               // elements defined by the fixed value.
+  return 0;                                    // Return status successful.
 }
 ```
 
@@ -701,30 +701,30 @@ Basic program that has no output.
 3. setup of function main
 
 ```C
-typedef unsigned char      u8;                  // Associate type unsigned char with u8.
-typedef unsigned short     u16;                 // Associate type unsigned short with u16.
-typedef int                s32;                 // Associate type signed int with s32.
-typedef unsigned int       u32;                 // Associate type unsigned int with u32.
-typedef unsigned long long u64;                 // Associate type unsigned long long with u64.
+typedef unsigned char      u8;                 // Associate type unsigned char with u8.
+typedef unsigned short     u16;                // Associate type unsigned short with u16.
+typedef int                s32;                // Associate type signed int with s32.
+typedef unsigned int       u32;                // Associate type unsigned int with u32.
+typedef unsigned long long u64;                // Associate type unsigned long long with u64.
 
-typedef union {                                 // Declare typedef for union.
-  u8  chars [8];                                // Takes 8x 1 byte to make a u64.
-  u16 shorts[4];                                // Takes 4x 2 bytes to make a u64.
-  u32 ints  [2];                                // Takes 2x 4 bytes to make a u64.
-  u64 base;                                     // Largest type inside the union at 8 bytes.
-} TMagiCaster;                                  // Assign TMagiCaster as the union name.
+typedef union {                                // Declare typedef for union.
+  u8  chars [8];                               // Takes 8x 1 byte to make a u64.
+  u16 shorts[4];                               // Takes 4x 2 bytes to make a u64.
+  u32 ints  [2];                               // Takes 2x 4 bytes to make a u64.
+  u64 base;                                    // Largest type inside the union at 8 bytes.
+} TMagiCaster;                                 // Assign TMagiCaster as the union name.
 
-s32 main() {                                    // Main program entry.
-  TMagiCaster foo = {};                         // Unions can be initialised to 0 the same
-                                                // as structs. Any assignment to any of
-                                                // the members will cause the automatic
-                                                // update of all other members inside the
-                                                // union. This is because each member of
-                                                // the union shares the same memory address
-                                                // as every other member in the union.
-                                                // You gain auto-casting or assignments
-                                                // between types for free.
-  return 0;                                     // Return status successful.
+s32 main() {                                   // Main program entry.
+  TMagiCaster foo = {};                        // Unions can be initialised to 0 the same
+                                               // as structs. Any assignment to any of
+                                               // the members will cause the automatic
+                                               // update of all other members inside the
+                                               // union. This is because each member of
+                                               // the union shares the same memory address
+                                               // as every other member in the union.
+                                               // You gain auto-casting or assignments
+                                               // between types for free.
+  return 0;                                    // Return status successful.
 }
 ```
 
@@ -739,25 +739,25 @@ Basic program that has no output.
 4. setup of function main.
 
 ```C
-typedef unsigned char      u8;                  // Associate type unsigned char with u8.
-typedef unsigned short     u16;                 // Associate type unsigned short with u16.
-typedef int                s32;                 // Associate type signed int with s32.
-typedef unsigned int       u32;                 // Associate type unsigned int with u32.
-typedef unsigned long long u64;                 // Associate type unsigned long long with u64.
-typedef float              f32;                 // Associate type float with f32.
-typedef double             f64;                 // Associate type double with f64.
-typedef double long        f80;                 // Associate type double long with f80.
+typedef unsigned char      u8;                 // Associate type unsigned char with u8.
+typedef unsigned short     u16;                // Associate type unsigned short with u16.
+typedef int                s32;                // Associate type signed int with s32.
+typedef unsigned int       u32;                // Associate type unsigned int with u32.
+typedef unsigned long long u64;                // Associate type unsigned long long with u64.
+typedef float              f32;                // Associate type float with f32.
+typedef double             f64;                // Associate type double with f64.
+typedef double long        f80;                // Associate type double long with f80.
 
-typedef union {                                 // Declare typedef for union.
-  char *pchars;                                 // When you cross types in this case
-  u8    chars  [8];                             // mixing pointers, and floating point
-  u16   shorts [4];                             // numbers with integers you will cause
-  u32   ints   [2];                             // data loss, conversion cast problems
-  u64   intBase;                                // as these types are fundamentally
-  f32   floats [2];                             // incompatible on a memory storage level.
-  f64   doubles[2];                             // Floating points and pointers traditionally
-  f80   floatBase;                              // are not used in unions because of this.
-} TMagiCaster;                                  // Assign TMagiCaster as the union name.
+typedef union {                                // Declare typedef for union.
+  char *pchars;                                // When you cross types in this case
+  u8    chars  [8];                            // mixing pointers, and floating point
+  u16   shorts [4];                            // numbers with integers you will cause
+  u32   ints   [2];                            // data loss, conversion cast problems
+  u64   intBase;                               // as these types are fundamentally
+  f32   floats [2];                            // incompatible on a memory storage level.
+  f64   doubles[2];                            // Floating points and pointers traditionally
+  f80   floatBase;                             // are not used in unions because of this.
+} TMagiCaster;                                 // Assign TMagiCaster as the union name.
 
 // There are special cases where you may want to mix some types but generally follow that
 // pointers in unions will reference the address, and not the data at the pointer. Floating
@@ -779,40 +779,39 @@ Basic program that has no output.
 3. setup of function main
 
 ```C
-typedef unsigned char      u8;   // Associate type unsigned char with u8.
-typedef unsigned short     u16;  // Associate type unsigned short with u16.
-typedef int                s32;  // Associate type signed int with s32.
-typedef unsigned int       u32;  // Associate type unsigned int with u32.
-typedef unsigned long long u64;  // Associate type unsigned long long with u64.
-typedef float              f32;  // Associate type float with f32.
-typedef double             f64;  // Associate type double with f64.
-typedef long double        f80;  // Associate type double long with f80.
+typedef unsigned char      u8;                 // Associate type unsigned char with u8.
+typedef unsigned short     u16;                // Associate type unsigned short with u16.
+typedef int                s32;                // Associate type signed int with s32.
+typedef unsigned int       u32;                // Associate type unsigned int with u32.
+typedef unsigned long long u64;                // Associate type unsigned long long with u64.
+typedef float              f32;                // Associate type float with f32.
+typedef double             f64;                // Associate type double with f64.
+typedef long double        f80;                // Associate type double long with f80.
 
-typedef struct {                 // Declare typedef for struct.
-  union {                        // In this case we are declaring an
-    u8  chars  [8];              // anonymous union to deal with our
-    u16 shorts [4];              // compatible integer types and embedding
-    u32 ints   [2];              // it inside our struct. These members will
-    u64 intBase;                 // still share the same memory region where
-  };                             // the members outside the union will have
-  char *pchars;                  // their own regions of memory as regular
-  f32 floats [2];                // members of a struct.
+typedef struct {                               // Declare typedef for struct.
+  union {                                      // In this case we are declaring an
+    u8  chars  [8];                            // anonymous union to deal with our
+    u16 shorts [4];                            // compatible integer types and embedding
+    u32 ints   [2];                            // it inside our struct. These members will
+    u64 intBase;                               // still share the same memory region where
+  };                                           // the members outside the union will have
+  char *pchars;                                // their own regions of memory as regular
+  f32 floats [2];                              // members of a struct.
   f64 doubles[2];
   f80 longFloat;             
 } TMagiCaster;               
 
 s32 main() {
   TMagiCaster foo = {};
-  // You can access the members from the anonymous union as if they were base
-  // members of the struct.
-
-  // foo.chars
-  // foo.shorts
-  // foo.longFloat
-
-  // If we named the union inside the struct, you would need to specify the
-  // union name as in foo.unionName.chars to access those members inside
-  // the union. The anonymous union used in this way allows for better layout.
+  
+  // You can access the members from the anonymous union as if they were base members of
+  // the struct. If we named the union inside the struct, you would need to specify the
+  // union name as in foo.unionName.chars to access those members inside the union. The
+  // anonymous union used in this way allows for better layout.
+  
+  // foo.chars      - inside anonymous union
+  // foo.shorts     - inside anonymous union
+  // foo.longFloat  - base member of the struct
   
   return 0;
 }
@@ -828,36 +827,36 @@ Basic program that has no output.
 3. setup of function main
 
 ```C
-typedef int   s32;        // Associate type signed int with s32.
-typedef float f32;        // Associate type float with f32.
+typedef int   s32;                             // Associate type signed int with s32.
+typedef float f32;                             // Associate type float with f32.
 
-typedef union {           // Declare typedef for struct.
-  struct {                // Each of these anonymous structures
-    f32 x;                // inside the union will be treated as
-    f32 y;                // two seperate groups of members. Each
-  };                      // anonymous struct is part of the union.
-  struct {                // All the structs will share the same
-    f32 u;                // memory region.
-    f32 v;                //  set 1:
-  };                      //    foo.x
-  struct {                //    foo.u
-    f32 left;             //    foo.left
-    f32 right;            //    foo.width
-  };                      //  set 2:
-  struct {                //    foo.y
-    f32 width;            //    foo.v
-    f32 height;           //    foo.right
-  };                      //    foo.height
-  f32 members[2];         // This array will place set 1 at index 0
-} T2DVectorF32;           // and set 2 at index 1.
+typedef union {                                // Declare typedef for struct.
+  struct {                                     // Each of these anonymous structures
+    f32 x;                                     // inside the union will be treated as
+    f32 y;                                     // two seperate groups of members. Each
+  };                                           // anonymous struct is part of the union.
+  struct {                                     // All the structs will share the same
+    f32 u;                                     // memory region.
+    f32 v;                                     //  set 1:
+  };                                           //    foo.x
+  struct {                                     //    foo.u
+    f32 left;                                  //    foo.left
+    f32 right;                                 //    foo.width
+  };                                           //  set 2:
+  struct {                                     //    foo.y
+    f32 width;                                 //    foo.v
+    f32 height;                                //    foo.right
+  };                                           //    foo.height
+  f32 members[2];                              // This array will place set 1 at index 0
+} T2DVectorF32;                                // and set 2 at index 1.
 
-s32 main() {              // Main program entry.
-  T2DVectorF32 foo = {};  // Default initialise all members to 0.
+s32 main() {                                   // Main program entry.
+  T2DVectorF32 foo = {};                       // Default initialise all members to 0.
   
-  foo.x = 0.6f;           // Assigns a value of 0.6f to set 1.
-  foo.right = 8.5f;       // Assigns a value of 8.5f to set 2.
+  foo.x = 0.6f;                                // Assigns a value of 0.6f to set 1.
+  foo.right = 8.5f;                            // Assigns a value of 8.5f to set 2.
   
-  return 0;               // Return status successful.
+  return 0;                                    // Return status successful.
 }
 ```
 
@@ -948,13 +947,13 @@ Basic program with output.
 2. setup of function main
 
 ```C
-#include <stdio.h>         //provide access to i/o functions 
+#include <stdio.h>                        // Provide access to i/o functions.
 
 typedef int s32;
 
-s32 main() {               //main program entry
-  puts("Hello World!");    //displays Hello World! to the console
-  return 0;                //return status successful
+s32 main() {                              // Main program entry.
+  puts("Hello World!");                   // Displays Hello World! to the console.
+  return 0;                               // Return status successful.
 }
 ```
 
@@ -973,7 +972,8 @@ Basic program with output.
 ```C
 #include <stdio.h>
 
-//create typedef associations
+// Create typedef associations.
+
 typedef char               c8;
 typedef signed char        s8;
 typedef unsigned char      u8;
@@ -1110,12 +1110,11 @@ s32 main() {
   s64 sThud = -38131823283338;
   u64 uThud = 14710131619;
 
-  //keep in mind the hex specifier only works with integer data types
-  //out of the box and only showing the lower case specifier in this case
-  //you can use %X and %LX if you prefer upper case
-  //remember you need the %Lx or %LX for 64-bit
-  //also that all other unsigned integer data types will be cast
-  //to unsigned char as you'll see in the output
+  // Keep in mind the hex specifier only works with integer data types and
+  // is only showing the lower case specifier in this case. You can use %X
+  // and %LX if you prefer upper case. Remember you need the %Lx or %LX for
+  // 64-bit. All other unsigned integer data types will be cast to unsigned
+  // char, as you'll see in the output.
 
   printf("cFoo  [%%x] = %x\n", cFoo);
   printf("sFoo  [%%x] = %x\n", sFoo);
