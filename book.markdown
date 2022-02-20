@@ -61,6 +61,7 @@ C is also extremely portable, which is why it drives so many things.  The [GCC C
 [⠀⠀⠀⠀Example 1: Using puts](#example-1-using-puts)\
 [⠀⠀⠀⠀Example 2: Using Format Specifiers with printf](#example-2-using-format-specifiers-with-printf)\
 [⠀⠀⠀⠀Example 3: Using printf with %x](#example-3-using-printf-with-x)\
+[⠀⠀⠀⠀Example 4: Displaying Union Members](#example-4-displaying-union-members)
 [⠀⠀Format Modifiers](#format-modifiers)\
 [⠀⠀C Output & Format Modification Examples](#c-output--format-modification-examples)\
 [⠀⠀⠀⠀Example 1: Left Justification with printf](#example-1-left-justification-with-printf)\
@@ -1116,15 +1117,15 @@ s32 main() {
   // 64-bit. All other unsigned integer data types will be cast to unsigned
   // char, as you'll see in the output.
 
-  printf("cFoo  [%%x] = %x\n", cFoo);
-  printf("sFoo  [%%x] = %x\n", sFoo);
-  printf("uFoo  [%%x] = %x\n", uFoo);
-  printf("sBar  [%%x] = %x\n", sBar);  
-  printf("uBar  [%%x] = %x\n", uBar);
-  printf("sBaz  [%%x] = %x\n", sBaz);
-  printf("uBaz  [%%x] = %x\n", uBaz);
-  printf("sThud [%%Lx] = %Lx\n", sThud);  
-  printf("uThud [%%Lx] = %Lx\n", uThud);
+  printf("cFoo  [%%x] = %x\n", cFoo);      // Will cast to a single unsigned char byte.
+  printf("sFoo  [%%x] = %x\n", sFoo);      // Will cast to an unsigned int showing 4 bytes of information.
+  printf("uFoo  [%%x] = %x\n", uFoo);      // Will cast to a single unsigned char byte.
+  printf("sBar  [%%x] = %x\n", sBar);      // Will cast to an unsigned int showing 4 bytes of information.
+  printf("uBar  [%%x] = %x\n", uBar);      // Will cast to a single unsigned char byte.
+  printf("sBaz  [%%x] = %x\n", sBaz);      // Will cast to an unsigned int showing 4 bytes of information.
+  printf("uBaz  [%%x] = %x\n", uBaz);      // Will cast to a single unsigned char byte.
+  printf("sThud [%%Lx] = %Lx\n", sThud);   // Will cast to an unsigned long long showing 8 bytes of information.
+  printf("uThud [%%Lx] = %Lx\n", uThud);   // Will cast to an unsigned lonh long showing upto 8 bytes of information.
 
   return 0;
 }
@@ -1132,38 +1133,91 @@ s32 main() {
 
 **Generated Output:**
 ```
-cFoo  [%x] = 41                    //cast to a single unsigned char byte
+cFoo  [%x] = 41
 sFoo  [%x] = ffffff88
-uFoo  [%x] = 80                    //cast to a single unsigned char byte
+uFoo  [%x] = 80
 sBar  [%x] = ffff9469
-uBar  [%x] = 62                    //cast to a single unsigned char byte
+uBar  [%x] = 62
 sBaz  [%x] = ffe66bc0
-uBaz  [%x] = 43                    //cast to a single unsigned char byte
+uBaz  [%x] = 43
 sThud [%Lx] = ffffdd51be37f376
 uThud [%Lx] = 36ccacba3
 ```
 
 [Return to Index](#index)
 
-#### Example 
+#### Example 4: Displaying Union Members
+
+Basic program with output.
+
+1. showing various typedef assignments
+2. assigning union members
+3. using an array inside a union
+4. using a portion of the C Standard Library to access Functions for output
+5. showing how to display Union Members.
+6. setup of function main.
+
 ```
 #include <stdio.h>
 
 typedef unsigned int s32;
 
 typedef union {
+  // Because unionTest has an anonymous struct inside it, the member array will
+  // automatically map each element to a memmber in order of the anonymous struct.
+  
   struct {
     s32 state;
     s32 active;
     s32 amount;
     s32 frameNo;
   };
+  
+  // The array member allows you to open up different and versatile options for
+  // assigning and referencing information inside the union. This is especially
+  // useful for later if you require to iterate over information.
+
+  // Unfortunately this method has a major drawback if the order of the members
+  // in anonymous struct change. Be mindful in your future programs this will
+  // affect initialisation and assignment throughout your program. It also creates
+  // a quasi-magic number state in relation to the index offsets of each mapped
+  // element.  
+
+  // array[0] maps to state
+  // array[1] maps to active
+  // array[2] maps to amount
+  // array[3] maps to frameNo
+
+  // Generally you should reference the members by name in your program unless you
+  // are iterating. This solves the need for enumerators and other naming conventions
+  // allowing you to access information stored at specific positions inside the array
+  // by name with just a little bit of extra coding.
+
   s32 array[4];
 } unionTest;
 
 s32 main() {
-  unionTest foo = { .array = {1,2,3,4}};
+  // Though, we could initialise the union with the array member, this method
+  // creates some obfuscation in relation to assignment.
   
+  // unionTest foo = {
+  //   .array = {
+  //     1, 2, 3, 4
+  //   }
+  // };
+  
+  // The correct method to initialise this union would be as follows. This removes
+  // the obfuscation of assignment and ensures if order changes in the anonymous
+  // struct the initialisation will still be valid reducing refactoring issues in
+  // larger programs.
+    
+  unionTest foo = {
+    .state   = 1,
+    .active  = 2,
+    .amount  = 3,
+    .frameNo = 4
+  };
+    
   printf("%d %d %d %d\n", foo.array[0], foo.array[1], foo.array[2], foo.array[3]);
   printf("%d %d %d %d", foo.state, foo.active, foo.amount, foo.frameNo);
   return 0;
@@ -1740,82 +1794,6 @@ f80Bar  [%.3Le] 1.234560e-01
 f80Baz  [%.3Le] 1.234560e+05
 f80Thud [%.3Le] 3.141593e+00
 ```
-[Return to Index](#index)
-
-### Zero is not always Zero
-
-More problems are created when we consider the case of 0 with floating point numbers.  Like every other value stored inside a Floating Point Type, it will be approximated.  This creates confusion when programmers assign a value of 0 and then attempt to do comparisons only to find out 0 does not equal 0 in the world of approximated values.  We'll explore this more when we get to if branching.  This will require a basic understand of using epsilon ranges to approximate a value realtionship to 0.
-
-#### Example 1: Issues with Floating Point Types and Approximations
-Basic program with output.
-
-1. showing various typedef assignments
-2. using a portion of the C Standard Library to access Functions for output
-3. exploring floating point representations of zero
-4. testing certain floating point states of approximations
-5. changing the character and width padding for floating point data
-6. setup of function main.
-
-```
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-
-typedef int         s32;
-typedef float       f32;
-typedef double      f64;
-typedef long double f80;
-
-s32 main(int argc, char *argv[]) {
-  f32 fltZero = 0.0F;
-  f64 dblZero = 0.0;
-  f80 decZero = 0.0L;
-  
-  printf("%.10f\n", fltZero);
-  printf("%.10lf\n", dblZero);
-  printf("%.10Lf\n", decZero);
-
-  fltZero = 10.0F - 10.0F;
-  dblZero = 10.0 - 10.0;
-  decZero = 10.0L - 10.0L;
-
-  printf("%.10f\n", fltZero);
-  printf("%.10lf\n", dblZero);
-  printf("%.10Lf\n", decZero);
-
-  printf("(0.0 == 0.0F) %s\n", (0.0 == 0.0F) ? "True" : "False");
-
-  // Everything looks fine to this point. Floating Point Types
-  // do have a representation of 0.0 that can be exactly
-  // stored.  Things start to get janky when you start mixing
-  // Floating Point Types. The more you work with floating point
-  // data you are going to run into these results that produce
-  // approximations of zero. It is generally not considered
-  // good form to perform equality checks against various forms
-  // of floating point data.
-
-  printf("(23.45f == 23.45) %s\n", (23.45F == 23.45) ? "true" : "false");
-  
-  dblZero = 23.45F - 23.45;
-  printf("%.10lf\n", dblZero);
- 
-  return 0;
-}
-```
-
-**General Output**
-```
-0.0000000000
-0.0000000000
-0.0000000000
-0.0000000000
-0.0000000000
-0.0000000000
-(0.0 == 0.0F) True
-(23.42f == 23.42) false
-0.0000000763
-```
-
 [Return to Index](#index)
 
 ## Part 4: Pointer Basics
@@ -4572,7 +4550,81 @@ int main() {
 if
 ```
 
-And this leads us into the next section beyond operators.
+### Zero is not always Zero
+
+More problems are created when we consider the case of 0 with floating point numbers.  Like every other value stored inside a Floating Point Type, it will be approximated.  This creates confusion when programmers assign a value of 0 and then attempt to do comparisons only to find out 0 does not equal 0 in the world of approximated values.  We'll explore this more when we get to if branching.  This will require a basic understand of using epsilon ranges to approximate a value realtionship to 0.
+
+#### Example 1: Issues with Floating Point Types and Approximations
+Basic program with output.
+
+1. showing various typedef assignments
+2. using a portion of the C Standard Library to access Functions for output
+3. exploring floating point representations of zero
+4. testing certain floating point states of approximations
+5. changing the character and width padding for floating point data
+6. setup of function main.
+
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+typedef int         s32;
+typedef float       f32;
+typedef double      f64;
+typedef long double f80;
+
+s32 main(int argc, char *argv[]) {
+  f32 fltZero = 0.0F;
+  f64 dblZero = 0.0;
+  f80 decZero = 0.0L;
+  
+  printf("%.10f\n", fltZero);
+  printf("%.10lf\n", dblZero);
+  printf("%.10Lf\n", decZero);
+
+  fltZero = 10.0F - 10.0F;
+  dblZero = 10.0 - 10.0;
+  decZero = 10.0L - 10.0L;
+
+  printf("%.10f\n", fltZero);
+  printf("%.10lf\n", dblZero);
+  printf("%.10Lf\n", decZero);
+
+  printf("(0.0 == 0.0F) %s\n", (0.0 == 0.0F) ? "True" : "False");
+
+  // Everything looks fine to this point. Floating Point Types
+  // do have a representation of 0.0 that can be exactly
+  // stored. Things start to get janky when you start mixing
+  // Floating Point Types. The more you work with floating point
+  // data you are going to run into these results that produce
+  // approximations of zero. It is generally not considered
+  // good form to perform equality checks against various forms
+  // of floating point data.
+
+  printf("(23.45f == 23.45) %s\n", (23.45F == 23.45) ? "true" : "false");
+  
+  dblZero = 23.45F - 23.45;
+  printf("%.10lf\n", dblZero);
+ 
+  return 0;
+}
+```
+
+**General Output**
+```
+0.0000000000
+0.0000000000
+0.0000000000
+0.0000000000
+0.0000000000
+0.0000000000
+(0.0 == 0.0F) True
+(23.42f == 23.42) false
+0.0000000763
+```
+
+[Return to Index](#index)
 
 ## Part 8: Introduction to Branching
 
