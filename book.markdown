@@ -532,12 +532,11 @@ typedef unsigned int u32;                      // Associate type unsigned int wi
 s32 main() {                                   // Main program entry.
   u32 foo[7] = {};                             // Declare type u32 named data.
                                                // In this case we are declaring 7 elements.
-                                               // C is a 0 index based language
-                                               // this will have a range of 0 to 6.
-                                               // We are assigning default data to it.
-                                               // With GCC this is a method of
-                                               // automatic initialisation to 0 of all
-                                               // elements in the array.
+                                               // C is a 0 index based language, so this 
+                                               // array will have a range of 0 to 6. By
+                                               // assigning {} as the default data to it,
+                                               // we are telling GCC to initialize all the
+                                               // data elements to 0.
   return 0;                                    // Return status successful      
 }
 ```
@@ -667,7 +666,7 @@ s32 main() {                                   // Main program entry.
 ```
 
 [Return to Index](#index)
-
+#### Example 14: Alternate Way to Typedef Structs
 #### Example 14: Arrays
 Basic program that has no output.
 
@@ -1800,7 +1799,7 @@ f80Thud [%.3Le] 3.141593e+00
 
 As mentioned prior, Pointer Types are a troubling subject for C programmers no matter their experience.  We'll cover some scenarios with code and hopefully demystify some of the confusion surrounding them.
 
-Example 1: 
+Example 1: Introduction to Pointers and Addressing
 
 This is a basic program with output showing how to declare variables, structures, unions, an introduction to pointers, getting the address of things, and declaring function main. 
 
@@ -1846,6 +1845,7 @@ s32 main() {
   //and an argument list referenced by the following ()
   //you are then able to assign the address of matching
   //functions that follow the same function pointer prototype
+  
   int (*fp)() = &main;
 
   printf("Address of  u32Foo = %p\n", &u32Foo);
@@ -1901,11 +1901,11 @@ Address at     *fp = 0x400540
 Address of     *fp = 0x7ffd0424aed0
 ```
 
-NOTE: Everytime you execute this program these memory addresses will be different.  This is only the current snapshot of the memory layout at the time the example was executed.  You should expect things to move around in memory.  The references that follow are based on this current snapshot for the machine it was executed on. (edited)
+NOTE: Everytime you execute this program these memory addresses will be different.  This is only the current snapshot of the memory layout at the time the example was executed.  You should expect things to move around in memory.  The references that follow are based on this current snapshot for the machine it was executed on.
 
 [Return to Index](#index)
 
-#### Deeper Dissection of Example 1: 
+### Deeper Dissection of Example 1: 
 
 If we remember back when we were looking our bitwidths and byte requirements of individual Types there are some things we can glean from what we're seeing in this output.  Let's dissect this a little to figure out what the computer this is running on has done and things to be mindful of.
 
@@ -1951,7 +1951,7 @@ Address at    *qux = 0x7ffd0424aef0
 Address of    *qux = 0x7ffd0424aee8
 ```
 
-We can see from the addresses of u32Foo and \*u32Bar and the addresses here that we have moved to a different region of memory.  The struct TFCP  appears before those other variables.  Byte pair 05 changed from AF \[175] to AE \[174], where 175 > 174, so we know we are in an early region of memory.  Since memory on any computer is addressed in bytes, smaller memory addresses are always going to be in a region of memory before the next largest memory address. This is what allows us to actually look at memory layouts and figure out where something is, and based on things around it, and approximate how many bytes it may be consuming.  In the case of struct TFCP we'll also be able to figure something else out.  The members thud.flob, thud.corge, thud.plugh, and byte pair 06 show they are laid out in order by fours.  This makes sense, because they are declared as s32 which was typedefed from an int, which we know uses 4 bytes of memory.  Also, remember that \*qux holds the address pointing to the start of struct TFCP, but the address of \*qux, like any pointer is going to have its own address as well. 
+We can see from the addresses of u32Foo and \*u32Bar and the addresses here that we have moved to a different region of memory. The struct TFCP appears before those other variables.  Byte pair 05 changed from AF \[175\] to AE \[174\], where 175 > 174, so we know we are in an early region of memory. Since memory on any computer is addressed in bytes, smaller memory addresses are always going to be in a region of memory before the next largest memory address. This is what allows us to actually look at memory layouts and figure out where something is, and based on things around it, and approximate how many bytes it may be consuming. In the case of struct TFCP we'll also be able to figure something else out. The members thud.flob, thud.corge, thud.plugh, and byte pair 06 show they are laid out in order by fours. This makes sense, because they are declared as s32 which was typedefed from an int, which we know uses 4 bytes of memory. Also, remember that \*qux holds the address pointing to the start of struct TFCP, but the address of \*qux, like any pointer is going to have its own address as well. 
 
 NOTE:  The C Standard guarantees that any struct declaration will always have member layout in the order it is declared unless you use an alternate alignment modifier on the struct.
 
@@ -1978,7 +1978,7 @@ typedef union {
 } TEHS;
 ```
 
-The union declares a group of member variables inside a nameless struct.  Then we declare spam as an array with 2 elements as another member.  Logically, we should be able to conclude from this declaration layout that eggs will map to spam\[0] and ham will map to spam\[1].  By looking at the addresses of each of the member variables we can see this is the case.  This is the basic fundamental concept of a pointer.  When you update a union member, the associated union member will also update.  A pointer will do the same thing since it points to the address of something. We can also conclude that anything we do with the pointer has the potential to update what the pointer is pointing to.  Before we explore this, we'll finish reviewing the \*fp declare.
+The union declares a group of member variables inside a nameless struct. Then we declare spam as an array with 2 elements as another member. Logically, we should be able to conclude from this declaration layout that eggs will map to spam\[0] and ham will map to spam\[1]. By looking at the addresses of each of the member variables we can see this is the case. This is the basic fundamental concept of a pointer. When you update a union member, the associated union member will also update. A pointer will do the same thing since it points to the address of something. We can also conclude that anything we do with the pointer has the potential to update what the pointer is pointing to. Before we explore this, we'll finish reviewing the \*fp declare.
 
 ```
 Address of  main() = 0x400540
@@ -1986,9 +1986,13 @@ Address at     *fp = 0x400540
 Address of     *fp = 0x7ffd0424aed0
 ```
 
-As mentioned, everything pretty much has an address, right down to the compiled byte code encoded internally to the executable.  Function main() is no different.  There are cases where this will prove to be very useful.  Like all pointers \*fp points to something and has its own address.  Pointers can point to other pointers.  Unlike other pointers though, a function pointer is able to call/invoke the function its pointing too.  This will be covered later when we go over functions.  It's important that we finish going over pointers.
+As mentioned, everything pretty much has an address, right down to the compiled byte code encoded internally to the executable. Function main() is no different. There are cases where this will prove to be very useful. Like all pointers \*fp points to something and has its own address. Pointers can point to other pointers. Unlike other pointers though, a function pointer is able to call/invoke the function it is pointing too. This will be covered later when we go over functions.  It's important that we finish going over pointers.
 
-Basic program with output, showing how we can use pointers to map different data types, output showing that when we update the pointer the thing we point to also updates, and a method for determining what Endianness your current hardware is using, and layout for function main. (edited)
+Example 2: 
+
+This is a basic program with output showing how to declare variables, structures, unions, an introduction to pointers, getting the address of things, and declaring function main. 
+
+Basic program with output, showing how we can use pointers to map different data types, output showing that when we update the pointer the thing we point to also updates, and a method for determining what Endianness your current hardware is using, and layout for function main.
 
 ```
 #include <stdio.h>
@@ -1998,36 +2002,44 @@ typedef int s32;
 typedef unsigned long long u64;
 
 s32 main() {
-  //we're going to create a simple byte map
-  //of a u64 integer so we need 8 bytes
-  //intialise it to 0  
+  // We are creating a simple byte map of a u64
+  // integer so we need at least 8 bytes. Then we
+  // intialise all u8 [byte] elements in the map
+  // to 0.
+  
   u8 u64Map[8] = {};
   
-  //set up an unsigned 64-bit integer
-  //filling every bit with something
-  //creating 8 bytes of data
+  // Setup an unsigned 64-bit integer, filling
+  // every bit with something so we create 8 bytes
+  // of data. Don't forget we need the ULL to
+  // signify our hex value is 64-bit.
+  
   u64 foo = 0xffeeddccbbaa9988ULL;
   
-  //remember arrays are pointers
-  //so we can use the name u64map as we saw
-  //above it stores the start address of
-  //u64map[0] we don't really need to do this
-  //its merely for reinforcement of a concept
+  // Remember arrays are pointers. This allows us
+  // to use the name u64map, as we saw above,
+  // because it stores the start address of
+  // u64map[0]. We don't really need to do this.
+  // It's merely for reinforcement of a concept.
+  
   u8 *bar = u64Map;
   
-  //this creates an unsigned char pointer
-  //and casts our unsigned 64-bit integer
-  //to an unsigned 8-bit char pointer
+  // This creates an unsigned char pointer and casts
+  // our unsigned 64-bit integer to an unsigned 8-bit
+  // char pointer.
+  
   u8 *fuzz = (u8 *)&foo;
   
-  //we need to remember to use %Lx for 64-bit integers
+  // We need to remember to use %Lx for 64-bit
+  // integers.
+  
   printf("foo = %Lx\n\n", foo);
   
-  //once we map our pointers, just like mentioned
-  //when discussing pointers when we update any
-  //element of pointer bar we are going to
-  //acutally be updating u64map elements
-  //we can see this here
+  // Once we map our pointers, just like mentioned
+  // when discussing pointers, by updating any elements
+  // of pointer bar, we are updating u64map elements.
+  // We can see the side-effects of this below.
+  
   bar[0] = fuzz[0];
   printf("bar[0] u64Map[0] = %x %x\n", bar[0], u64Map[0]);
   bar[1] = fuzz[1];
@@ -2149,8 +2161,16 @@ typedef struct {
 
 s32 main() {
   TFooBar thud = {};
-  //sizeof is a macro used to determine the size of whatever
-  //you stick in between the parenthesis returned in bytes used
+  
+  // sizeof is a compiler implemented unary operator that is used
+  // to determine the size of whatever you stick in between the
+  // parenthesis.  The size of what you are requesting will be
+  // returned in bytes as a size_t [typed] value.
+  
+  // size_t is generally just a typedef inside the C standard
+  // libraries included with GCC.  Depending on the system,
+  // size_t may be 16, 32 or 64-bits in size.  
+  
   printf("size of s8  = %lu\n", sizeof(s8));
   printf("size of u8  = %lu\n", sizeof(u8));
   printf("size of s16 = %lu\n", sizeof(s16));
@@ -2172,15 +2192,41 @@ s32 main() {
     sizeof(thud) - (sizeof(thud.foo) + sizeof(thud.bar))
   );
   
-  //this is a C++ friendly form of a malloc call
-  //type of thing to create a pointer from called fooBar
-  //cast the return from the malloc to the given type
-  //call malloc passing how much space you are requesting
-  //in this case we would like to allocate enough space
-  //for a single instance of TFooBar
-  TFooBar *fooBar = (TFooBar *)malloc(sizeof(TFooBar));
+  // You will see mallocs often delcared like this. This is
+  // required by C++. It was common to cast C malloc calls
+  // like this in case your C code was compiled with a C++
+  // compiler.  However, this generally doesn't make sense
+  // anymore as C++ has moved so far from C they are just
+  // not compatible enough anymore to matter.
+  //
+  // Since malloc returns a void pointer. It is considered
+  // untyped memory and can be cast to any pointer it is
+  // assigned to. By using malloc you are requesting
+  // memory from the operating system.
+  //
+  // sizeof(TFooBar) will ask for 112 bytes of memory.
+  //
+  // This creates a single allocated instance of struct
+  // TFooBar. Memory should be better managed than single
+  // instances of things. Memory management has changed
+  // alot. Taking into consideration things like cache
+  // lines and memory fragmentation will force developing
+  // newer models of managing memory.
+  //
+  // TFooBar *fooBar = (TFooBar *)malloc(sizeof(TFooBar));
+  //
+  // malloc calls should follow the standard C form to
+  // prevent silly C++ coders from thinking they can use
+  // this code with a C++ compiler.
   
-  //don't forget to call free on the pointer
+  TFooBar *foobar = malloc(sizeof(TFooBar));
+    
+  // Finally, don't forget to call free on the pointer.
+  // Generally the operating system will cleanup memory
+  // on exit from the program, however, we are tidy
+  // conscientious C programmers and will free all
+  // malloced memory before exit.  
+  
   free(fooBar);
   
   return 0;
@@ -6664,11 +6710,13 @@ Order  Operators                                                          Associ
 16     ,                                                                  Left to Right
 ```
 
-# Chapter 2: Queues, Stacks, Lists, Hash Maps... Oh My!
+# Chapter 2: Non-Thread Safe Lists, Stacks, Queues, Hash Maps... Oh My!
 
 The following implementations are not thread safe.  A static and dynamic allocation version is provided.  These examples are not documented.  Also due to their complexity and length, they will not have the traditional output examples or dissections.  The code will compile and provide basic use in an implementation of function main. If you need help reading the code, please refer to Chapter 1.
 
 ## Part 1: Lists
+
+#### Static implementation of a Vectored List
 
 ```
 #include <stdio.h>
@@ -6677,6 +6725,7 @@ The following implementations are not thread safe.  A static and dynamic allocat
 
 typedef struct {
   char name[100];
+  int nameLen;
   int flags;
 } TNode;
 
@@ -6693,32 +6742,59 @@ typedef struct {
 #define success   1
 
 int newVectoredList(TVectorList *list, TNode **nodes, int size) {
-  int r = failed;
-  printf("sizeof(TNode) = %lu\n", sizeof(TNode));
+  int r           = failed;
   int requestSize = sizeof(TNode) * size;
-  printf("requested size = %u\n", requestSize);
-  *nodes = (TNode *)malloc(sizeof(TNode) * size);
-  if (*nodes) {
-    printf("nodes %p\n", *nodes);
-    list->limit = size;
-    list->count = 0;
-    list->tail  = 0;
+  
+  *nodes = malloc(sizeof(TNode) * size);
+  
+  if (*nodes) {  
+    list->limit     = size;
+    list->count     = 0;
+    list->tail      = 0;
     list->lastError = success;
+    
     memset(*nodes, 0, requestSize);
+    
     r = success;
   }
 
   return r;
 }
 
+//
+// ** vectorListAdd **
+//
+// @Accepts:
+//   TVectorList *list - Should be initialised prior to use
+//                       with a call to newVectoredList(...)
+//
+//   TNode data        - An initialised data node to add to
+//                       list. Make sure TNode.name is null
+//                       terminated. Function uses strncpy.
+//
+// @Returns:
+//   success - Everything went well.
+//   failed  - If the list is full when trying to add.
+//
+// @Sets: 
+//   list->lastError:
+//     success  - Everything went well.
+//     listFull - Could not add to the list.
+
+//   list->tail - to be 1 less than count to minimize
+//                off by one errors and havinge to do -1
+//                to count.
+
 int vectorListAdd(TVectorList *list, TNode data) {
-  int r = success;
+  int r           = success;
+  list->lastError = success;
   
   list->count++;
   if (list->count <= list->limit) {
     list->tail = list->count - 1;
-    strcpy(list->nodes[list->tail].name, data.name);
-    list->nodes[list->tail].flags = 1;
+    
+    strncpy(list->nodes[list->tail].name, data.name, data.nameLen);    
+    list->nodes[list->tail].flags = data.flags;
   } else {
     list->lastError = listFull;
     r = failed;
@@ -6727,23 +6803,24 @@ int vectorListAdd(TVectorList *list, TNode data) {
   return r;
 }
 
-
 int main() {
-  TVectorList list;
+  TVectorList list = {};
+  
   if (newVectoredList(&list, &list.nodes, 50)) {
     printf("nodes out %p\n", list.nodes[0].name);
     
-    vectorListAdd(&list, (TNode) { .name = "Blah Blah", .flags = 2 });
-    vectorListAdd(&list, (TNode) { .name = "2nd rec name", .flags = 2 });
-    vectorListAdd(&list, (TNode) { .name = "3rd rec name", .flags = 4 });
+    vectorListAdd(&list, (TNode) { .name = "Blah Blah",    .nameLen = 10, .flags = 2 });
+    vectorListAdd(&list, (TNode) { .name = "2nd rec name", .nameLen = 13, .flags = 2 });
+    vectorListAdd(&list, (TNode) { .name = "3rd rec name", .nameLen = 13, .flags = 4 });
 
     printf("list.nodes[0]->name = [%s]\n", list.nodes[0].name);
     printf("list.nodes[1]->name = [%s]\n", list.nodes[1].name);
 
     for (int i = 0; i < list.count; ++i) {
       printf("rec #%u\n", i);
-      printf(".name  = %s\n", list.nodes[i].name);
-      printf(".flags = %i\n\n", list.nodes[i].flags);
+      printf(".name    = %s\n",   list.nodes[i].name);
+      printf(".nameLen = %d\n",   list.nodes[i].nameLen);
+      printf(".flags   = %i\n\n", list.nodes[i].flags);
     }
   }
 
@@ -6964,9 +7041,19 @@ buildNewStaticQueueContext(TF32Record);
 //will need to create two functions
 
 //
-//** compare **
+// ** TF32RecordCompare **
 //
-//@RETURNS - 1 for equal, 0 for not equal
+// @Notes: Function used as the internal comparator
+//         for the queue.
+//
+// @Accepts:
+//   TF32Record *left  - 1st record to compare
+//   TF32Record *right - 2nd record to compare 
+//
+// @Returns:
+//   1 - for equal
+//   0 - for not equal
+
 s32 TF32RecordCompare(TF32Record *left, TF32Record *right) {
   return (left->foo == right->foo) &&
          (left->bar == right->bar);
