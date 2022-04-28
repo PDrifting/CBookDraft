@@ -613,7 +613,7 @@ s32 main() {                                   // Main program entry.
                                                // has 15 elements the reamaining
                                                // elements will be default initialised
                                                // to 0. This is mererly one method for
-                                               // initialisationduring declare.
+                                               // initialisation during declare.
 
   data[12] = (TFoobar){                        // Accesses element 13 [12+1 from 0 index].
     .foo = 5, .bar = 6                         // We need to perform a cast (TFoobar) then
@@ -652,8 +652,8 @@ struct _TFoobar {                              // You cannot use the standard ty
 
 s32 main() {                                   // Main program entry.
   TFoobar data[15] = {                         // Arrays of structs can be default initialised.
-    [0].foo  = 12,  [0].bar = 8,               // Each element and member can be referenced
-                    [2].bar = 3,               // by element index in this manner also, then
+    [ 0].foo = 12, [ 0].bar = 8,               // Each element and member can be referenced
+                   [ 2].bar = 3,               // by element index in this manner also, then
     [12].foo = 5,  [12].bar = 5                // follow rules defined earlier in examples
   };                                           // for member initialisation. Commas are used
                                                // to seperate a list of consecutive 
@@ -681,10 +681,10 @@ typedef unsigned int u32;                      // Associate type unsigned int wi
 
 s32 main() {                                   // Main program entry.
   u32 data[] = {                               // Arrays can be default initialised using
-    [ 0 ... 10] = 1,                           // ranges for specific values in this manner.
-    [11 ... 20] = 3,                           // This will define an arbitrary array with
-    [21 ... 99] = 5,                           // 101 elements ranging from 0 to 100. It also 
-    [100]       = 0                            // works for fixed element declares of arrays
+    [  0 ... 10] = 1,                          // ranges for specific values in this manner.
+    [ 11 ... 20] = 3,                          // This will define an arbitrary array with
+    [ 21 ... 99] = 5,                          // 101 elements ranging from 0 to 100. It also 
+    [100       ] = 0                           // works for fixed element declares of arrays
   };                                           // provided indexes fall within range of
                                                // elements defined by the fixed value.
   return 0;                                    // Return status successful.
@@ -750,12 +750,12 @@ typedef double long        f80;                // Associate type double long wit
 
 typedef union {                                // Declare typedef for union.
   char *pchars;                                // When you cross types in this case
-  u8    chars  [8];                            // mixing pointers, and floating point
-  u16   shorts [4];                            // numbers with integers you will cause
-  u32   ints   [2];                            // data loss, conversion cast problems
+  u8    chars     [8];                         // mixing pointers, and floating point
+  u16   shorts    [4];                         // numbers with integers you will cause
+  u32   ints      [2];                         // data loss, conversion cast problems
   u64   intBase;                               // as these types are fundamentally
-  f32   floats [2];                            // incompatible on a memory storage level.
-  f64   doubles[2];                            // Floating points and pointers traditionally
+  f32   floats    [2];                         // incompatible on a memory storage level.
+  f64   doubles   [2];                         // Floating points and pointers traditionally
   f80   floatBase;                             // are not used in unions because of this.
 } TMagiCaster;                                 // Assign TMagiCaster as the union name.
 
@@ -790,14 +790,14 @@ typedef long double        f80;                // Associate type double long wit
 
 typedef struct {                               // Declare typedef for struct.
   union {                                      // In this case we are declaring an
-    u8  chars  [8];                            // anonymous union to deal with our
-    u16 shorts [4];                            // compatible integer types and embedding
-    u32 ints   [2];                            // it inside our struct. These members will
+    u8  chars   [8];                           // anonymous union to deal with our
+    u16 shorts  [4];                           // compatible integer types and embedding
+    u32 ints    [2];                           // it inside our struct. These members will
     u64 intBase;                               // still share the same memory region where
   };                                           // the members outside the union will have
   char *pchars;                                // their own regions of memory as regular
-  f32 floats [2];                              // members of a struct.
-  f64 doubles[2];
+  f32 floats    [2];                           // members of a struct.
+  f64 doubles   [2];
   f80 longFloat;             
 } TMagiCaster;               
 
@@ -888,13 +888,19 @@ Sometimes you just need to output a single char to the Console.  This is what pu
 
 > int putchar(int character)
 
-It might seem odd that putchar accepts an int instead of char, but these are compatible Data Types that can be thought of like a union.  Any int can be a char and any char can be an int.  We'll go over char literals and int more later.  This makes putchar extremely flexible.  You can refer to a specific character by an int value, or by a char literal.
+It might seem odd that putchar accepts an int instead of char, but these are compatible Data Types that can be thought of like a union. Any int can be a char and any char can be an int.  We'll go over char literals and int more later. This makes putchar extremely flexible. You can refer to a specific character by an int value, or by a char literal.
 
-The int return from putchar returns the char output to the Console.  If there is an error, the return will be set to the constant EOF and it will set an error number you can lookup
+The int return from putchar returns the char output to the Console. If there is an error, the return will be set to the constant EOF and it will set an error number you can lookup. The GCC Macro for EOF defines it as having a value of -1. It is possible to have some other value depending on the library you are using, or the compiler. To avoid Magic Numbers, using EOF is the preffered option to test for.  These constants make your code portable.
+
+#### Errno Constants
+
+This is a little bit of a side-track, but where the errno values come into play.  Depending on Linux or Windows versions of GCC, the constants change.  Mingw programmers have done there best guess, but errno constants are not cross-platform compatible across different operating systems.  Below will be the list for Linux then the list for Windows.  Generally most of the errno constant descriptions leave much to the imagination.  However, some are straightforward.
+
+
 
 ### Printf
 
-The beast of Console output.  For formatted output printf is your friend.  Remembering how to use it will make it your enemy.  If you scour the internet for printf cheat sheets, you'll find them in abundance. This is by far one of the most complex feature contained in the C Standard Library.  Let's start with the prototype. 
+The beast of Console output.  For formatted output printf is your friend.  Remembering how to use it will make it your enemy.  If you scour the internet for printf cheat sheets, you'll find them in abundance. This is by far one of the most complex features contained in the C Standard Library.  Let's start with the prototype. 
 
 > int printf(const char *format, ...)
 
@@ -937,6 +943,8 @@ char *              %s                 \'                 Single Quote
 Alright, now we have a table of nightmares and the basic knowledge to start tackling some basic output.  Let's write some examples.  The following examples will expand on topics missed above and cover a more complete set of examples based on all topics we have covered so far.  Get ready, there's going to be a lot. 
 
 [Return to Index](#index)
+
+#### EOF and Error Constants
 
 ### C Output & Expansion on Type Examples
 
