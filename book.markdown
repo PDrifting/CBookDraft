@@ -666,7 +666,7 @@ s32 main() {                                   // Main program entry.
 ```
 
 [Return to Index](#index)
-#### Example 14: Alternate Way to Typedef Structs
+
 #### Example 14: Arrays
 Basic program that has no output.
 
@@ -692,6 +692,54 @@ s32 main() {                                   // Main program entry.
 ```
 
 [Return to Index](#index)
+
+#### Example 14: Alternate Way to Typedef Structs
+Basic program that has no output.
+
+1. using a typedef to declare a custom Type Name
+2. declaring a temporary name for a self-referencing struct
+3. implement a very primitive form of a linked list
+4. assiging things to pointers using the address of operator
+5. setup of function main
+
+```C
+typedef int s32;                               // Associate type signed int with s32.
+
+typedef struct _TFoo {                         // Assign the initial struct name as _TFoo.
+  struct _TFoo *next;                          // You must then reference struct _TFoo.
+  s32           data;                          // Create a member named data inside the struct.
+} TFoo;                                        // A new referencing name can be assigned as
+                                               // usual. Regardless which form you use, be
+                                               // consistant.
+                                               
+                                               // This creates a simple linked list. Though,
+                                               // you want to avoid following this style of
+                                               // struct declaration if you intend to declare
+                                               // allocated chains of structs this way. It
+                                               // will lead to memory fragmentation and
+                                               // other nasty side-effects.
+                                               
+                                               // Consider using an array, or if allocating,
+                                               // use a single block allocation which can
+                                               // be treated as an array.  DO NOT ALLOCATE
+                                               // INDIVIDUAL INSTANCES.
+                                               
+                                               // Remember, pointers that reference a single
+                                               // block of memory regardless where it is in
+                                               // memory can be treated as an array of objects.
+                                               // Even void pointer memory can be cast, and
+                                               // other type cast memory can be traversed as
+                                               // an array of another type by changing the
+                                               // cast of the pointer looking at that region
+                                               // of memory.
+                                               
+s32 main() {                                   // Main program entry.
+  TFoo foo = {};                               // Create a local instance of TFoo named foo.
+  TFoo bar = {};                               // Create a local instance of TFoo named foo.
+  foo.test = &bar;
+  
+  return 0;
+}
 
 #### Example 15: Unions
 Basic program that has no output.
