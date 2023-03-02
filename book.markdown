@@ -6890,6 +6890,8 @@ Traditional queue examples use linked lists and other jank.  We all should under
 
 This method goes one step further and removes the typical modulus calls and replaces them with a prebaked lookup.  It adds a minor performance gain, there is test code shown for each.  The tests are not complete, and only showing plausible ways to use it, and ideas on how to write efficient code in your projects.  There are likely to be improvements that can be made, but this is a much less terrible implementation than you will find elsewhere.
 
+**NOTE** Several people have reported this code does not build.  Several other C Compilers are incapable of building the code below.  Remember, this manual only ensures the code builds with GCC and executes.  If it does not function on another compiler, remember, not all compilers are created equal.
+
 STATIC IMPLEMENTATION WITH JANKY TESTS
 
 ```
@@ -7174,6 +7176,123 @@ s32 main() {
   return 0;
 }
 ```
+**General Output**
+```
+[foo = 1.10 | bar = 2.00 | state = 4]
 
+[foo = 2.10 | bar = 3.00 | state = 4]
+
+could not push... full.
+[foo = 33.00 | bar = 66.00 | state = 3] - found at index 1
+
+[foo = 19.00 | bar = 38.00 | state = 3] - pulled from index 19
+
+size  32
+count 32
+head  2
+tail  2
+[000000] [foo = 32.00 | bar = 64.00 | state = 3]
+[000001] [foo = 33.00 | bar = 66.00 | state = 3]
+[000002] [foo = 2.00 | bar = 4.00 | state = 3]
+[000003] [foo = 3.00 | bar = 6.00 | state = 3]
+[000004] [foo = 4.00 | bar = 8.00 | state = 3]
+[000005] [foo = 5.00 | bar = 10.00 | state = 3]
+[000006] [foo = 6.00 | bar = 12.00 | state = 3]
+[000007] [foo = 7.00 | bar = 14.00 | state = 3]
+[000008] [foo = 8.00 | bar = 16.00 | state = 3]
+[000009] [foo = 9.00 | bar = 18.00 | state = 3]
+[000010] [foo = 10.00 | bar = 20.00 | state = 3]
+[000011] [foo = 11.00 | bar = 22.00 | state = 3]
+[000012] [foo = 12.00 | bar = 24.00 | state = 3]
+[000013] [foo = 13.00 | bar = 26.00 | state = 3]
+[000014] [foo = 14.00 | bar = 28.00 | state = 3]
+[000015] [foo = 15.00 | bar = 30.00 | state = 3]
+[000016] [foo = 16.00 | bar = 32.00 | state = 3]
+[000017] [foo = 17.00 | bar = 34.00 | state = 3]
+[000018] [foo = 18.00 | bar = 36.00 | state = 3]
+[000019] [foo = 19.00 | bar = 38.00 | state = 3]
+[000020] [foo = 20.00 | bar = 40.00 | state = 3]
+[000021] [foo = 21.00 | bar = 42.00 | state = 3]
+[000022] [foo = 22.00 | bar = 44.00 | state = 3]
+[000023] [foo = 23.00 | bar = 46.00 | state = 3]
+[000024] [foo = 24.00 | bar = 48.00 | state = 3]
+[000025] [foo = 25.00 | bar = 50.00 | state = 3]
+[000026] [foo = 26.00 | bar = 52.00 | state = 3]
+[000027] [foo = 27.00 | bar = 54.00 | state = 3]
+[000028] [foo = 28.00 | bar = 56.00 | state = 3]
+[000029] [foo = 29.00 | bar = 58.00 | state = 3]
+[000030] [foo = 30.00 | bar = 60.00 | state = 3]
+[000031] [foo = 31.00 | bar = 62.00 | state = 3]
+
+size  32
+count 32
+head  2
+tail  2
+[000000] [foo = 32.00 | bar = 64.00 | state = 3]
+[000001] [foo = 33.00 | bar = 66.00 | state = 3]
+[000002] [foo = 2.00 | bar = 4.00 | state = 3]
+[000003] [foo = 3.00 | bar = 6.00 | state = 3]
+[000004] [foo = 4.00 | bar = 8.00 | state = 3]
+[000005] [foo = 5.00 | bar = 10.00 | state = 3]
+[000006] [foo = 6.00 | bar = 12.00 | state = 3]
+[000007] [foo = 7.00 | bar = 14.00 | state = 3]
+[000008] [foo = 8.00 | bar = 16.00 | state = 3]
+[000009] [foo = 9.00 | bar = 18.00 | state = 3]
+[000010] [foo = 10.00 | bar = 20.00 | state = 3]
+[000011] [foo = 11.00 | bar = 22.00 | state = 3]
+[000012] [foo = 12.00 | bar = 24.00 | state = 3]
+[000013] [foo = 13.00 | bar = 26.00 | state = 3]
+[000014] [foo = 14.00 | bar = 28.00 | state = 3]
+[000015] [foo = 15.00 | bar = 30.00 | state = 3]
+[000016] [foo = 16.00 | bar = 32.00 | state = 3]
+[000017] [foo = 17.00 | bar = 34.00 | state = 3]
+[000018] [foo = 18.00 | bar = 36.00 | state = 3]
+[000019] [foo = 19.00 | bar = 38.00 | state = 3]
+[000020] [foo = 20.00 | bar = 40.00 | state = 3]
+[000021] [foo = 21.00 | bar = 42.00 | state = 3]
+[000022] [foo = 22.00 | bar = 44.00 | state = 3]
+[000023] [foo = 23.00 | bar = 46.00 | state = 3]
+[000024] [foo = 24.00 | bar = 48.00 | state = 3]
+[000025] [foo = 25.00 | bar = 50.00 | state = 3]
+[000026] [foo = 26.00 | bar = 52.00 | state = 3]
+[000027] [foo = 27.00 | bar = 54.00 | state = 3]
+[000028] [foo = 28.00 | bar = 56.00 | state = 3]
+[000029] [foo = 29.00 | bar = 58.00 | state = 3]
+[000030] [foo = 30.00 | bar = 60.00 | state = 3]
+[000031] [foo = 31.00 | bar = 62.00 | state = 3]
+
+popped -> [foo = 2.00 | bar = 4.00 | state = 4]
+popped -> [foo = 3.00 | bar = 6.00 | state = 4]
+popped -> [foo = 4.00 | bar = 8.00 | state = 4]
+popped -> [foo = 5.00 | bar = 10.00 | state = 4]
+popped -> [foo = 6.00 | bar = 12.00 | state = 4]
+popped -> [foo = 7.00 | bar = 14.00 | state = 4]
+popped -> [foo = 8.00 | bar = 16.00 | state = 4]
+popped -> [foo = 9.00 | bar = 18.00 | state = 4]
+popped -> [foo = 10.00 | bar = 20.00 | state = 4]
+popped -> [foo = 11.00 | bar = 22.00 | state = 4]
+popped -> [foo = 12.00 | bar = 24.00 | state = 4]
+popped -> [foo = 13.00 | bar = 26.00 | state = 4]
+popped -> [foo = 14.00 | bar = 28.00 | state = 4]
+popped -> [foo = 15.00 | bar = 30.00 | state = 4]
+popped -> [foo = 16.00 | bar = 32.00 | state = 4]
+popped -> [foo = 17.00 | bar = 34.00 | state = 4]
+popped -> [foo = 18.00 | bar = 36.00 | state = 4]
+popped -> [foo = 19.00 | bar = 38.00 | state = 4]
+popped -> [foo = 20.00 | bar = 40.00 | state = 4]
+popped -> [foo = 21.00 | bar = 42.00 | state = 4]
+popped -> [foo = 22.00 | bar = 44.00 | state = 4]
+popped -> [foo = 23.00 | bar = 46.00 | state = 4]
+popped -> [foo = 24.00 | bar = 48.00 | state = 4]
+popped -> [foo = 25.00 | bar = 50.00 | state = 4]
+popped -> [foo = 26.00 | bar = 52.00 | state = 4]
+popped -> [foo = 27.00 | bar = 54.00 | state = 4]
+popped -> [foo = 28.00 | bar = 56.00 | state = 4]
+popped -> [foo = 29.00 | bar = 58.00 | state = 4]
+popped -> [foo = 30.00 | bar = 60.00 | state = 4]
+popped -> [foo = 31.00 | bar = 62.00 | state = 4]
+popped -> [foo = 32.00 | bar = 64.00 | state = 4]
+popped -> [foo = 33.00 | bar = 66.00 | state = 4]
+```
 
 DYNAMIC IMPLEMENTATION WITH JANKY TESTS
