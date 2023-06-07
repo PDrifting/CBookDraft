@@ -612,7 +612,7 @@ s32 main() {                                   // Main program entry.
                                                // initialisations. Even though this
                                                // has 15 elements the reamaining
                                                // elements will be default initialised
-                                               // to 0. This is mererly one method for
+                                               // to 0. This is merely one method for
                                                // initialisation during declare.
 
   data[12] = (TFoobar){                        // Accesses element 13 [12+1 from 0 index].
@@ -940,11 +940,172 @@ It might seem odd that putchar accepts an int instead of char, but these are com
 
 The int return from putchar returns the char output to the Console. If there is an error, the return will be set to the constant EOF and it will set an error number you can lookup. The GCC Macro for EOF defines it as having a value of -1. It is possible to have some other value depending on the library you are using, or the compiler. To avoid Magic Numbers, using EOF is the preffered option to test for.  These constants make your code portable.
 
-#### Errno Constants
+### Errno Constants
 
-This is a little bit of a side-track, but where the errno values come into play.  Depending on Linux or Windows versions of GCC, the constants change.  Mingw programmers have done there best guess, but errno constants are not cross-platform compatible across different operating systems.  Below will be the list for Linux then the list for Windows.  Generally most of the errno constant descriptions leave much to the imagination.  However, some are straightforward.
+This is a little bit of a side-track, but where the errno values come into play.  Depending on Linux or Windows versions of GCC, the constants change.  Mingw programmers have done their best guess, but errno constants are not cross-platform compatible across different operating systems.  Below will be the list for Linux then the list for Windows.  Generally most of the errno constant descriptions leave much to the imagination.  However, some are straightforward.
 
+#### Produced from perror() on Linux/UNIX
 
+The man page for [perror()](https://man7.org/linux/man-pages/man3/perror.3.html) if you would like more information.
+
+|Number|Error Code|Description|
+|:---:|:---:|:---:|
+|1|EPERM|Operation not permitted|
+|2|ENOENT|No such file or directory|
+|3|ESRCH|No such process|
+|4|EINTR|Interrupted system call|
+|5|EIO|I/O error|
+|6|ENXIO|No such device or address|
+|7|E2BIG|Argument list too long|
+|8|ENOEXEC|Exec format error|
+|9|EBADF|Bad file number|
+|10|ECHILD|No child processes|
+|11|EAGAIN|Try again|
+|12|ENOMEM|Out of memory|
+|13|EACCES|Permission denied|
+|14|EFAULT|Bad address|
+|15|ENOTBLK|Block device required|
+|16|EBUSY|Device or resource busy|
+|17|EEXIST|File exists|
+|18|EXDEV|Cross-device link|
+|19|ENODEV|No such device|
+|20|ENOTDIR|Not a directory|
+|21|EISDIR|Is a directory|
+|22|EINVAL|Invalid argument|
+|23|ENFILE|File table overflow|
+|24|EMFILE|Too many open files|
+|25|ENOTTY|Not a typewriter|
+|26|ETXTBSY|Text file busy|
+|27|EFBIG|File too large|
+|28|ENOSPC|No space left on device|
+|29|ESPIPE|Illegal seek|
+|30|EROFS|Read-only file system|
+|31|EMLINK|Too many links|
+|32|EPIPE|Broken pipe|
+|33|EDOM|Math argument out of domain of func|
+|34|ERANGE|Math result not representable|
+|35|EDEADLK|Resource deadlock would occur|
+|36|ENAMETOOLONG|File name too long|
+|37|ENOLCK|No record locks available|
+|38|ENOSYS|Function not implemented|
+|39|ENOTEMPTY|Directory not empty|
+|40|ELOOP|Too many symbolic links encountered|
+|42|ENOMSG|No message of desired type|
+|43|EIDRM|Identifier removed|
+|44|ECHRNG|Channel number out of range|
+|45|EL2NSYNC|Level 2 not synchronized|
+|46|EL3HLT|Level 3 halted|
+|47|EL3RST|Level 3 reset|
+|48|ELNRNG|Link number out of range|
+|49|EUNATCH|Protocol driver not attached|
+|50|ENOCSI|No CSI structure available|
+|51|EL2HLT|Level 2 halted|
+|52|EBADE|Invalid exchange|
+|53|EBADR|Invalid request descriptor|
+|54|EXFULL|Exchange full|
+|55|ENOANO|No anode|
+|56|EBADRQC|Invalid request code|
+|57|EBADSLT|Invalid slot|
+|59|EBFONT|Bad font file format|
+|60|ENOSTR|Device not a stream|
+|61|ENODATA|No data available|
+|62|ETIME|Timer expired|
+|63|ENOSR|Out of streams resources|
+|64|ENONET|Machine is not on the network|
+|65|ENOPKG|Package not installed|
+|66|EREMOTE|Object is remote|
+|67|ENOLINK|Link has been severed|
+|68|EADV|Advertise error|
+|69|ESRMNT|Srmount error|
+|70|ECOMM|Communication error on send|
+|71|EPROTO|Protocol error|
+|72|EMULTIHOP|Multihop attempted|
+|73|EDOTDOT|RFS specific error|
+|74|EBADMSG|Not a data message|
+|75|EOVERFLOW|Value too large for defined data type|
+|76|ENOTUNIQ|Name not unique on network|
+|77|EBADFD|File descriptor in bad state|
+|78|EREMCHG|Remote address changed|
+|79|ELIBACC|Can not access a needed shared library|
+|80|ELIBBAD|Accessing a corrupted shared library|
+|81|ELIBSCN|.lib section in a.out corrupted|
+|82|ELIBMAX|Attempting to link in too many shared libraries|
+|83|ELIBEXEC|Cannot exec a shared library directly|
+|84|EILSEQ|Illegal byte sequence|
+|85|ERESTART|Interrupted system call should be restarted|
+|86|ESTRPIPE|Streams pipe error|
+|87|EUSERS|Too many users|
+|88|ENOTSOCK|Socket operation on non-socket|
+|89|EDESTADDRREQ|Destination address required|
+|90|EMSGSIZE|Message too long|
+|91|EPROTOTYPE|Protocol wrong type for socket|
+|92|ENOPROTOOPT|Protocol not available|
+|93|EPROTONOSUPPORT|Protocol not supported|
+|94|ESOCKTNOSUPPORT|Socket type not supported|
+|95|EOPNOTSUPP|Operation not supported on transport endpoint|
+|96|EPFNOSUPPORT|Protocol family not supported|
+|97|EAFNOSUPPORT|Address family not supported by protocol|
+|98|EADDRINUSE|Address already in use|
+|99|EADDRNOTAVAIL|Cannot assign requested address|
+|100|ENETDOWN|Network is down|
+|101|ENETUNREACH|Network is unreachable|
+|102|ENETRESET|Network dropped connection because of reset|
+|103|ECONNABORTED|Software caused connection abort|
+|104|ECONNRESET|Connection reset by peer|
+|105|ENOBUFS|No buffer space available|
+|106|EISCONN|Transport endpoint is already connected|
+|107|ENOTCONN|Transport endpoint is not connected|
+|108|ESHUTDOWN|Cannot send after transport endpoint shutdown|
+|109|ETOOMANYREFS|Too many references: cannot splice|
+|110|ETIMEDOUT|Connection timed out|
+|111|ECONNREFUSED|Connection refused|
+|112|EHOSTDOWN|Host is down|
+|113|EHOSTUNREACH|No route to host|
+|114|EALREADY|Operation already in progress|
+|115|EINPROGRESS|Operation now in progress|
+|116|ESTALE|Stale NFS file handle|
+|117|EUCLEAN|Structure needs cleaning|
+|118|ENOTNAM|Not a XENIX named type file|
+|119|ENAVAIL|No XENIX semaphores available|
+|120|EISNAM|Is a named type file|
+|121|EREMOTEIO|Remote I/O error|
+|122|EDQUOT|Quota exceeded|
+|123|ENOMEDIUM|No medium found|
+|124|EMEDIUMTYPE|Wrong medium type|
+|125|ECANCELED|Operation Canceled|
+|126|ENOKEY|Required key not available|
+|127|EKEYEXPIRED|Key has expired|
+|128|EKEYREVOKED|Key has been revoked|
+|129|EKEYREJECTED|Key was rejected by service|
+|130|EOWNERDEAD|Owner died|
+|131|ENOTRECOVERABLE|State not recoverable|
+
+On non-windows you can also use this little program to figure out what your operating system might be using for error numbers and their associated meanings.
+
+```C
+#include <stdio.h>
+#include <string.h>
+
+typedef int s32;
+
+s32 main() {
+  s32 buffLen = 1000;
+  for (s32 err = 0; err < 133; ++err)  {
+    char buff[1000] = {};    
+    strerror_r(err,buff,buffLen);
+    printf("[errno = %03d][%s]\n", err, buff);
+  }
+  return 0;
+}
+```
+
+Windows on the otherhand has a very complex error numbering system.  You can read up more on it [here](https://learn.microsoft.com/en-us/windows/win32/debug/system-error-codes?redirectedfrom=MSDN#system-error-codes).  Neither of these operating systems share overlapping error numbers, except for 0, which is STATUS_OK or even ERROR_SUCCESS. C functions in the standard library, or otherwise generally use 0 to specify a lack of error.  There are always exceptions to this.  The functions based on alloc(), such as malloc(), calloc(), etc., return NULL (0) on a failure to allocate, and any other number to specify a pointer to the address of the allocated memory.  You are strongly advised to look up functions for your given standard library or referenced header modules of code you are using in your program.
+
+On Linux/UNIX/FreeBSD you always have the good old MAN Pages.  For example [malloc()](https://man7.org/linux/man-pages/man3/malloc.3.html).  GCC pretty much follows the general POSIX compliance, so any MAN Page that references the POSIX standard should be valid.  Mingw, does not attempt to maintain POSIX compliance on Windows, as this is not always possible.  Microsoft is not a POSIX compliant operating system, and anyone that has coded with WinSocks over POSIX Sockets is well aware of the nightmare created by custom solutions provided inside Windows. As mentioned, trust the manual for the best advice on how to use and what to expect when you use anything from a standard library, or any 3rd party library for that matter.
+
+There is also the matter of how errors are returned, the janky nature of system vs. non-system error handling, and the various methods of returning errors and where to find them.  Examples in this book follow system style code using the return for status, and function arguments for returning or updating values.  
+
+[Return to Index](#index)
 
 ### Printf
 
