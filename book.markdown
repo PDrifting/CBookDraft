@@ -15,7 +15,7 @@ It drives the world and is the foundation to pretty much everything in the moder
 |     |[R](https://www.r-project.org/about.html)         |       |             |[Vehicles](https://en.wikipedia.org/wiki/Intel_8051)      |
 
 
-C is also extremely portable, which is why it drives so many things.  The [GCC Compiler](https://gcc.gnu.org/) supports 70+ platforms and several architectures.  All of the code examples and C source code in this document will be largely focused on Linux and Windows development.  You can find the base manual for GCC [here](https://gcc.gnu.org/onlinedocs/). MinGW has been used for validation of sources on Windows, you can get it [here](https://sourceforge.net/projects/mingw/files/latest/download).  A general how to install MinGW and configure the path can be found [here](https://youtu.be/guM4XS43m4I). Unlike Unix-like environments, GCC does not come installed by default on Windows platforms. You can also turn on the [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/) and use the Microsoft App Store to install a Unix-Like operating system and use GCC natively.  If you're on a Linux or non-windows platform, this document assumes you have a decent command of that evironment.
+C is also extremely portable, which is why it drives so many things.  The [GCC Compiler](https://gcc.gnu.org/) supports 70+ platforms and several architectures.  All of the code examples and C source code in this document will be largely focused on Linux and Windows development.  You can find the base manual for GCC [here](https://gcc.gnu.org/onlinedocs/). MinGW has been used for the validation of sources on Windows, you can get it [here](https://sourceforge.net/projects/mingw/files/latest/download).  A general how to install MinGW and configure the path can be found [here](https://youtu.be/guM4XS43m4I). Unlike Unix-like environments, GCC does not come installed by default on Windows platforms. You can also turn on the [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/) and use the Microsoft App Store to install a Unix-Like operating system and use GCC natively.  If you're on a Linux or non-windows platform, this document assumes you have a decent command of that environment.
 
 # index
 [Pre-Basics of GCC](#pre-basics-of-gcc)\
@@ -67,9 +67,9 @@ C is also extremely portable, which is why it drives so many things.  The [GCC C
 [⠀⠀⠀⠀Example 1: Left Justification with printf](#example-1-left-justification-with-printf)\
 [⠀⠀⠀⠀Example 2: Zero Padding with printf](#examples-2-zero-padding-with-printf)\
 [⠀⠀⠀⠀Example 3: Side-Effects using printf %x and signed numbers](#example-3-side-effects-using-printf-x-and-signed-numbers)\
-[⠀⠀⠀⠀Example 4: Formating Floating Point Types with printf](#example-4-formating-floating-point-types-with-printf)\
-[⠀⠀⠀⠀Example 5: Formating double Floating Point Types with printf](#example-5-formating-double-floating-point-types-with-printf)\
-[⠀⠀⠀⠀Example 6: Formating long double Floating Point Types with printf](#example-6-formating-long-double-floating-point-types-with-printf)\
+[⠀⠀⠀⠀Example 4: Formating Floating Point Types with printf](#example-4-formatting-floating-point-types-with-printf)\
+[⠀⠀⠀⠀Example 5: Formating double Floating Point Types with printf](#example-5-formatting-double-floating-point-types-with-printf)\
+[⠀⠀⠀⠀Example 6: Formating long double Floating Point Types with printf](#example-6-formatting-long-double-floating-point-types-with-printf)\
 [⠀⠀Zero is not always Zero](#zero-is-not-always-zero)\
 [⠀⠀⠀⠀Example 1: Issues with Floating Point Types and Approximations](#examples-1-issues-with-floating-point-types-and-approximations)
 
@@ -92,13 +92,13 @@ C is also extremely portable, which is why it drives so many things.  The [GCC C
    [7]         Generation of Executable
 ```
 
-1. Source File - Main file that contains the syntax of your program.
+1. Source File - Main file containing your program's syntax.
 
 2. Pre-processor - It strips out comments from the sources.  Fetches header files (.h) and executes macros.
 
 > -E will halt the compilation process and emit the pre-processor stage.
 
-3. Generation of Assembly - This is actually an intermediate stage generating assembly that can only be used by the GCC compiler.  The GNU Assembler that is part of GCC can build this file with some minor modifications.  It is formatted in AT&T style vs. Intel which is generally easier to read.
+3. Generation of Assembly - This is an intermediate stage generating assembly that can only be used by the GCC compiler.  The GNU Assembler that is part of GCC can build this file with some minor modifications.  It is formatted in AT&T style vs. Intel which is generally easier to read.
 
 > -S will halt the compilation process and emit the intermediate assembly stage.
 
@@ -151,12 +151,12 @@ These are the general arithmetic types that are broken down into integer and flo
 
 #### Enumerated Types
 
-These are typically regarded as another arithmetic type used to define named variables that are assigned discrete integer values.  They are used in place of magic numbers or hard-coded values that can have arbitrary meaning.  The general modern view is to avoid using them.
+These are typically regarded as another arithmetic type used to define named variables that are assigned discrete integer values.  They are used in place of magic numbers or hard-coded values that can have arbitrary meanings.  The general modern view is to avoid using them.
 
-**MAGIC NUMBERS** - Enumerated values were created to solve this problem.  However, they create more problems than they resolve.  When we consider the issue of obfuscated information by using values instead of meaninful tokens we generally refer to those as Magic Numbers.  It is generally regarded that we should not use them as initial values or in the endpoint test expressions of a while, do while, or for loops.  There is a general concern for avoiding their use in expressions, mallocs, and other statements where it may obfuscate information and taint obvious readability or understanding of the code.  You are advised to use a #define, or specific variables within contextual scope to give a meaningful name to your value.
+**MAGIC NUMBERS** - Enumerated values were created to solve this problem.  However, they create more problems than they resolve.  When we consider the issue of obfuscated information by using values instead of meaningful tokens we generally refer to those as Magic Numbers.  It is generally regarded that we should not use them as initial values or in the endpoint test expressions of a while, do while, or for loops.  There is a general concern for avoiding their use in expressions, mallocs, and other statements where it may obfuscate information and taint obvious readability or understanding of the code.  You are advised to use a #define, or specific variables within contextual scope to give a meaningful name to your value.
 
 ```
-1. They are not really integer values, but GCC does treat them as such.
+1. They are not integer values, but GCC does treat them as such.
 2. Code written using Enums is not treated the same by all C compilers.
 3. They do not provide any type safety.
 4. You can assign values to Enum typed variables that are invalid in context.
@@ -167,7 +167,7 @@ These are typically regarded as another arithmetic type used to define named var
 9. The storage size of an Enum is defined by the compiler.
 10. You will end up littering your code with switches or other branching layouts.
 11. There is no way to use non-numeric values.
-12. Has a tendency to force state-driven coding.
+12. Tends to force state-driven coding.
 13. They violate Data Oriented Design and Don't Repeat Yourself principles.
 14. Use a #define declaration instead.  We are not C++ coders.
 ```
@@ -179,11 +179,11 @@ These include Arrays, Pointers, Structures, Unions, Functions, and Type Definiti
 
 #### Arrays
 
-An Array is created from a Data Type that is generally used to store multiple elements of data.  They are zero indexed and you declare them by specifying the total number of elements needed.  To access the last element in an Array use the total number of elements minus one.  Arrays, once declared, cannot change size.  Elements are accessed by unique integer based indices.  Data stored inside an Array, provided Pointers are not involved with the data stored in each element, will generally create a single block of contiguous memory.  Most off-by-one errors in your code will be created by trying to access information inside Arrays. You generally do not need to pass an Array by reference to a function as an argument.  In most cases when using them, they will be treated as pointers or referenced as such.
+An Array is created from a Data Type that is generally used to store multiple elements of data.  They are zero-indexed and you declare them by specifying the total number of elements needed.  To access the last element in an Array use the total number of elements minus one.  Arrays, once declared, cannot change size.  Elements are accessed by unique integer based indices.  Data stored inside an Array, provided Pointers are not involved with the data stored in each element, will generally create a single block of contiguous memory.  Most off-by-one errors in your code will be created by trying to access information inside Arrays. You generally do not need to pass an Array by reference to a function as an argument.  In most cases when using them, they will be treated as pointers or referenced as such.
 
 #### Pointers
 
-These are definitely regarded as one of the single hardest concepts to learn in programming, and the reason most people avoid coding in C.  A Pointer is a variable that uses the address of another variable for storage.  It uses an address that represents a specific location in memory.  You must declare pointers like any other variable declaration.  Confusingly, Pointers use the asterisk for dereferencing.  This simply means, to get the value stored at the location of memory the Pointer is pointing at.  The asterisk is also used as the multiplication maths operator.  Pointers have many problems associated with their use, but they are a staple in the advanced C language syntax.  To pass variables to a function by reference you must use a pointer for all Data Types, except Arrays in some cases.
+These are regarded as one of the single hardest concepts to learn in programming, and the reason most people avoid coding in C.  A Pointer is a variable that uses the address of another variable for storage.  It uses an address that represents a specific location in memory.  You must declare pointers like any other variable declaration.  Confusingly, Pointers use the asterisk for dereferencing.  This simply means, to get the value stored at the location of memory the Pointer is pointing at.  The asterisk is also used as the multiplication maths operator.  Pointers have many problems associated with their use, but they are a staple in the advanced C language syntax.  To pass variables to a function by reference you must use a pointer for all Data Types, except Arrays in some cases.
 
 C has a special kind of Pointer called the Function Pointer.  This allows the creation of a Pointer that will point at the address of a specific Function that has been declared.  There are some rules they must follow, but can be very useful when you are writing sorting or other types of algorithms that may have a comparator or some other piece of the algorithm that could change based on requirements.  Instead of creating unique Functions for each specific task of sorting by ascending or descending order, you can pass in a Function that can be used to address this.  There are other more complicated, but useful scenarios when working with graphics engines where you may have to substitute an optional chunk of your code that runs if an equivalent feature is not available on a given platform.
 
@@ -203,7 +203,7 @@ These are your user-defined record types.  Useful when you need to combine group
 
 Alignment, packing, and padding are compiler implementation-specific.  GCC manages these aspects of these Data Types for you.  In the case of needing to override the defaults, you can use GCC compiler defined macros.
 
-**Alignment** - This tells the compiler to attempt a specific alignment during allocation to specific boundaries. Alignment can only be used to increase member boundaries. These are determined by the linker and the platform you are compiling on.  GCC by default will optimise for the platform you are compiling on.  You can assume this is the default memory layout.  Keep in mind your linker will be a limiting factor on the largest size you are able to align to.  This will be platform-specific.  Specifiying a byte alignment of 16 when the linker or platform can only support 8, will not not have any benefits.
+**Alignment** - This tells the compiler to attempt a specific alignment during allocation to specific boundaries. Alignment can only be used to increase member boundaries. These are determined by the linker and the platform you are compiling on.  GCC by default will optimise for the platform you are compiling on.  You can assume this is the default memory layout.  Keep in mind your linker will be a limiting factor on the largest size you can align to.  This will be platform-specific.  Specifiying a byte alignment of 16 when the linker or platform can only support 8, will not not have any benefits.
 
 > __attribute__ ((aligned ([in bytes])))
 
@@ -215,7 +215,7 @@ Alignment, packing, and padding are compiler implementation-specific.  GCC manag
 
 **Padding** - Is required, and can be manipulated by alignment and packing attributes. Overriding the default padding performed by GCC is likely to slow down access to members, but can save memory. Padding will only be inserted when a _struct_ member is followed by another _struct_ member that requires a larger alignment or at the end of the _struct_ to align it to a specific boundary. GCC by default is not allowed to reorder any _struct_ members to achieve optimal alignment, so programmers should be mindful of their member layouts inside their _struct_ definitions.
 
-**Transparency** - This only applies to _union_ Data Types. Accepting multiple types of arguments in C is problematic.  There is no Function Overloading.  However, it is possible to use a transparent _union_ in order to accomplish being able to pass multiple strictly declared Data Types using this attribute.  For instance, in POSIX when dealing with sockets and other networking code, there are several functions that take multiple argument Data Types.  This forces the function and the way it will be called with arguments to be treated in a special context.  This is a bypass for getting around having to use _void_ pointers which would allow any type to be passed.
+**Transparency** - This only applies to _union_ Data Types. Accepting multiple types of arguments in C is problematic.  There is no Function Overloading.  However, it is possible to use a transparent _union_ to accomplish being able to pass multiple strictly declared Data Types using this attribute.  For instance, in POSIX when dealing with sockets and other networking code, several functions take multiple argument Data Types.  This forces the function and the way it will be called with arguments to be treated in a special context.  This is a bypass for getting around having to use _void_ pointers which would allow any type to be passed.
 
 > __attribute__ ((__transparent_union__))
 
@@ -230,23 +230,23 @@ This is another very hard concept for programmers to grasp -- code reuse.  Funct
 int           foo   (int a, float b)
 ```
 
-The C Standard Library provides numerous Functions that you can call.  These often require using the correct _#include_ statement before they can be used.  We will discuss this in detail when going over the preprocessor and the side-effects associated with including and creating headers in your code.
+The C Standard Library provides numerous Functions that you can call.  These often require using the correct _#include_ statement before they can be used.  We will discuss this in detail when going over the preprocessor and the side effects associated with including and creating headers in your code.
 
 There is one Function that must be present in all programs called main.  This is your entry point to your program.  When you execute programs this will be where the main portion of the controlling code exists.  It is required to be present.  Your main Function should always return an int type.  It can optionally have no arguments or a pair of arguments to accept information being passed to it from the command line.
 
 The Return Type from main is used by the Operating System to determine how the program terminated.  You are expected to return 0 if the execution exit was normal, or a non-zero based value to report abnormal termination.  You will see many tutorials and examples that exclude the return value from main.  This was common many decades ago, but modern Operating Systems, especially Linux, expect the return result.  Some compilers will default to a return 0 if the statement is omitted.  For clarity in your code, you should ensure the return statement exists.
 
-Functions can also be invoked from almost anywhere in your source code for your program.  Once a Function is created you can use it over and over.  Functions are extremely useful and practical.  They are required to keep moderate to large code bases tidy.
+Functions can also be invoked from almost anywhere in the source code for your program.  Once a Function is created you can use it over and over.  Functions are extremely useful and practical.  They are required to keep moderate to large code bases tidy.
 
 Many tutorials written for C, still declare Function main as Return Type void.  Any Function with a Return Type declared as void cannot return any value once a Function has completed executing its statements. This is not to slight the old-school manuals of my youth, but they promote models of coding in C that are largely outdated. Beyond this, there are features of more modern languages that C does not support. Function Overloading, is one of them, so all Function names must be unique.
 
 **Function Overloading** - The ability to create multiple Functions with the same name declaration and different arguments.  In modern programming, this is a major drawback that C has not added the ability to use this feature of coding.  This drives many C programmers to write C in C++.  This has a host of other drawbacks.  Despite missing this syntax feature, you can still write robust and useful programs in a meaningful way with C.  A later standard has implemented Generics into C with Macros that can emulate Function Overloading.  When discussing the preprocessor, we will cover this feature.
 
-**Argument Lists** - Functions in order to pass information to them use argument lists.  They consist of a Data Type and name separated by a comma. This book does not use the modern form of supplying void when there are no arguments accepted.  GCC does not warn if you make a function call with arguments to an empty argument listed function declare.  You will see comments on the Undefined Behaviour this technically causes, however, at best you're going to get a warning.  C compilers have a fuzzy area when it comes to empty argument lists. Since at best you will get a warning, this book excludes the promotion of using void argument lists.  The only other alternative is to use Function Prototypes.
+**Argument Lists** - Functions use argument lists to deal with information you might need to pass or receive back from a function once it is done executing.  They consist of a Data Type and name separated by a comma. This book does not use the modern form of supplying void when there are no arguments accepted.  GCC does not warn if you make a function call with arguments to an empty argument listed function declare.  You will see comments on the Undefined Behaviour this technically causes, however, at best you're going to get a warning.  C compilers have a fuzzy area when it comes to empty argument lists. Since at best you will get a warning, this book excludes the promotion of using void argument lists.  The only other alternative is to use Function Prototypes.
 
 **Function Prototypes** - Generally these create code clutter, but they can be meaningful in context and are required when declaring Function Pointers in a modified syntax. The book will detail when using Function Prototypes is generally a good idea.  Since all C Compilers are known to be single-pass, your functions must be declared before use. If a Function is declared elsewhere, externally, or compiled/linked from another foreign piece of code, you must use a Function Prototype to announce that the compiler should be aware to look for it. Otherwise, you are encouraged to reorder your main Function to the end of your code and order all other functions in a precalling fashion.  This is another heavily debated topic amongst purists.  As mentioned this book focuses on keeping code clean, easy to read, hardware-friendly, and mostly modern. Some old-school syntax is still encouraged regardless of side effects.
 
-**SINGLE-ENTRANCE/SINGLE-EXIT** - As mentioned earlier in Pointers, there is an issue with Function Pointers creating a potential for unpredictable code.  In order to simplify the flow and reduce the branching potential inside your Function you should ensure that you only have a single return statement that exists at the end of each of your Functions. Placing more than one return statement inside a Function has the potential to confuse the compiler and prevent it from creating clean bytecode.  Make sure you do what you can to assist the compiler to create predictable and clean bytecode by ensuring simple program flow.  Many programmers will argue this does not matter, but it does.  You might also hear arguments that languages like GO promote the idea of multiple exits from a Function.  Please remember, that not all compilers treat all forms of code the same.  What works well in one language, is unlikely to be performant in others. C compilers are complex, they do not do well with complicated code.  They make mistakes, and often their own internal prediction algorithms to optimise code will give up when you fail to keep the flow of your code simple.  See the [KISS Principle](https://en.wikipedia.org/wiki/KISS_principle).  When in doubt check your code with [Godbolt](https://godbolt.org).
+**SINGLE-ENTRANCE/SINGLE-EXIT** - As mentioned earlier in Pointers, there is an issue with Function Pointers creating a potential for unpredictable code.  To simplify the flow and reduce the branching potential inside your Function you should ensure that you only have a single return statement that exists at the end of each of your Functions. Placing more than one return statement inside a Function has the potential to confuse the compiler and prevent it from creating clean bytecode.  Make sure you do what you can to assist the compiler to create predictable and clean bytecode by ensuring simple program flow.  Many programmers will argue this does not matter, but it does.  You might also hear arguments that languages like GO promote the idea of multiple exits from a Function.  Please remember, that not all compilers treat all forms of code the same.  What works well in one language, is unlikely to be performant in others. C compilers are complex, they do not do well with complicated code.  They make mistakes, and often their internal prediction algorithms to optimise code will give up when you fail to keep the flow of your code simple.  See the [KISS Principle](https://en.wikipedia.org/wiki/KISS_principle).  When in doubt check your code with [Godbolt](https://godbolt.org).
 
 **NOTE** - No process is going to save you from mistakes you're going to make in your code based on standards, compiler warnings, or style guides.  Based on the discussions around Functions, you are encouraged to understand that C can be an over forgiving language and pretty much take whatever you throw at it. Understanding what the code is doing in C is far more important than anything you can do to generate useless warnings for mistakes you should be aware of in your code. 
 
@@ -266,7 +266,7 @@ Most projects and coding firms you will write code for have Style Guides.  Each 
 
 #### Void
 
-Despite this being a Data Type that can be used in various scenarios, there are some restrictions on void that should be discussed.  When dealing with void, it generally means different things contextually. There are also problems with void conversions and data loss. Opportunities to create Undefined Behaviour are also in abundance. 
+Despite this being a Data Type that can be used in various scenarios, some restrictions on void should be discussed.  When dealing with void, it generally means different things contextually. There are also problems with void conversions and data loss. Opportunities to create Undefined Behaviour are also in abundance. 
 
 Unlike other Data Types, you cannot directly declare a variable as _void_ unless it is a pointer.  _void_ when used as a Function Return Data Type, signifies that a Function is incapable of returning any information from it.  Pointer Data Types declared as _void_ can be extremely flexible.  They can store any other Data Type, mixed data, memory layouts, and can also be used to point to Functions.  Many Functions inside the C Standard Library will return a _void_ pointer, or consume one as a Function Argument. 
 
@@ -276,7 +276,7 @@ _malloc()_ and _free()_ are good examples of this.
 
 > void free(void *ptr)
 
-When declaring Function Arguments in a Function Prototype you should technically use void if the Function Argument List is actually meant to be nothing.  GCC for backwards compatibility maintains arbitrary Function Prototypes and definitions of functions which can lead to problems if you program using the Function Prototypes.  As mentioned in the Functions sections for Arguments Lists, this book does not use _void_ in this way. 
+When declaring Function Arguments in a Function Prototype you should technically use void if the Function Argument List is meant to be nothing.  GCC for backwards compatibility maintains arbitrary Function Prototypes and definitions of functions which can lead to problems if you program using the Function Prototypes.  As mentioned in the Functions sections for Arguments Lists, this book does not use _void_ in this way. 
 
 [Return to Index](#index)
 
@@ -822,7 +822,7 @@ s32 main() {
 #### Example 17: Ideas on Dealing with Union Troubles
 Basic program that has no output.
 
-1. shows using multiple typedef to declare custom Type Names
+1. shows using multiple typedefs to declare custom Type Names
 2. how to create a struct with an anonymous union inside it
 3. setup of function main
 
@@ -914,7 +914,7 @@ It might seem strange to cover the complexities of struct, union, typedef and ot
 
 # Part 2: Console Output & Using #include
 
-Console, or Terminal output has been around since the advent of computer screens.  It is the most common way programmers can present information from within the program.  C has Functions built into the Standard Library that can be accessed from various includible libraries.  This is where the #include tag is useful.  For this context we will be referencing the library stdio.h. 
+Console, or Terminal output has been around since the advent of computer screens.  It is the most common way programmers can present information from within the program.  C has Functions built into the Standard Library that can be accessed from various includible libraries.  This is where the #include tag is useful.  For this context, we will be referencing the library stdio.h. 
 
 > #include <stdio.h>
  
@@ -936,7 +936,7 @@ Sometimes you just need to output a single char to the Console.  This is what pu
 
 > int putchar(int character)
 
-It might seem odd that putchar accepts an int instead of char, but these are compatible Data Types that can be thought of like a union. Any int can be a char and any char can be an int.  We'll go over char literals and int more later. This makes putchar extremely flexible. You can refer to a specific character by an int value, or by a char literal.
+It might seem odd that putchar accepts an int instead of char, but these are compatible Data Types that can be thought of as a union. Any int can be a char and any char can be an int.  We'll go over char literals and int more later. This makes putchar extremely flexible. You can refer to a specific character by an int value, or by a char literal.
 
 The int return from putchar returns the char output to the Console. If there is an error, the return will be set to the constant EOF and it will set an error number you can look up. The GCC Macro for EOF defines it as having a value of -1. It is possible to have some other value depending on the library you are using, or the compiler. To avoid Magic Numbers, using EOF is the preferred option to test for.  These constants make your code portable.
 
@@ -1080,7 +1080,9 @@ The man page for [perror()](https://man7.org/linux/man-pages/man3/perror.3.html)
 |130|EOWNERDEAD|Owner died|
 |131|ENOTRECOVERABLE|State not recoverable|
 
-On non-windows you can also use this little program to figure out what your operating system might be using for error numbers and their associated meanings.
+On non-windows, you can also use this little program to figure out what your operating system might be using for error numbers and their associated meanings.
+
+
 
 ```C
 #include <stdio.h>
@@ -1147,9 +1149,9 @@ char *              %s                 \'                 Single Quote
 
 <sup>**NOTE [1]:** *Type char is unique from all other types. It has three unique states -- char, signed char, and unsigned char.  None of these equate to each other.  According to the C Standard char will be guaranteed to hold a single character/byte worth of data.  Function arguments that expect char will complain if you try to pass a signed or unsigned variant instead.*</sup>
 
-<sup>**NOTE [2]:** *If the hex specifier is used for any unsigned integer Data Type it will be cast to unsigned char and only display one 8-bit.  The hex and octal specifiers can only be used to represent integer Data Types.  Floating Point Data Types require special pointer twiddling.  You will get strange output trying to use either of the conversion specifiers otherwise.*</sup>
+<sup>**NOTE [2]:** *If the hex specifier is used for any unsigned integer Data Type it will be cast to an unsigned char and only display one byte of information.  The hex and octal specifiers can only be used to represent integer Data Types.  Floating Point Data Types require special pointer twiddling.  You will get strange output trying to use either of the conversion specifiers otherwise.*</sup>
 
-Alright, now we have a table of nightmares and the basic knowledge to start tackling some basic output.  Let's write some examples.  The following examples will expand on topics missed above and cover a more complete set of examples based on all topics we have covered so far.  Get ready, there's going to be a lot. 
+Alright, now we have a table of nightmares and the basic knowledge to start tackling some basic output.  Let's write some examples.  The following examples will expand on topics missed above and cover a more complete set of examples based on all topics we have covered so far. 
 
 [Return to Index](#index)
 
@@ -1164,13 +1166,13 @@ Basic program with output.
 2. setup of function main
 
 ```C
-#include <stdio.h>                        // Provide access to i/o functions.
+#include <stdio.h>                             // Provide access to i/o functions.
 
 typedef int s32;
 
-s32 main() {                              // Main program entry.
-  puts("Hello World!");                   // Displays Hello World! to the console.
-  return 0;                               // Return status successful.
+s32 main() {                                   // Main program entry.
+  puts("Hello World!");                        // Displays Hello World! to the console.
+  return 0;                                    // Return status successful.
 }
 ```
 
@@ -1223,11 +1225,11 @@ s32 main() {
 
   // Shows using the appropriate format specifier for any given type.
   // C has a special use case for %c so that integer based 8-bit,
-  // 16-bit, and 32-bit data types can all be used to represent
-  // chars. This can be seen from the output information below.
-  // 64-bit integer types are incapable of storing char information.
+  // 16-bit, and 32-bit data types can all be used to represent chars.
+  // This can be seen from the output information below. 64-bit
+  // integer types are incapable of storing char information.
 
-  printf("cFoo  [%%c]   = %c\n", cFoo);  
+  printf("cFoo  [%%c]   = %c\n", cFoo);        
   printf("uFoo  [%%c]   = %c\n", uFoo);
   printf("sFoo  [%%c]   = %c\n", sFoo);
   printf("sFoo  [%%d]   = %d\n", sFoo);
@@ -1296,7 +1298,7 @@ Basic program with output.
 2. general variable use
 3. using a portion of the C Standard Library to access Functions for output
 4. showing how to use %x \[hex specifier\]
-5. examples on how it can be used
+5. examples of how it can be used
 6. setup of function main.
 
 ```C
@@ -1341,7 +1343,7 @@ s32 main() {
   printf("sBaz  [%%x] = %x\n", sBaz);      // Will cast to an unsigned int showing 4 bytes of information.
   printf("uBaz  [%%x] = %x\n", uBaz);      // Will cast to a single unsigned char byte.
   printf("sThud [%%Lx] = %Lx\n", sThud);   // Will cast to an unsigned long long showing 8 bytes of information.
-  printf("uThud [%%Lx] = %Lx\n", uThud);   // Will cast to an unsigned long long showing upto 8 bytes of information.
+  printf("uThud [%%Lx] = %Lx\n", uThud);   // Will cast to an unsigned long long showing up to 8 bytes of information.
 
   return 0;
 }
@@ -1396,8 +1398,7 @@ typedef union {
   // Unfortunately this method has a major drawback if the order of the members
   // in anonymous struct change. Be mindful in your future programs this will
   // affect initialisation and assignment throughout your program. It also creates
-  // a quasi-magic number state in relation to the index offsets of each mapped
-  // element.  
+  // a quasi-magic number state concerning the index offsets of each mapped element.  
 
   // array[0] maps to state
   // array[1] maps to active
@@ -1414,7 +1415,7 @@ typedef union {
 
 s32 main() {
   // Though, we could initialise the union with the array member, this method
-  // creates some obfuscation in relation to the assignment.
+  // creates some obfuscation with the assignment.
   
   // unionTest foo = {
   //   .array = {
@@ -1483,7 +1484,7 @@ Basic program with output.
 2. general variable use
 3. using a portion of the C Standard Library to access Functions for output
 4. showing how to use various output specifiers
-5. examples on how they can be used to left justify data
+5. examples of how they can be used to left justify data
 6. setup of function main.
 
 ```C
@@ -1564,7 +1565,6 @@ Basic program with output.
 5. examples of how they can be used to zero pad and justify data
 6. setup of function main.
 
-
 ```C
 #include <stdio.h>
 
@@ -1583,8 +1583,9 @@ s32 main() {
   u8 uBaz  = 247;
   u8 uThud = 'A';
   
-  //shows padding a value with leading zeroes
-  //with use of width padding 
+  // Shows padding a value with leading zeroes and
+  // using width-based padding.
+ 
   printf("sFoo  [%%05d] %05d\n", sFoo);
   printf("sBar  [%%05d] %05d\n", sBar);
   printf("sBaz  [%%05d] %05d\n", sBaz);
@@ -1666,9 +1667,9 @@ s32 main() {
     
   // Shows padding a value with leading zeroes with the use of width padding.
   // sFoo is going to cause value rolling. Since %x defaults to the width
-  // needed, notice an unexpected side-effect when the compiler casts the
-  // s8 to s32 for the -120. Be cautious of displaying negative values
-  // using the %x specfier.
+  // needed, you should notice an unexpected side-effect when the compiler
+  // casts the s8 to s32 for the -120. Be cautious of displaying negative
+  // values using the %x specfier.
   
   printf("thud  [%%05x] %05x\n\n", thud);
   
@@ -1681,6 +1682,7 @@ s32 main() {
   printf("uBaz  [%%05x] %05x\n\n", uBaz);
   
   // No real difference, it just switched to uppercase.
+
   printf("thud  [%%05X] %05X\n\n", thud);
   
   printf("sFoo  [%%05X] %05X\n", sFoo);
@@ -1763,8 +1765,8 @@ s32 main() {
 
   // This forces more decimal places because we have
   // higher precision with more decimal places. You
-  // can see there are errors being introduced when
-  // we extend more decimal places.
+  // can see errors are being introduced when extending
+  // more decimal places.
   
   printf("f32Foo  [%%-.10f] %-.10f\n", f32Foo);
   printf("f32Bar  [%%-.10f] %-.10f\n", f32Bar);
@@ -1856,9 +1858,9 @@ s32 main() {
   printf("f64Thud [%%-lf] %-lf\n\n", f64Thud);
 
   // This forces more decimal places because we have
-  // higher precision with more bits.  You can still
-  // see there are errors being introduced when we
-  // extend more decimal places.
+  // higher precision with more decimal places. You
+  // can see errors are being introduced when extending
+  // more decimal places.
   
   printf("f64Foo  [%%-.25lf] %-.25lf\n", f64Foo);
   printf("f64Bar  [%%-.25lf] %-.25lf\n", f64Bar);
@@ -1927,17 +1929,17 @@ typedef int         s32;
 typedef long double f80;
 
 s32 main() {
-  // Despite more precision, you will never be able to get absolutely true
-  // representations of your values.  All we are going to gain is some extra
-  // digits of accuracy.  This is the continued unfortunate consequence of
-  // approximating Floating Point Data Types.
+  // Despite more precision, you will never get true representations of
+  // your values.  All we are going to gain is some extra digits of
+  // accuracy.  This is the unfortunate consequence of Floating Point
+  // Data Types.
 
   f80 f80Foo = 10.2L;
   f80 f80Bar = 0.123456L;
   f80 f80Baz = 123456.0123456L;
   f80 f80Thud = 3.14159265358979323846L;
 
-  // Left justify and notice the truncation on output.
+  // Left justify and observe the truncation on output.
   
   printf("f80Foo  [%%-Lf] %-Lf\n", f80Foo);
   printf("f80Bar  [%%-Lf] %-Lf\n", f80Bar);
@@ -1945,9 +1947,9 @@ s32 main() {
   printf("f80Thud [%%-Lf] %-Lf\n\n", f80Thud);
 
   // This forces more decimal places because we have
-  // higher precision with more bits.  You can still
-  // see there are errors being introduced when we
-  // extend more decimal places.
+  // higher precision with more decimal places. You
+  // can see errors are being introduced when extending
+  // more decimal places.
   
   printf("f80Foo  [%%-.40Lf] %-.40Lf\n", f80Foo);
   printf("f80Bar  [%%-.40Lf] %-.40Lf\n", f80Bar);
@@ -2017,8 +2019,14 @@ f80Thud [%.3Le] 3.141593e+00
 As mentioned previously, Pointer Types are a troubling subject for C programmers no matter their experience.  We'll cover some scenarios with code and hopefully demystify some of the confusion surrounding them.
 
 Example 1: Introduction to Pointers and Addressing
+Basic program with output.
 
-This is a basic program with an output showing how to declare variables, structures, unions, an introduction to pointers, locating the address of things, and declaring function main. 
+1. declaration of a struct and union to explore memory addressing
+2. introduction to pointers to things
+3. establishing a basic function pointer definition
+4. using %p formatting to display the address of things
+5. display the address of each member for the struct and union
+6. setup of function main.
 
 ```
 #include <stdio.h>
@@ -2040,13 +2048,15 @@ typedef union {
 } TEHS;
 
 s32 main() { 
-  //every variable, pointer, structure, union, member and function
-  //are assigned an addressable location in memory on the computer
+  // Every variable, pointer, structure, union, member, and function
+  // are assigned an addressable location in memory on the computer.
+
   s32 u32Foo = 12;
 
-  //pointers store these addresses for lookup
-  //the * in front a variable denotes this is a pointer
-  //the & means the address of something
+  // Pointers store these addresses for lookup. The * in front of a
+  // variable denotes this is a pointer the & means get the address
+  // of something.
+
   s32 *u32Bar = &u32Foo;
 
   TFCP thud = {};
@@ -2055,15 +2065,13 @@ s32 main() {
   TEHS garply = {};
   TEHS *grault = &garply;
 
-  //we have only covered function main to this point
-  //in order to create a function pointer to main
-  //we must match the return type of int
-  //give the function pointer a name (*name)
-  //and an argument list referenced by the following ()
-  //you are then able to assign the address of matching
-  //functions that follow the same function pointer prototype
+  // We have only covered function main. To create a function pointer
+  // to main we must match the return type of int, give the function
+  // pointer a name (*name), and an argument list referenced by the
+  // following (). Then you can assign the address of function main
+  // to the function prototype as matched the prototype.
   
-  int (*fp)() = &main;
+  s32 (*fp)() = &main;
 
   printf("Address of  u32Foo = %p\n", &u32Foo);
   printf("Address at *u32Bar = %p\n", u32Bar);
@@ -2118,7 +2126,7 @@ Address at     *fp = 0x400540
 Address of     *fp = 0x7ffd0424aed0
 ```
 
-NOTE: Everytime you execute this program these memory addresses will be different.  This is only the current snapshot of the memory layout at the time the example was executed.  You should expect things to move around in memory.  The references that follow are based on this current snapshot for the machine it was executed on.
+NOTE: Every time you execute this program these memory addresses will be different.  This is only the current snapshot of the memory layout at the time the example was executed.  You should expect things to move around in memory.  The references that follow are based on this current snapshot for the machine it was executed on.
 
 [Return to Index](#index)
 
@@ -2157,7 +2165,7 @@ Address of *u32Bar = 0x7ffd0424af00
 
 When we say pointers store an address of something, we can clearly see this is true.  The address stored at \*u32Bar is the same address of the variable u32Foo.  This should be the case because we assigned the address of u32Foo to \*u32Bar when we declared \*u32Bar.  By using the amperstand \[&] we fetched the address of u32Foo.  We will see this replicates in the same way when we deal with the other pieces of this example.
 
-Let's take a look at how the struct TFCP and the pointer we coupled it with a look in memory.  
+Let's take a look at how the struct TFCP addresses and pointers are laid out in memory.  
 
 ```
 Address of    thud = 0x7ffd0424aef0
@@ -2168,12 +2176,13 @@ Address at    *qux = 0x7ffd0424aef0
 Address of    *qux = 0x7ffd0424aee8
 ```
 
-We can see from the addresses of u32Foo and \*u32Bar and the addresses here that we have moved to a different region of memory. The struct TFCP appears before those other variables.  Byte pair 05 changed from AF \[175\] to AE \[174\], where 175 > 174, so we know we are in an early region of memory. Since memory on any computer is addressed in bytes, smaller memory addresses are always going to be in a region of memory before the next largest memory address. This is what allows us to actually look at memory layouts and figure out where something is, and based on things around it, and approximate how many bytes it may be consuming. In the case of struct TFCP we'll also be able to figure something else out. The members thud.flob, thud.corge, thud.plugh, and byte pair 06 show they are laid out in order by fours. This makes sense because they are declared as s32 which was type defined from an int, which we know uses 4 bytes of memory. Also, remember that \*qux holds the address pointing to the start of struct TFCP, but the address of \*qux, like any pointer is going to have its own address as well. 
+We can see from the addresses of u32Foo and \*u32Bar and the addresses here that we have moved to a different region of memory. The struct TFCP appears before those other variables.  Byte pair 05 changed from AF \[175\] to AE \[174\], where 175 > 174, so we know we are in an early region of memory. Since memory on any computer is addressed in bytes, smaller memory addresses are always going to be in a region of memory before the next largest memory address. This is what allows us to look at memory layouts and figure out where something is, and based on things around it, and approximate how many bytes it may be consuming. In the case of struct TFCP we'll also be able to figure something else out. The members thud.flob, thud.corge, thud.plugh, and byte pair 06 show they are laid out in order by fours. This makes sense because they are declared as s32 which was type defined from an int, which we know uses 4 bytes of memory. Also, remember that \*qux holds the address pointing to the start of struct TFCP, but the address of \*qux, like any pointer is going to have its own address as well. 
 
 NOTE:  The C Standard guarantees that any struct declaration will always have member layout in the order it is declared unless you use an alternate alignment modifier on the struct.
 
 ```
-If unions give you problems visualising, this is another way of thinking about how memory is laid out. Next we'll look at the union TEHS which we created in the example.  
+If unions give you problems visualising, this is another way of thinking about how memory is laid out. We'll look closer at the union TEHS.
+
 Address of  garply = 0x7ffd0424aee0
     garply.eggs    = 0x7ffd0424aee0
     garply.ham     = 0x7ffd0424aee4
@@ -2203,11 +2212,12 @@ Address at     *fp = 0x400540
 Address of     *fp = 0x7ffd0424aed0
 ```
 
-As mentioned, everything pretty much has an address, right down to the compiled byte code encoded internally to the executable. Function main() is no different. There are cases where this will prove to be very useful. Like all pointers \*fp points to something and has its own address. Pointers can point to other pointers. Unlike other pointers though, a function pointer is able to call/invoke the function it is pointing too. This will be covered later when we go over functions.  It's important that we finish going over pointers.
+As mentioned, everything pretty much has an address, right down to the compiled byte code encoded internally to the executable. Function main() is no different. There are cases where this will prove to be very useful. Like all pointers \*fp points to something and has its own address. Pointers can point to other pointers. Unlike other pointers though, a function pointer can call/invoke the function it is pointing to. This will be covered later when we go over functions.  We must finish going over pointers.
 
 Example 2: 
+Basic program with output.
 
-This is a basic program with output showing how to declare variables, structures, unions, an introduction to pointers, locating the address of things, and declaring function main. 
+showing how to declare variables, structures, unions, an introduction to pointers, locate the address of things, and declaring function main. 
 
 Basic program with output, showing how we can use pointers to map different data types, output showing that when we update the pointer the thing we point to also updates, and a method for determining what Endianness your current hardware is using, and layout for function main.
 
@@ -2233,11 +2243,11 @@ s32 main() {
   
   u64 foo = 0xffeeddccbbaa9988ULL;
   
-  // Remember arrays are pointers. This allows us
-  // to use the name u64map, as we saw above,
-  // because it stores the start address of
-  // u64map[0]. We don't really need to do this.
-  // It's merely for reinforcement of a concept.
+  // Remember arrays are pointers. This allows us to
+  // use the name u64map, as we saw above, because it
+  // stores the start address of u64map[0]. We don't
+  // need to do this. It's merely for reinforcement
+  // of a concept.
   
   u8 *bar = u64Map;
   
@@ -2252,10 +2262,10 @@ s32 main() {
   
   printf("foo = %Lx\n\n", foo);
   
-  // Once we map our pointers, just like mentioned
-  // when discussing pointers, by updating any elements
-  // of the pointer bar, we are updating u64map elements.
-  // We can see the side effects of this below.
+  // Once we map our pointers, just like mentioned when
+  // discussing pointers, by updating any elements of the
+  // pointer bar, we are updating u64map elements. We can
+  // see the side effects of this below.
   
   bar[0] = fuzz[0];
   printf("bar[0] u64Map[0] = %x %x\n", bar[0], u64Map[0]);
@@ -2328,7 +2338,7 @@ Atari Consoles          8  -> 64
 Sony PS4/PS5            64
 ```
 
-The problem with this might not be apparent immediately, however, if we store data in binary formats, pass information across networks, then store data in some other way that may do encoding with a certain Endianness, things are going get a little wonky.  It's unlikely you'll be coding on a majority of these platforms, but a career in software engineering might have you crossing paths with older systems still in the wild running legacy code, or with newer systems that have unique eco-systems.  Migrating data from one architecture to another will require having some understanding of how integer data will be stored.  Modern coding does create some problems specifically when creating games, especially ones that are multi-player crossing platforms.  If you support phones, you're going to be running into ARM based architecture which is BI-Endianness and will be determined by the operating system installed on the device.  While your server may be running on some other architecture that will be different Endianness.  Regardless, you are encouraged to do research to determine the hardware and operating system limitations that will effect how things are stored in memory.
+The problem with this might not be apparent immediately, however, if we store data in binary formats, pass information across networks, then store data in some other way that may do encoding with a certain Endianness, things are going get a little wonky.  It's unlikely you'll be coding on a majority of these platforms, but a career in software engineering might have you crossing paths with older systems still in the wild running legacy code, or with newer systems that have unique eco-systems.  Migrating data from one architecture to another will require having some understanding of how integer data will be stored.  Modern coding does create some problems specifically when creating games, especially ones that are multi-player crossing platforms.  If you support phones, you're going to be running into ARM based architecture which is BI-Endianness and will be determined by the operating system installed on the device.  While your server may be running on some other architecture that will be different Endianness.  Regardless, you are encouraged to research the hardware and operating system limitations so you can determine how things are stored in memory.
 
 Here's another table showing Endianness by Operating Systems.
 
@@ -2473,15 +2483,15 @@ gap between addresses  = 104
 padding in TFooBar  = 4
 ```
 
-Each of the values displayed by the example program above, short of the addresses, are measured in bytes.  If we recall back in the early part of this text, we had a table of Integer and Float Types and their associated byte/bitwidths.  All the base types in this case should show the corresponding matching byte requirements.  The exception in this case is the f80 which was mapped from long double.  It shows 16 bytes being used, however, it should be known that only 10 bytes will ever be used according to the C Standard for precision.  Some padding has taken place.  This is a good way to figure out what your bitwidths will be for given types in the future if you're unsure of your given limitations on a given platform, architecture or under a given operating system.
+Each of the values displayed by the example program above, short of the addresses, is measured in bytes.  If we recall back in the early part of this text, we had a table of Integer and Float Types and their associated byte/bit widths.  All the base types in this case should show the corresponding matching byte requirements.  The exception in this case is the f80 which was mapped from long double.  It shows 16 bytes being used, however, it should be known that only 10 bytes will ever be used according to the C Standard for precision.  Some padding has taken place.  This is a good way to figure out what your bit widths will be for given types in the future if you're unsure of your given limitations on a given platform, architecture, or under a given operating system.
 
-The other section of the output deals with the sizeof a struct and it's members.  As shown in this case, the C Standard dictates that the compiler for memory alignment can add padding.  In this case the 100 elements that we declared for TFooBar.foo, created a gap filled by padding of 4 bytes.  Despite the struct having a sizeof 112, the members of TFooBar only actually use 108 bytes in total.  These are useful ways to find out how your struct is using memory.  For now, your understanding is unlikely to take advantage of what all this means, but this is strictly for exposure to how you can determine these things later when you need to.
+The other section of the output deals with the sizeof a struct and its members.  As shown in this case, the C Standard dictates that the compiler for memory alignment can add padding.  In this case the 100 elements that we declared for TFooBar.foo, created a gap filled by padding of 4 bytes.  Despite the struct having a sizeof 112, the members of TFooBar only actually use 108 bytes in total.  These are useful ways to find out how your struct is using memory.  For now, your understanding is unlikely to take advantage of what all this means, but this is strictly for exposure to how you can determine these things later when you need to.
 
-Finally, we have the malloc and free that didn't really have any side-effects or purpose in this code, other than to show why we needed to cover sizeof.  We will be covering proper use of malloc and free later.  For now we're going to tie up our basics on pointers and continue on to Functions.  Pointers were needed in basic understanding so we could continue on to the next part of our programming understanding.
+Finally, we have the malloc and free that didn't have any side-effects or purpose in this code, other than to show why we needed to cover sizeof.  We will be covering proper use of malloc and free later.  For now we're going to tie up our basics on pointers and continue to Functions.  Pointers were needed in basic understanding so we could continue to the next part of our programming understanding.
 
 ## Part 6: Introduction to Functions
 
-It has taken a bit longer than normal to get to this part, but one of the purposes of the order of this text is to make sure we are not covering anything without first knowing or having exposure to the base concepts prior.  Functions are a very useful feature of programming.  They allow splitting up code, creating sections that are reusable, or just in general grouping code by purpose for what it does.  Let's dive into some examples and cover some basics.
+It has taken a bit longer than normal to get to this part, but one of the purposes of the order of this text is to make sure we are not covering anything without first knowing or having exposure to the base concepts prior.  Functions are a very useful feature of programming.  They allow splitting up code, creating reusable sections, or just in general grouping code by purpose for what it does.  Let's dive into some examples and cover some basics.
 
 #### Example 1:
 Basic program with output, showing how to create and call a Function from main.
@@ -2524,7 +2534,7 @@ Hello World!
 
 #### Example 2:
 
-Let's carry on with another basic program with out, showing how to create and call a function with arguments from main. (edited)
+Let's carry on with another basic program without, showing how to create and call a function with arguments from main. (edited)
 
 ```
 #include <stdio.h>
