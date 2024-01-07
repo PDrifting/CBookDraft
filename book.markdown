@@ -1,6 +1,6 @@
 # Why learn C?
 
-It drives the world and is the foundation to pretty much everything in the modern programming world.  Some examples of this are below.
+It drives the world and is the foundation of pretty much everything in the modern programming world.  Some examples of this are below.
 
 |Compilers|Virtual Machines|Operating Systems|Databases|Tools|Embedded|
 |:---:|:---:|:---:|:---:|:---:|:---:|
@@ -15,7 +15,7 @@ It drives the world and is the foundation to pretty much everything in the moder
 |     |[R](https://www.r-project.org/about.html)         |       |             |[Vehicles](https://en.wikipedia.org/wiki/Intel_8051)      |
 
 
-C is also extremely portable, which is why it drives so many things.  The [GCC Compiler](https://gcc.gnu.org/) supports 70+ platforms and several architectures.  All of the code examples and C source code in this document will be largely focused on Linux and Windows development.  You can find the base manual for GCC [here](https://gcc.gnu.org/onlinedocs/). MinGW has been used for the validation of sources on Windows, you can get it [here](https://sourceforge.net/projects/mingw/files/latest/download).  A general how to install MinGW and configure the path can be found [here](https://youtu.be/guM4XS43m4I). Unlike Unix-like environments, GCC does not come installed by default on Windows platforms. You can also turn on the [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/) and use the Microsoft App Store to install a Unix-Like operating system and use GCC natively.  If you're on a Linux or non-windows platform, this document assumes you have a decent command of that environment.
+C is also extremely portable, which is why it drives so many things.  The [GCC Compiler](https://gcc.gnu.org/) supports 70+ platforms and several architectures.  All of the code examples and C source code in this document will largely focus on Linux and Windows development.  You can find the base manual for GCC [here](https://gcc.gnu.org/onlinedocs/). MinGW has been used for the validation of sources on Windows, you can get it [here](https://sourceforge.net/projects/mingw/files/latest/download).  A general how to install MinGW and configure the path can be found [here](https://youtu.be/guM4XS43m4I). Unlike Unix-like environments, GCC does not come installed by default on Windows platforms. You can also turn on the [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/) and use the Microsoft App Store to install a Unix-Like operating system and use GCC natively.  If you're on a Linux or non-windows platform, this document assumes you have a decent command of that environment.
 
 # index
 [Pre-Basics of GCC](#pre-basics-of-gcc)\
@@ -98,7 +98,7 @@ C is also extremely portable, which is why it drives so many things.  The [GCC C
 
 > -E will halt the compilation process and emit the pre-processor stage.
 
-3. Generation of Assembly - This is an intermediate stage generating assembly that can only be used by the GCC compiler.  The GNU Assembler that is part of GCC can build this file with some minor modifications.  It is formatted in AT&T style vs. Intel which is generally easier to read.
+3. Generation of Assembly - This is an intermediate stage generating assembly that can only be used by the GCC compiler.  The GNU Assembler which is part of GCC can build this file with some minor modifications.  It is formatted in AT&T style vs. Intel which is generally easier to read.
 
 > -S will halt the compilation process and emit the intermediate assembly stage.
 
@@ -248,7 +248,7 @@ Many tutorials written for C, still declare Function main as Return Type void.  
 
 **SINGLE-ENTRANCE/SINGLE-EXIT** - As mentioned earlier in Pointers, there is an issue with Function Pointers creating a potential for unpredictable code.  To simplify the flow and reduce the branching potential inside your Function you should ensure that you only have a single return statement that exists at the end of each of your Functions. Placing more than one return statement inside a Function has the potential to confuse the compiler and prevent it from creating clean bytecode.  Make sure you do what you can to assist the compiler to create predictable and clean bytecode by ensuring simple program flow.  Many programmers will argue this does not matter, but it does.  You might also hear arguments that languages like GO promote the idea of multiple exits from a Function.  Please remember, that not all compilers treat all forms of code the same.  What works well in one language, is unlikely to be performant in others. C compilers are complex, they do not do well with complicated code.  They make mistakes, and often their internal prediction algorithms to optimise code will give up when you fail to keep the flow of your code simple.  See the [KISS Principle](https://en.wikipedia.org/wiki/KISS_principle).  When in doubt check your code with [Godbolt](https://godbolt.org).
 
-**NOTE** - No process is going to save you from mistakes you're going to make in your code based on standards, compiler warnings, or style guides.  Based on the discussions around Functions, you are encouraged to understand that C can be an over forgiving language and pretty much take whatever you throw at it. Understanding what the code is doing in C is far more important than anything you can do to generate useless warnings for mistakes you should be aware of in your code. 
+**NOTE** - No process is going to save you from mistakes you're going to make in your code based on standards, compiler warnings, or style guides.  Based on the discussions around Functions, you are encouraged to understand that C can be an over-forgiving language and pretty much take whatever you throw at it. Understanding what the code is doing in C is far more important than anything you can do to generate useless warnings for mistakes you should be aware of in your code. 
 
 [Return to Index](#index)
 
@@ -495,7 +495,7 @@ s32 main() {                                   // Main program entry.
 Basic program that has no output.
 
 1. using a typedef to declare a custom Type Name
-2. definition of an arbitrary array with defaults values
+2. definition of an arbitrary array with default values
 3. setup of function main
 
 ```C
@@ -908,7 +908,7 @@ s32 main() {                                   // Main program entry.
 }
 ```
 
-It might seem strange to cover the complexities of struct, union, typedef and other things before the basics of general variable use and output, but since each of those things is likely to use the prior outlined references, it seemed prudent to cover those first.  This gives general exposure, so when used in the next pieces they are not new concepts.  We are going to bypass Functions, Pointers, and other types not discussed until post Console Output.
+It might seem strange to cover the complexities of struct, union, typedef, and other things before the basics of general variable use and output, but since each of those things is likely to use the prior outlined references, it seemed prudent to cover those first.  This gives general exposure, so when used in the next pieces they are not new concepts.  We are going to bypass Functions, Pointers, and other types not discussed until post Console Output.
 
 [Return to Index](#index)
 
@@ -928,7 +928,7 @@ This allows us to write a string of char to the Console and will append a newlin
 
 In this case, it returns an int value and accepts a Pointer Type of char named str.  As usual with functions that will accept char strings, they need to be NULL terminated.  In other words, make sure your char string, buffer, or other form of data has a '\0' literal on the end of it.  We will cover char strings more later.
 
-The int return from puts will be the total number of characters written to the Console including the '\n' it appends to the end.  If there is an error, the return will be set to the constant EOF and it will set an error number you can lookup.  If you missed putting the '\0' at the end, you will cause Undefined Behaviour.
+The int return from puts will be the total number of characters written to the Console including the '\n' it appends to the end.  If there is an error, the return will be set to the constant EOF and it will set an error number you can lookup.  If you missed terminating the string with '\0', you will cause Undefined Behaviour.
 
 ### Putchar
 
@@ -1082,7 +1082,22 @@ The man page for [perror()](https://man7.org/linux/man-pages/man3/perror.3.html)
 
 On non-windows, you can also use this little program to figure out what your operating system might be using for error numbers and their associated meanings.
 
+> int strerror_r(int errnum, char *buf, size_t buflen);
 
+The following example uses this function.  On non-windows systems, this is the systems interface (XSI) compliant form of the appropriate function.  We could use the GNU version, but in this case, we are ignoring the return value regardless.  Given the issues created by a huge pool of numbers, versus some sort of identifier, is fundamentally left over for compatibility.  Arbitrary magic numbers are a bad thing and lead to serious ambiguity.  Future programmers should come up with some other model to modernise this mess.  
+
+[Return to Index](#index)
+
+#### Example 19: Sample Dump of Windows Error Numbers
+Basic program that with output.
+
+**Note** - This uses syntax and functions we have not covered yet.
+
+1. using a typedef statement for type aliasing
+2. converting an error number to its string equivalent
+3. setting up a for loop to iterate over a finite set of values
+4. printf formatting of strings and other information
+5. setup of function main
 
 ```C
 #include <stdio.h>
@@ -1090,14 +1105,45 @@ On non-windows, you can also use this little program to figure out what your ope
 
 typedef int s32;
 
-s32 main() {
-  s32 buffLen = 1000;
-  for (s32 err = 0; err < 133; ++err)  {
-    char buff[1000] = {};    
-    strerror_r(err,buff,buffLen);
-    printf("[errno = %03d][%s]\n", err, buff);
+s32 main() {                                   // Start of the program.
+  s32 buffLen = 1000;                          // Set a variable for the maximum length of
+                                               // the char buffer to hold the string.
+  for (s32 err = 0; err < 133; ++err)  {       // Build a loop to go from 0 to 133 counting
+                                               // by 1. This will iterate over the range of
+                                               // known assigned values across different
+                                               // non-windows operating systems. The number
+                                               // of errors is not standard, so depending on
+                                               // your given operating system, it may explode.
+                                               
+    char buff[1000] = {};                      // Establish a buffer of characters with 1001
+                                               // elements. This sets up an array. We invoke
+                                               // the {} initialisation to zero the array. This
+                                               // will in theory each time through the loop
+                                               // fill the array which will hold a string with
+                                               // '\0' null terminators. As long as we never
+                                               // write more than 1000 bytes of data to the
+                                               // array, there will always be a null terminating
+                                               // byte for string processing or output.  Most
+                                               // if not all string functions, at least in the
+                                               // C standard libraries require null termination
+                                               // to be present.
+
+    strerror_r(err,buff,buffLen);              // As mentioned we are using the XSI version
+                                               // of the strerror_r function and ignoring
+                                               // the return value.
+
+                                               // err  - is the errno supplied by the loop
+                                               // buff - is the char buff array to hold the string
+                                               // bufflen - holds the max size of the char buff array
+
+    printf("[errno = %03d][%s]\n", err, buff); // Builds the string output to display the errno
+                                               // and the converted string equivalent of the
+                                               // errno.  This format information with printf
+                                               // will be dissected immediately following this
+                                               // example.
   }
-  return 0;
+
+  return 0;                                    // Inform the operating system we exited cleanly.
 }
 ```
 
@@ -1159,7 +1205,7 @@ Alright, now we have a table of nightmares and the basic knowledge to start tack
 
 ### C Output & Expansion on Type Examples
 
-#### Example 1: Using puts
+#### Example 20: Using puts
 Basic program with output.
 
 1. using a portion of the C Standard Library to access Functions for output
@@ -1178,7 +1224,7 @@ s32 main() {                                   // Main program entry.
 
 [Return to Index](#index)
 
-#### Example 2: Using Format Specifiers with printf
+#### Example 21: Using Format Specifiers with printf
 Basic program with output.
 
 1. showing various typedef assignments
@@ -1291,7 +1337,7 @@ Based on the above we can see some janky output showing up with %c specifier for
 
 [Return to Index](#index)
 
-#### Example 3: Using printf with %x
+#### Example 22: Using printf with %x
 Basic program with output.
 
 1. showing various typedef assignments
@@ -1364,7 +1410,7 @@ uThud [%Lx] = 36ccacba3
 
 [Return to Index](#index)
 
-#### Example 4: Displaying Union Members
+#### Example 23: Displaying Union Members
 
 Basic program with output.
 
