@@ -1405,35 +1405,52 @@ The difficulty with converting to and from certain fonts and glyphs is exacerbat
 
 Compiling and executing the following code under Microsoft Power Shell or Command Prompt should display the Chinese characters embedded in the syntax correctly.
 
-#### Example 22: Using printf with Chinese Characters
+#### Example 22: Outputting Glytphs for Different Languages
 
 
 ```C
 #include <stdio.h>
 
 int main() {
-    // UTF-8 encoded string
-    const char utf8String[] = "Hello, 你好";
+    char utf8English [] = "Hello World!";
+    char utf8Punjabi [] = "ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ ਦੁਨਿਆ!";
+    char utf8Sindhi  [] = "هيلو، دنيا!";
+    char utf8Kannada [] = "ಹಲೋ, ವರ್ಲ್ಡ್!";
+    char utf8Japanese[] = "こんにちは世界!";
 
-    // Display UTF-8 string
-    printf("UTF-8 String: %s\n", utf8String);
+    puts("UTF-8 Strings:);
+    printf("%s\n", utf8English);
+    printf("%s\n", utf8Punjabi);
+    printf("%s\n", utf8Sindhi);
+    printf("%s\n", utf8Kannada);
+    printf("%s\n", utf8Japanese);
 
     return 0;
 }
 ```
 
 **Generated Output:**
+
 ```
-UTF-8 String: Hello, 你好
+UTF-8 Strings:
+Hello World!
+ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ ਦੁਨਿਆ!
+هيلو، دنيا!
+ಹಲೋ, ವರ್ಲ್ಡ್!
+こんにちは世界!
 ```
+
+The spacing and general glyph rendering even on Windows Terminal (Microsoft Store App) using Code Page 65001 butchers the output.  Notepad which I wrote the code in is not capable of rendering Arabic in the correct order (right to left) and has less than adequate capabilities for other glyphs and languages.
 
 If you get mojibake, or characters that look like "Σ╜áσÑ╜", this requires executing a command to change the Code Page.  You can use the following command in the terminal.
 
-> chcp 936
+> chcp 65001
 
 Then rerun the application in the terminal. This is chaos.  They have generally been trying to standardise glyph and font associations since the dawn of computing. As you can tell, it has largely not gone well.  Most modern web browsers are more than capable of displaying proper UTF encodings.  Generally, it is the responsibility of the programmer to ensure the application sets and returns the terminal, or execution environment as needed for proper formatting.  This can be a daunting task.
 
-Jonathan Blow remarked while writing The Witness about how difficult it is to address the spacing of non-standard glyphs visually.  You can see issues in this [image](http://the-witness.net/news/wp-content/uploads/2015/12/Arabic.png).  Glyphs are too close and too far away creating gaps and oddities in spacing.  This requires serious fancy coding.  Modern terminals cannot properly render this information either.  Given programmers have been working on this problem since 1967, at least at the time of this writing, we are pushing almost 6 decades of problem-solving, and still do not have a pretty way to do this.  Any programmer who has scoured the internet for solutions to display, work with, and manage libraries in UTF has several things going for them...
+There is a way to set the Code Page inside the program, but we have not covered Operating System API calls, or importing Dynamically Linked Libraries, or methods on how to find functions and addresses inside them. We have covered the idea of function pointers.  There is still much to cover in this book.
+
+It should be noted that Jonathan Blow remarked while writing The Witness about how difficult it is to address the spacing of non-standard glyphs visually.  You can see issues in this [image](http://the-witness.net/news/wp-content/uploads/2015/12/Arabic.png).  Glyphs are too close and too far away creating gaps and oddities in spacing.  This requires serious fancy coding.  Modern terminals cannot properly render this information either.  Given programmers have been working on this problem since 1967, at least at the time of this writing, we are pushing almost 6 decades of problem-solving, and still do not have a pretty way to do this.  Any programmer who has scoured the internet for solutions to display, work with, and manage libraries in UTF has several things going for them...
 
 1. A very large savings fund in their swear jar.
 2. More grey hair.
@@ -1632,7 +1649,7 @@ Confused? It's always easier to look at code to figure out how things work.  We'
 
 ### C Output & Format Modification Examples
 
-#### Example 24: Left Justification with printf
+#### Example 25: Left Justification with printf
 Basic program with output.
 
 1. showing various typedef assignments
@@ -1710,7 +1727,7 @@ uThud [%-c] A
 
 [Return to Index](#index)
 
-#### Example 25: Zero Padding with printf
+#### Example 26: Zero Padding with printf
 Basic program with output.
 
 1. showing various typedef assignments
@@ -1792,7 +1809,7 @@ uThud [%5c]     A
 
 [Return to Index](#index)
 
-#### Example 26: Side-Effects using printf %x and signed numbers
+#### Example 27: Side-Effects using printf %x and signed numbers
 Basic program with output.
 
 1. showing various typedef assignments
@@ -1877,7 +1894,7 @@ uBaz  [%05X] 000F7
 
 [Return to Index](#index)
 
-#### Example 27: Formating Floating Point Types with printf
+#### Example 28: Formating Floating Point Types with printf
 Basic program with output.
 
 1. showing various typedef assignments
@@ -1975,7 +1992,7 @@ f32Thud [%9.2f]      3.14
 
 [Return to Index](#index)
 
-#### Example 28: Formating double Floating Point Types with printf
+#### Example 29: Formating double Floating Point Types with printf
 Basic program with output.
 
 1. showing various typedef assignments
@@ -2069,7 +2086,7 @@ f64Thud [%9.2lf]      3.14
 
 [Return to Index](#index)
 
-#### Example 29: Formating long double Floating Point Types with printf
+#### Example 30: Formating long double Floating Point Types with printf
 Basic program with output.
 
 1. showing various typedef assignments
@@ -2175,7 +2192,7 @@ f80Thud [%.3Le] 3.141593e+00
 
 As mentioned previously, Pointer Types are a troubling subject for C programmers no matter their experience.  We'll cover some scenarios with code and hopefully demystify some of the confusion surrounding them.
 
-Example 30: Introduction to Pointers and Addressing
+Example 31: Introduction to Pointers and Addressing
 Basic program with output.
 
 1. declaration of a struct and union to explore memory addressing
@@ -2287,7 +2304,7 @@ NOTE: Every time you execute this program these memory addresses will be differe
 
 [Return to Index](#index)
 
-### Deeper Dissection of Example 30: 
+### Deeper Dissection of Example 31: 
 
 If we remember back when we were looking at our bitwidths and byte requirements of individual Types there are some things we can glean from what we are seeing in this output.  Let's dissect this a little to figure out what the computer this is running on has done and things to be mindful of.
 
@@ -2370,6 +2387,12 @@ Address of     *fp = 0x7ffd0424aed0
 ```
 
 As mentioned, everything pretty much has an address, right down to the compiled byte code encoded internally to the executable. Function main() is no different. There are cases where this will prove to be very useful. Like all pointers \*fp points to something and has its own address. Pointers can point to other pointers. Unlike other pointers though, a function pointer can call/invoke the function it is pointing to. This will be covered later when we go over functions.  We must finish going over pointers.
+
+```
+**************************************************
+****************CHECKPOINT************************
+**************************************************
+```
 
 Example 2: 
 Basic program with output.
