@@ -258,7 +258,7 @@ To implement a Type Definition you must use the _typedef_ keyword.  This allows 
 
 There are many good discussions between Linus Torvalds and the rest of the internet on [his views](https://yarchive.net/comp/linux/typedefs.html) on programmers that abuse the _typedef_ keyword.  It can certainly be agreed that this is a completely abusable feature of C.  But like the _goto_ keyword, there are some places where it is useful.  You will be urged to ignore a feature of the language by many programmers and tutorials because most never learn when to use it in the proper context. This is an argument that prevents future growth and evolution of the understanding of the language and where C programmers may need to make changes to the Standard for the ongoing upkeep and use of the language.
 
-Most projects and coding firms you will write code for have Style Guides.  Each guide will usually include a section on Type Definitions.  Along with other restrictions on how code should be written for the given project.  In general, if it makes things easier for you to write code, is generally self-documenting, helps with maintenance of the code base, then use it regardless of the opinions of other coders, unless the project you are working on has a strict Style Guide.  In this case, you must follow it, regardless of preferred personal coding styles.
+Most projects and coding firms you will write code for have Style Guides.  Each guide will usually include a section on Type Definitions.  Along with other restrictions on how code should be written for the given project.  In general, if it makes things easier for you to write code, is generally self-documenting, helps with maintenance of the code base, then use it regardless of the opinions of other coders. Unless the project you are working on has a strict Style Guide.  In this case, you must follow it, regardless of preferred personal coding styles.
 
 **NOTE** - You will see _typedef_ being used in pretty much every example in this book.  Instead of using <stdint.h>, which normally provides a _typedef_ for specific bit width data types, this book will start off using shorter forms of the int32_t for unsigned int.  Instead prefixing all unsigned types with a _u_, and signed types with an _s_.  In this case, _s64_ would be a type guaranteed to be at least 64 bits and signed.  The only base data type in C that you will see unmodified with a _typedef_ is _char_.  It has no equivalent associated signed or unsigned state.  Remember the _char_ data type is unique in that it has three distinct states _char_, _usngined char_, and _signed char_.  The _typedef_ _u8_, and _s8_ specifiy an _unsigned char_, and _signed char_ of 8 bits wide.  Floating point types will be prefixed with an _f_.  In the case of structs, unions, and other specific user types they will be prefixed with a _T_.
 
@@ -1084,7 +1084,7 @@ On non-windows, you can also use this little program to figure out what your ope
 
 > int strerror_r(int errnum, char *buf, size_t buflen);
 
-The following example uses this function.  On non-windows systems, this is the systems interface (XSI) compliant form of the appropriate function.  We could use the GNU version, but in this case, we are ignoring the return value regardless.  Given the issues created by a huge pool of numbers, versus some sort of identifier, is fundamentally left over for compatibility.  Arbitrary magic numbers are a bad thing and lead to serious ambiguity.  Future programmers should come up with some other model to modernise this mess.  
+The following example uses this function.  On non-windows systems, this is the systems interface (XSI) compliant form of the appropriate function.  We could use the GNU version, but in this case, we are ignoring the return value regardless.  Given the issue created by a huge pool of numbers, versus some sort of identifier, this is fundamentally left over for compatibility.  Arbitrary magic numbers are bad and lead to serious ambiguity.  Future programmers should come up with some other model to modernise this mess.  
 
 [Return to Index](#index)
 
@@ -1094,14 +1094,15 @@ Basic program that with output.
 **Note** - This uses syntax and functions we have not covered yet.
 
 1. using a typedef statement for type aliasing
-2. converting an error number to its string equivalent
-3. setting up a for loop to iterate over a finite set of values
-4. printf formatting of strings and other information
-5. setup of function main
+2. accessing functions from the C standard library
+3. converting an error number to its string equivalent
+4. setting up a for loop to iterate over a finite set of values
+5. printf formatting of strings and other information
+6. setup of function main
 
 ```C
-#include <stdio.h>
-#include <string.h>
+#include <stdio.h>                             // Provides access to standard I/O functions.
+#include <string.h>                            // Provides access to standard string functions.
 
 typedef int s32;
 
@@ -1123,7 +1124,7 @@ s32 main() {                                   // Start of the program.
                                                // '\0' null terminators. As long as we never
                                                // write more than 1000 bytes of data to the
                                                // array, there will always be a null terminating
-                                               // byte for string processing or output.  Most
+                                               // byte for string processing or output.  Most,
                                                // if not all string functions, at least in the
                                                // C standard libraries require null termination
                                                // to be present.
@@ -1212,12 +1213,13 @@ Basic program with output.
 2. setup of function main
 
 ```C
-#include <stdio.h>                             // Provide access to i/o functions.
+#include <stdio.h>                             // Provides access to standard I/O functions.
 
 typedef int s32;
 
 s32 main() {                                   // Main program entry.
   puts("Hello World!");                        // Displays Hello World! to the console.
+
   return 0;                                    // Return status successful.
 }
 ```
@@ -1270,7 +1272,7 @@ s32 main() {
   f80  plugh = 9.6169031625e+35;
 
   // Shows using the appropriate format specifier for any given type.
-  // C has a special use case for %c so that integer based 8-bit,
+  // C has a special use cases for %c so that integer based 8-bit,
   // 16-bit, and 32-bit data types can all be used to represent chars.
   // This can be seen from the output information below. 64-bit
   // integer types are incapable of storing char information.
@@ -1333,11 +1335,118 @@ plugh [%Le]  = 9.616903e+35
 plugh [%LE]  = 9.616903E+35
 ```
 
-Based on the above we can see some janky output showing up with %c specifier formatting for uFoo, sFoo and sBaz.  This has generated non-displayable information.  The following example will show how to display information with a different specifier.
+Based on the above we can see some janky output showing up with %c specifier formatting for uFoo, sFoo and sBaz.  This has generated symbols based on where it falls in the Code Page, then determined it could not render the character.
+
+### ASCII, Code Pages and UTF Standards
+
+We are going to tangent for a short bit and explain the nightmare that is actually behind those glyphs and why they might be rendered that way.
+
+ASCII (American Standard Code for Information Interchange) is a 7-bit character encoding standard initially designed for telegraph communication originally established in 1963. It assigns unique numerical codes to represent 128 characters, primarily English letters and symbols. The initial version, known as ASCII-63, was published by the American Standards Association (ASA), later renamed the American National Standards Institute (ANSI). This early version laid the foundation for subsequent revisions, with ASCII being officially standardized in 1967. The most widely recognized version is ASCII-67, which became the basis for the ASCII standard that has been widely adopted in computing and communication systems.
+
+ASCII code pages are variations or extensions of the ASCII standard tailored to specific languages or regions, incorporating additional characters not covered in the basic ASCII set. For instance, the ISO-8859 series extends ASCII for Western European languages by utilizing 8 bits per character. Code Pages are more broadly used to define character encodings, encompassing ASCII, ISO-8859, and Unicode.
+
+Unicode has largely superseded many ASCII code pages by providing a unified standard for characters from all languages. UTF-8, a variable-width character encoding under Unicode, has gained popularity for its ability to efficiently represent global text with one to four bytes per character.
+
+**NOTE** - This table shows only printable characters.
+
+|Character|Hex|Decimal|Character|Hex|Decimal|Character|Hex|Decimal
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+|Space|20|32|@|40|64|`|60|96|
+|!|21|33|A|41|65|a|61|97|
+|"|22|34|B|42|66|b|62|98|
+|#|23|35|C|43|67|c|63|99|
+|$|24|36|D|44|68|d|64|100|
+|%|25|37|E|45|69|e|65|101|
+|&|26|38|F|46|70|f|66|102|
+|'|27|39|G|47|71|g|67|103|
+|(|28|40|H|48|72|h|68|104|
+|)|29|41|I|49|73|i|69|105|
+|*|2A|42|J|4A|74|j|6A|106|
+|+|2B|43|K|4B|75|k|6B|107|
+|,|2C|44|L|4C|76|l|6C|108|
+|_|2D|45|M|4D|77|m|6D|109|
+|.|2E|46|N|4E|78|n|6E|110|
+|/|2F|47|O|4F|79|o|6F|111|
+|0|30|48|P|50|80|p|70|112|
+|1|31|49|Q|51|81|q|71|113|
+|2|32|50|R|52|82|r|72|114|
+|3|33|51|S|53|83|s|73|115|
+|4|34|52|T|54|84|t|74|116|
+|5|35|53|U|55|85|u|75|117|
+|6|36|54|V|56|86|v|76|118|
+|7|37|55|W|57|87|w|77|119|
+|8|38|56|X|58|88|x|78|120|
+|9|39|57|Y|59|89|y|79|121|
+|:|3A|58|Z|5A|90|z|7A|122|
+|;|3B|59|[|5B|91|{|7B|123|
+|<|3C|60| \\ |5C|92| \| |7C|124|
+|=|3D|61|]|5D|93|}|7D|125|
+|>|3E|62|^|5E|94|~|7E|126|
+|?|3F|63|-|5F|95|Delete|7F|127|
+
+Code Page standards can get a little janky.  As mentioned, ASCII-67, is only 7-bits, the 8-bit characters are generally what the different ASCII standards change.  Since a single byte can hold 0 to 255, means the characters from 128 to 255 make up another section of potential displayable characters.  There are vendor, language, regional, and operating system specific Code Pages. There are [hundreds of them](https://en.wikipedia.org/wiki/Code_page). The variations in the UTF standards from 8-bit, 16-bit, or 32-bit Code Pages add to the complexity.  Microsoft Windows terminals are notorious for butchering output, defaulting to legacy support, outright refusing to display proper conversions from other standard Code Pages. Linux, Unix and Mac OS are not without their quirks either, however, they tend to offer moderately to better support dealing with conversion, display, and formatting of UTF-encoded information.
+
+Conversion from the following Code Pages is dysfunctional at best while executing under Microsoft Windows terminals.
+
+```
+57002: Devanagari (Hindi, Marathi, Sanskrit, Konkani)
+57003: Bengali
+57004: Tamil
+57005: Telugu
+57006: Assamese
+57007: Odia
+57008: Kannada
+57009: Malayalam
+57010: Gujarati
+57011: Punjabi (Gurmukhi)
+```
+
+The difficulty with converting to and from certain fonts and glyphs is exacerbated when digging through pages like [this](https://ltrc.iiit.ac.in/showfile.php?filename=downloads/FC-1.0/fc.html).  It outlines the various converters and methods required to create search engines, display, and processing or modify information to and from the Devanagari family of languages.  This will also be a problem with the different dialects of Chinese and Arabic.  Code Page 936 for instance is a simplified and heavily modified version of the Chinese language.  It provides minimal support.
+
+Compiling and executing the following code under Microsoft Power Shell or Command Prompt should display the Chinese characters embedded in the syntax correctly.
+
+#### Example 22: Using printf with Chinese Characters
+
+
+```C
+#include <stdio.h>
+
+int main() {
+    // UTF-8 encoded string
+    const char utf8String[] = "Hello, 你好";
+
+    // Display UTF-8 string
+    printf("UTF-8 String: %s\n", utf8String);
+
+    return 0;
+}
+```
+
+**Generated Output:**
+```
+UTF-8 String: Hello, 你好
+```
+
+If you get mojibake, or characters that look like "Σ╜áσÑ╜", this requires executing a command to change the Code Page.  You can use the following command in the terminal.
+
+> chcp 936
+
+Then rerun the application in the terminal. This is chaos.  They have generally been trying to standardise glyph and font associations since the dawn of computing. As you can tell, it has largely not gone well.  Most modern web browsers are more than capable of displaying proper UTF encodings.  Generally, it is the responsibility of the programmer to ensure the application sets and returns the terminal, or execution environment as needed for proper formatting.  This can be a daunting task.
+
+Jonathan Blow remarked while writing The Witness about how difficult it is to address the spacing of non-standard glyphs visually.  You can see issues in this [image](http://the-witness.net/news/wp-content/uploads/2015/12/Arabic.png).  Glyphs are too close and too far away creating gaps and oddities in spacing.  This requires serious fancy coding.  Modern terminals cannot properly render this information either.  Given programmers have been working on this problem since 1967, at least at the time of this writing, we are pushing almost 6 decades of problem-solving, and still do not have a pretty way to do this.  Any programmer who has scoured the internet for solutions to display, work with, and manage libraries in UTF has several things going for them...
+
+1. A very large savings fund in their swear jar.
+2. More grey hair.
+3. Years off their life from stress.
+4. Unanswered questions on how to execute a solution effectively for all written languages.
+
+Unreal Engine 4 cannot properly render Arabic.  It lacks a robust enough rendering pipeline.  This is seriously not an easy problem to solve.  I am merely raising this issue here, as current and future generations of programmers still need to address this problem.  Unreal Engine 5 is attempting to work on the problem, but from this [video](https://www.youtube.com/watch?v=Ha9LIA90EyY) you can see there are still several issues with the glyph rendering pipeline.
+
+There are ways to get around some of the issues, but most of those require using managed, or custom engines, and avoiding terminals of any kind.  Other problems are created by Raster, Vector, True-Type, and Open-Type fonts.  Let us get back to the basics.  We will explore possible ways to solve this later when we get to methods of rendering.
 
 [Return to Index](#index)
 
-#### Example 22: Using printf with %x
+#### Example 23: Using printf with %x
 Basic program with output.
 
 1. showing various typedef assignments
@@ -1410,7 +1519,7 @@ uThud [%Lx] = 36ccacba3
 
 [Return to Index](#index)
 
-#### Example 23: Displaying Union Members
+#### Example 24: Displaying Union Members
 
 Basic program with output.
 
@@ -1523,7 +1632,7 @@ Confused? It's always easier to look at code to figure out how things work.  We'
 
 ### C Output & Format Modification Examples
 
-#### Example 1: Left Justification with printf
+#### Example 24: Left Justification with printf
 Basic program with output.
 
 1. showing various typedef assignments
@@ -1601,7 +1710,7 @@ uThud [%-c] A
 
 [Return to Index](#index)
 
-#### Example 2: Zero Padding with printf
+#### Example 25: Zero Padding with printf
 Basic program with output.
 
 1. showing various typedef assignments
@@ -1609,7 +1718,7 @@ Basic program with output.
 3. using a portion of the C Standard Library to access Functions for output
 4. showing how to use various output specifiers
 5. examples of how they can be used to zero pad and justify data
-6. setup of function main.
+6. setup of function main
 
 ```C
 #include <stdio.h>
@@ -1683,7 +1792,7 @@ uThud [%5c]     A
 
 [Return to Index](#index)
 
-#### Example 3: Side-Effects using printf %x and signed numbers
+#### Example 26: Side-Effects using printf %x and signed numbers
 Basic program with output.
 
 1. showing various typedef assignments
@@ -1768,7 +1877,7 @@ uBaz  [%05X] 000F7
 
 [Return to Index](#index)
 
-#### Example 4: Formating Floating Point Types with printf
+#### Example 27: Formating Floating Point Types with printf
 Basic program with output.
 
 1. showing various typedef assignments
@@ -1786,12 +1895,14 @@ typedef float f32;
 
 s32 main() {
   // This shows the introduction of estimation errors
-  // with floating point values. You will see output
+  // with floating point numbers. You will see output
   // that often does not match what you are assigning
   // to your variables. There are inaccuracy problems
-  // since all Floating Point Type values cannot always
-  // be accurately represented with a standard bit
-  // pattern like the Integer Types.
+  // with all Floating Point Types. Not all values
+  // can be accurately represented with a standard bit
+  // pattern like the Integer Types.  This leads to
+  // all Floating Point Types being represented with
+  // approximations of their true value.
   
   // All floating point values assigned during declare
   // are assumed to be double. You must use the F
@@ -1864,7 +1975,7 @@ f32Thud [%9.2f]      3.14
 
 [Return to Index](#index)
 
-#### Example 5: Formating double Floating Point Types with printf
+#### Example 28: Formating double Floating Point Types with printf
 Basic program with output.
 
 1. showing various typedef assignments
@@ -1958,7 +2069,7 @@ f64Thud [%9.2lf]      3.14
 
 [Return to Index](#index)
 
-#### Example 6: Formating long double Floating Point Types with printf
+#### Example 29: Formating long double Floating Point Types with printf
 Basic program with output.
 
 1. showing various typedef assignments
@@ -2060,11 +2171,11 @@ f80Thud [%.3Le] 3.141593e+00
 ```
 [Return to Index](#index)
 
-## Part 4: Pointer Basics
+## Part 3: Pointer Basics
 
 As mentioned previously, Pointer Types are a troubling subject for C programmers no matter their experience.  We'll cover some scenarios with code and hopefully demystify some of the confusion surrounding them.
 
-Example 1: Introduction to Pointers and Addressing
+Example 30: Introduction to Pointers and Addressing
 Basic program with output.
 
 1. declaration of a struct and union to explore memory addressing
@@ -2176,7 +2287,7 @@ NOTE: Every time you execute this program these memory addresses will be differe
 
 [Return to Index](#index)
 
-### Deeper Dissection of Example 1: 
+### Deeper Dissection of Example 30: 
 
 If we remember back when we were looking at our bitwidths and byte requirements of individual Types there are some things we can glean from what we are seeing in this output.  Let's dissect this a little to figure out what the computer this is running on has done and things to be mindful of.
 
