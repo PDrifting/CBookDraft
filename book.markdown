@@ -244,6 +244,11 @@ Many tutorials written for C, still declare Function main as Return Type void.  
 
 **Argument Lists** - Functions use argument lists to deal with information you might need to pass or receive back from a function once it is done executing.  They consist of a Data Type and name separated by a comma. This book does not use the modern form of supplying void when there are no arguments accepted.  GCC does not warn if you make a function call with arguments to an empty argument listed function declare.  You will see comments on the Undefined Behaviour this technically causes, however, at best you're going to get a warning.  C compilers have a fuzzy area when it comes to empty argument lists. Since at best you will get a warning, this book excludes the promotion of using void argument lists.  The only other alternative is to use Function Prototypes.
 
+Arguments can be passed in two ways to Functions:
+
+1. By Value - In this way the argument is immutable and copied to the Function for use.  There is no way for the Function to modify an argument passed this way.  Most arguments will be passed this way.
+2. By Reference - This typically requires the argument to be treated as a pointer, except for Arrays, they are passed this way by default.  For large sets of data, and to avoid copies that could be expensive, it can be advised to pass the information by reference regardless of need to modify.
+
 **Function Prototypes** - Generally these create code clutter, but they can be meaningful in context and are required when declaring Function Pointers in a modified syntax. The book will detail when using Function Prototypes is generally a good idea.  Since all C Compilers are known to be single-pass, your functions must be declared before use. If a Function is declared elsewhere, externally, or compiled/linked from another foreign piece of code, you must use a Function Prototype to announce that the compiler should be aware to look for it. Otherwise, you are encouraged to reorder your main Function to the end of your code and order all other functions in a precalling fashion.  This is another heavily debated topic amongst purists.  As mentioned this book focuses on keeping code clean, easy to read, hardware-friendly, and mostly modern. Some old-school syntax is still encouraged regardless of side effects.
 
 **SINGLE-ENTRANCE/SINGLE-EXIT** - As mentioned earlier in Pointers, there is an issue with Function Pointers creating a potential for unpredictable code.  To simplify the flow and reduce the branching potential inside your Function you should ensure that you only have a single return statement that exists at the end of each of your Functions. Placing more than one return statement inside a Function has the potential to confuse the compiler and prevent it from creating clean bytecode.  Make sure you do what you can to assist the compiler to create predictable and clean bytecode by ensuring simple program flow.  Many programmers will argue this does not matter, but it does.  You might also hear arguments that languages like GO promote the idea of multiple exits from a Function.  Please remember, that not all compilers treat all forms of code the same.  What works well in one language, is unlikely to be performant in others. C compilers are complex, they do not do well with complicated code.  They make mistakes, and often their internal prediction algorithms to optimise code will give up when you fail to keep the flow of your code simple.  See the [KISS Principle](https://en.wikipedia.org/wiki/KISS_principle).  When in doubt check your code with [Godbolt](https://godbolt.org).
@@ -1412,9 +1417,9 @@ Compiling and executing the following code under Microsoft Power Shell or Comman
 #include <stdio.h>
 
 int main() {
-    char utf8English [] = "Hello World!";
+    char utf8English [] = "Hello World!"; 
     char utf8Punjabi [] = "ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ ਦੁਨਿਆ!";
-    char utf8Sindhi  [] = "هيلو، دنيا!";
+    char utf8Arabic  [] = "هيلو، دنيا!";
     char utf8Kannada [] = "ಹಲೋ, ವರ್ಲ್ಡ್!";
     char utf8Japanese[] = "こんにちは世界!";
 
@@ -1448,7 +1453,7 @@ If you get mojibake, or characters that look like "Σ╜áσÑ╜", this require
 
 Then rerun the application in the terminal. This is chaos.  They have generally been trying to standardise glyph and font associations since the dawn of computing. As you can tell, it has largely not gone well.  Most modern web browsers are more than capable of displaying proper UTF encodings.  Generally, it is the responsibility of the programmer to ensure the application sets and returns the terminal, or execution environment as needed for proper formatting.  This can be a daunting task.
 
-There is a way to set the Code Page inside the program, but we have not covered Operating System API calls, or importing Dynamically Linked Libraries, or methods on how to find functions and addresses inside them. We have covered the idea of function pointers.  There is still much to cover in this book.
+There is a way to set the Code Page inside the program. Still, we have not covered Operating System API calls, importing Dynamically Linked Libraries, or methods on how to find functions and addresses inside them. We have covered the idea of function pointers.  There is still much to cover in this book.
 
 It should be noted that Jonathan Blow remarked while writing The Witness about how difficult it is to address the spacing of non-standard glyphs visually.  You can see issues in this [image](http://the-witness.net/news/wp-content/uploads/2015/12/Arabic.png).  Glyphs are too close and too far away creating gaps and oddities in spacing.  This requires serious fancy coding.  Modern terminals cannot properly render this information either.  Given programmers have been working on this problem since 1967, at least at the time of this writing, we are pushing almost 6 decades of problem-solving, and still do not have a pretty way to do this.  Any programmer who has scoured the internet for solutions to display, work with, and manage libraries in UTF has several things going for them...
 
@@ -2324,12 +2329,9 @@ Byte Pairs
 01 02 03 04 05 06
 7f|fd|04|24|af|08 u32Foo appears 8 bytes after *u32Bar in memory
 7f|fd|04|24|af|00 *u32Bar is 8 bytes
-
-//we are only looking at byte pair 06 when determining the 8 bytes used [08 - 00 = 8]
-//or by looking at the addresses as a whole [7ffd0424af08 - 7ffd0424af00 = 8]
 ```
 
-The next problem we should address is the out-of-order problem in memory.  Any time you declare something in C it can cause Memory Fragmentation depending on how it was declared.  Memory Fragmentation will be discussed in more detail when we begin dealing with malloc and free a bit later.  Individual variables in this case clearly show the order they are declared in does not guarantee that same order in memory.  We can also learn from looking at this, that any declared pointer is using 8 bytes of memory.  So pointers are 64-bit based on the architecture this code was compiled on.  This can change depending on your system configuration, and compiler setup also.  Let's look at another feature of the addresses shown.
+We are only looking at byte pair 06 when determining the 8 bytes used (08 - 00 = 8), or by looking at the addresses as a whole (7ffd0424af08 - 7ffd0424af00 = 8). The next problem we should address is the out-of-order problem in memory.  Any time you declare something in C it can cause Memory Fragmentation depending on how it was declared.  Memory Fragmentation will be discussed in more detail when we begin dealing with malloc and free a bit later.  Individual variables in this case clearly show the order they are declared in does not guarantee that same order in memory.  We can also learn from looking at this, that any declared pointer is using 8 bytes of memory.  So pointers are 64-bit based on the architecture this code was compiled on.  This can change depending on your system configuration, and compiler setup also.  Let's look at another feature of the addresses shown.
 
 ```
 Address of  u32Foo = 0x7ffd0424af08
@@ -2337,7 +2339,7 @@ Address at *u32Bar = 0x7ffd0424af08
 Address of *u32Bar = 0x7ffd0424af00
 ```
 
-When we say pointers store an address of something, we can clearly see this is true.  The address stored at \*u32Bar is the same address of the variable u32Foo.  This should be the case because we assigned the address of u32Foo to \*u32Bar when we declared \*u32Bar.  By using the amperstand \[&] we fetched the address of u32Foo.  We will see this replicates in the same way when we deal with the other pieces of this example.
+When we say pointers store an address of something, we can see this is true.  The address stored at \*u32Bar is the same as the variable u32Foo.  This should be the case because we assigned the address of u32Foo to \*u32Bar when we declared \*u32Bar.  By using the ampersand \[&] we fetched the address of u32Foo.  We will see this replicates in the same way when we deal with the other pieces of this example.
 
 Let's take a look at how the struct TFCP addresses and pointers are laid out in memory.  
 
@@ -2352,11 +2354,11 @@ Address of    *qux = 0x7ffd0424aee8
 
 We can see from the addresses of u32Foo and \*u32Bar and the addresses here that we have moved to a different region of memory. The struct TFCP appears before those other variables.  Byte pair 05 changed from AF \[175\] to AE \[174\], where 175 > 174, so we know we are in an early region of memory. Since memory on any computer is addressed in bytes, smaller memory addresses are always going to be in a region of memory before the next largest memory address. This is what allows us to look at memory layouts and figure out where something is, and based on things around it, and approximate how many bytes it may be consuming. In the case of struct TFCP we'll also be able to figure something else out. The members thud.flob, thud.corge, thud.plugh, and byte pair 06 show they are laid out in order by fours. This makes sense because they are declared as s32 which was type defined from an int, which we know uses 4 bytes of memory. Also, remember that \*qux holds the address pointing to the start of struct TFCP, but the address of \*qux, like any pointer is going to have its own address as well. 
 
-NOTE:  The C Standard guarantees that any struct declaration will always have member layout in the order it is declared unless you use an alternate alignment modifier on the struct.
+**NOTE:** - The C Standard guarantees that any struct declaration will always have member layout in the order it is declared unless you use an alternate alignment modifier on the struct.
 
-```
 If unions give you problems visualising, this is another way of thinking about how memory is laid out. We'll look closer at the union TEHS.
 
+```
 Address of  garply = 0x7ffd0424aee0
     garply.eggs    = 0x7ffd0424aee0
     garply.ham     = 0x7ffd0424aee4
@@ -2388,16 +2390,13 @@ Address of     *fp = 0x7ffd0424aed0
 
 As mentioned, everything pretty much has an address, right down to the compiled byte code encoded internally to the executable. Function main() is no different. There are cases where this will prove to be very useful. Like all pointers \*fp points to something and has its own address. Pointers can point to other pointers. Unlike other pointers though, a function pointer can call/invoke the function it is pointing to. This will be covered later when we go over functions.  We must finish going over pointers.
 
-```
-**************************************************
-****************CHECKPOINT************************
-**************************************************
-```
-
-Example 2: 
+Example 32: 
 Basic program with output.
 
-showing how to declare variables, structures, unions, an introduction to pointers, locate the address of things, and declaring function main. 
+1. showing how to declare variables
+2. structures, unions, an introduction to pointers
+3. locating the address of things
+4. declaring function main
 
 Basic program with output, showing how we can use pointers to map different data types, output showing that when we update the pointer the thing we point to also updates, and a method for determining what Endianness your current hardware is using, and layout for function main.
 
@@ -2518,7 +2517,7 @@ Atari Consoles          8  -> 64
 Sony PS4/PS5            64
 ```
 
-The problem with this might not be apparent immediately, however, if we store data in binary formats, pass information across networks, then store data in some other way that may do encoding with a certain Endianness, things are going get a little wonky.  It's unlikely you'll be coding on a majority of these platforms, but a career in software engineering might have you crossing paths with older systems still in the wild running legacy code, or with newer systems that have unique eco-systems.  Migrating data from one architecture to another will require having some understanding of how integer data will be stored.  Modern coding does create some problems specifically when creating games, especially ones that are multi-player crossing platforms.  If you support phones, you're going to be running into ARM based architecture which is BI-Endianness and will be determined by the operating system installed on the device.  While your server may be running on some other architecture that will be different Endianness.  Regardless, you are encouraged to research the hardware and operating system limitations so you can determine how things are stored in memory.
+The problem with this might not be apparent immediately, however, if we store data in binary formats, pass information across networks, and then store data in some other way that may do encoding with a certain Endianness, things are going get a little wonky.  It's unlikely you'll be coding on a majority of these platforms, but a career in software engineering might have you crossing paths with older systems still in the wild running legacy code, or with newer systems that have unique eco-systems.  Migrating data from one architecture to another will require having some understanding of how integer data will be stored.  Modern coding does create some problems specifically when creating games, especially ones that are multi-player crossing platforms.  If you support phones, you're going to be running into ARM-based architecture which is BI-Endianness and will be determined by the operating system installed on the device.  While your server may be running on some other architecture that will be different Endianness.  Regardless, you are encouraged to research the hardware and operating system limitations so you can determine how things are stored in memory.
 
 Here's another table showing Endianness by Operating Systems.
 
@@ -2535,14 +2534,19 @@ HP VMS
 OS/2
 ```
 
-Generally most architectures and operating systems are moving exclusively towards Little-Endianness.  Neither of the above tables should be considered complete or exhaustive, but are provided merely to show examples that there are different circumstances where you should be considering how you think about data storage on your given platform.  There are cases where networking protocols, specifically TCP come to mind that are Big-Endian.  For the time being we'll cover a few more basics of pointers showing how we might take Endianness into consideration.  Future examples of code will generally ignore Endianess unless specifically required.
+Generally, most architectures and operating systems are moving exclusively towards Little-Endianness.  Neither of the above tables should be considered complete or exhaustive, but are provided merely to show examples that there are different circumstances where you should be considering how you think about data storage on your given platform.  There are cases where networking protocols, specifically TCP come to mind that are Big-Endian.  For the time being, we'll cover a few more basics of pointers showing how we might consider Endianness.  Future examples of code will generally ignore Endianess unless specifically required.
 
 ## Part 5: Using sizeof()
 
 As we expand into our understanding of pointers and memory, there is a useful Operator called sizeof.  It is calculated during compile time and will result in the compiler returning a value that will be representative of the size in bytes of the things you requested the sizeof.
 
-#### Example 1:
-Basic program with output, showing the use of sizeof, a brief introduction to padding and working with addresses, an introduction malloc, also free, and the basic use of main.
+#### Example 33:
+Basic program with output.
+
+1. showing the use of sizeof
+2. a brief introduction to padding and working with addresses
+3. introduction malloc, also free
+4. the basic use of main.
 
 ```
 #include <stdio.h>
@@ -2569,7 +2573,7 @@ typedef struct {
 s32 main() {
   TFooBar thud = {};
   
-  // sizeof is a compiler implemented unary operator that is used
+  // sizeof is a compiler-implemented unary operator that is used
   // to determine the size of whatever you stick in between the
   // parenthesis.  The size of what you are requesting will be
   // returned in bytes as a size_t [typed] value.
@@ -2599,7 +2603,7 @@ s32 main() {
     sizeof(thud) - (sizeof(thud.foo) + sizeof(thud.bar))
   );
   
-  // You will see mallocs often delcared like this. This is
+  // You will see mallocs often declared like this. This is
   // required by C++. It was common to cast C malloc calls
   // like this in case your C code was compiled with a C++
   // compiler.  However, this generally doesn't make sense
@@ -2665,44 +2669,50 @@ padding in TFooBar  = 4
 
 Each of the values displayed by the example program above, short of the addresses, is measured in bytes.  If we recall back in the early part of this text, we had a table of Integer and Float Types and their associated byte/bit widths.  All the base types in this case should show the corresponding matching byte requirements.  The exception in this case is the f80 which was mapped from long double.  It shows 16 bytes being used, however, it should be known that only 10 bytes will ever be used according to the C Standard for precision.  Some padding has taken place.  This is a good way to figure out what your bit widths will be for given types in the future if you're unsure of your given limitations on a given platform, architecture, or under a given operating system.
 
-The other section of the output deals with the sizeof a struct and its members.  As shown in this case, the C Standard dictates that the compiler for memory alignment can add padding.  In this case the 100 elements that we declared for TFooBar.foo, created a gap filled by padding of 4 bytes.  Despite the struct having a sizeof 112, the members of TFooBar only actually use 108 bytes in total.  These are useful ways to find out how your struct is using memory.  For now, your understanding is unlikely to take advantage of what all this means, but this is strictly for exposure to how you can determine these things later when you need to.
+The other section of the output deals with the sizeof a struct and its members.  As shown in this case, the C Standard dictates that the compiler for memory alignment can add padding.  In this case, the 100 elements that we declared for TFooBar.foo, created a gap filled by padding of 4 bytes.  Despite the struct having a sizeof 112, the members of TFooBar only actually use 108 bytes in total.  These are useful ways to find out how your struct is using memory.  For now, your understanding is unlikely to take advantage of what all this means, but this is strictly for exposure to how you can determine these things later when you need to.
 
-Finally, we have the malloc and free that didn't have any side-effects or purpose in this code, other than to show why we needed to cover sizeof.  We will be covering proper use of malloc and free later.  For now we're going to tie up our basics on pointers and continue to Functions.  Pointers were needed in basic understanding so we could continue to the next part of our programming understanding.
+Finally, we have the malloc and free that didn't have any side-effects or purpose in this code, other than to show why we needed to cover sizeof.  We will be covering the proper use of malloc and free later.  For now, we're going to tie up our basics on pointers and continue to Functions.  Pointers were needed in basic understanding so we could continue to the next part of our programming understanding.
 
 ## Part 6: Introduction to Functions
 
 It has taken a bit longer than normal to get to this part, but one of the purposes of the order of this text is to make sure we are not covering anything without first knowing or having exposure to the base concepts prior.  Functions are a very useful feature of programming.  They allow splitting up code, creating reusable sections, or just in general grouping code by purpose for what it does.  Let's dive into some examples and cover some basics.
 
-#### Example 1:
-Basic program with output, showing how to create and call a Function from main.
+#### Example 34:
+Basic program with output.
+
+1. showing how to create and call a function
+2. declaring function main
 
 ```
 #include <stdio.h>
 
 typedef int s32;
 
-//functions follow a given form known as a prototype
-//return type name(argument list)
-//in this case our return type is void telling us
-//our function does not return anything
-//in this case we do not need have a return statement
-//line we normally have had in the past when we leave main
-//our function has a name of foo and its has no arguments
-//we need to remember that C is a delcare before use
-//this goes for functions as well so we must make sure
-//that our functions like anything else appear before
-//we use them
+// Functions follow a given form known as a prototype:
+//    [return type] [name]([argument list])
+
+// In this case our return type is void telling us our
+// function does not return anything. For void returns
+// we do not need a return statement.
+
+// Our function has a name of foo and it has no arguments.
+// We need to remember that C is a declare before use. So
+// our function is created before main. Otherwise, we would
+// need create a function prototype.  There are cases where
+// this is required, this is not one of them.
 
 void foo() {
   puts("Hello World!");
 }
 
 s32 main() {
-  //this calls function foo with no arguments
-  //when the call to foo is complete it will return
-  //to the line after the foo() call and carry on
-  //with the program
+  // This calls function foo with no arguments. When the
+  // call to foo is complete it will return to the line
+  // after the foo() call and carry on executing the
+  // program.
+
   foo();  
+
   return 0;
 }
 ```
@@ -2712,55 +2722,78 @@ s32 main() {
 Hello World!
 ```
 
-#### Example 2:
+#### Example 35:
+Basic program with output.
 
-Let's carry on with another basic program without, showing how to create and call a function with arguments from main. (edited)
+Basic program with output.
+
+1. showing how to create and call a function
+2. passing arguments to a function by value
+3. using printf to display the value of the argument
+4. declaring function main
+
+Let's carry on with another basic program without, showing how to create and call a function with arguments from main.
 
 ```
 #include <stdio.h>
 
 typedef int s32;
 
-//like the prior example we are not returning anything
-//as designated by the return type being void
-//we are still naming our function foo, however
-//we have an argument in the argument list
-//arguments follow the base form a normal variable
-//declare in that they have a type and a name
+// Like the prior example we are not returning anything
+// as designated by the return type being void we are
+// still naming our function foo, however, we have an
+// argument in the argument list. Arguments follow the
+// base form a normal variable declared in that they
+// have a type and a name.
 
 void foo(s32 bar) {
+  // Remember char can be int and interchangeable.
+  // Casting to char will force the 32-bit integer
+  // to be coerced.  
   printf("value of bar = %i\n", bar);
+  printf("char stored in bar = %c\n\n", bar);
 }
 
 s32 main() {
-  //since we have a function that can take an argument now
-  //we are passing a value of 1 to foo and since the
-  //argument list for foo declares and int called bar
-  //when we call the function the argument variable
-  //bar will be assigned the value we pass it
-  //so in this case bar in the function will equal 1
-  foo(1);
+  // Since we have a function that can take an argument
+  // now we are passing a value of 65 to foo and since
+  // the argument list for foo declares an int called
+  // bar when we call the function the argument variable
+  // bar will be assigned the value we pass it. In this
+  // case bar in the function will equal 65.
+  foo(65);
 
-  //now that we have a function we can call it whenever
-  //we want to so in this case we are passing -2344 so
-  //when foo is called bar will be assigned this value
-  //just like above
-  foo(-2344);
+  // Now that we have a function we can call it whenever
+  // we want to. In this case we are passing -132 so when
+  // foo is called bar will be assigned this value just
+  // like above.
+  foo(-132);
 
-  //in this case we are passing a char literal which we
-  //can do because we know char literals are promoted to
-  //int types automatically
+  // Here weare passing a char literal which we can do
+  // because we know char literals are coerced to int
+  // types automatically.
   foo('Z');
-  
+
   return 0;
 }
 ```
 
 **General Output:**
 ```
-value of bar = 1
-value of bar = -2344
+value of bar = 65
+char stored in bar = A
+
+value of bar = -132
+char stored in bar = |
+
 value of bar = 90
+char stored in bar = Z
+```
+
+```
+*************************************************************
+***********************CHECKPOINT****************************
+*************************************************************
 ```
 
 #### Example 3:
