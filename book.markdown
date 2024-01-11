@@ -1384,25 +1384,11 @@ Unicode has largely superseded many ASCII code pages by providing a unified stan
 |SO|0E|14|Shift Out|RS|1E|30|Record Separator|
 |SI|0F|15|Shift In|US|1F|31|Unit Separator|
 
-The 32 non-displayable characters are most likely to display mojibake.  We will break down and discuss each of the non-display characters in detail.  When this portion of the ASCII table was created, computer users were largely connected to a mainframe and used a video terminal to connect to it.  This is why the VT standards such as VT100 or VT200 were created.  They are base standard that all terminals, virtual or otherwise need to emulate.  Even though there are very few out in the wild anymore, you will still run into them.  Other standards were derived from these control characters and combined with other ASCII character combinations to develop the ANSI Colour Terminal Standard.  This colour standard was established under ISO/IEC 6429.  As terminals evolved from monochrome to CGA, EGA, and VGA displays more colours became available.  After some explanations, basic code examples will break down how most of this is done.
+The 32 non-displayable characters are most likely to display mojibake.  We will break down and discuss each of the non-display characters in detail.  When this portion of the ASCII table was created, computer users were largely connected to a mainframe and used a video terminal to connect to it.  This is why the VT standards such as VT100 or VT200 were created.  They are the base standard that all terminals, virtual or otherwise need to emulate.  Even though there are very few out in the wild anymore, you will still run into them.  Other standards were derived from these control characters and combined with other ASCII character combinations to develop the ANSI Colour Terminal Standard.  This colour standard was established under ISO/IEC 6429.  As terminals evolved from monochrome to CGA, EGA, and VGA displays more colours became available.  After some explanations, basic code examples will break down how most of this is done.
 
 #### Temporary Side-Quest
 
-While conducting research for this section, I [hit](https://www.vt100.net/) the VT 100 archive site. It errored out on line 14 at token 95. The problem with the 95th character it is the new line. A non-displayable character.  Generally follows character 10 (NL).  The error is actually on the 87th character.
-
-```
-<link rel="stylesheet" href="/nordsec-crmsa_d1Tj34djkJ/stylesheet?id=4QS2oGR4puwSP9VX"></head>(NL)
-                                                                                              ^
-```
-
-I would hope the site is fixed when you get around to reading this. It just seemed fitting to explain several issues with this.
-
-1. The parser for the HTML incorrectly reported error location.
-2. This was likely .PHP or some other script assembling the page with common elements.
-3. There are two HTML tags present <link> and <head>.
-
-This is a problem with script parsers and compilers.  They still have trouble outputting useful byte locations to assist the programmer in finding errors. More so, that it points to a byte location that is not even visible to the programmer. Web browsers tend to render all non-displayable characters as nothing, not even a placeholder.  Looking at the sources for the web page, there are a number of problems with it. When developing software, and tools for programmers please take into consideration for non-displayable characters and optional or forced methods to display them as aids.
-
+While conducting research for this section, I tried [loading](https://www.vt100.net/), a VT owners page and archive. It errored out on line 14 at token 95. The problem with the 95th character it is the new line (NL) non-displayable character.  The error is actually on the 87th character.
 
 The specific error reads:
 
@@ -1412,10 +1398,25 @@ error on line 14 at column 95: Opening and ending tag mismatch: link line 14 and
 Below is a rendering of the page up to the first error.
 ```
 
+Pulling line 14 from the sources.
 
+```
+<link rel="stylesheet" href="/nordsec-crmsa_d1Tj34djkJ/stylesheet?id=4QS2oGR4puwSP9VX"></head>(NL)
+                                                                                              ^
+```
 
+I would hope the site is fixed when you get around to reading this. It just seemed fitting to explain several issues with this.  Teaching HTML back in the early 1990s as an early adopter of the internet the problem could be fixed by adding a </link> tag or taking ...SP9VX"/> would fix it also.  I spend more time as a programmer looking at other programmers' code and knowing full well it is one of the most demanding and difficult skills to learn, but a skill anyone with time, patience, and persistence can adapt to and learn well. 
 
+Regardless, a few things we can glean from the error presented on this page at the time of writing this section...
 
+1. The parser for the HTML incorrectly reported the error location.
+2. This was likely .PHP or some other script assembling the page with common elements.
+3. There are two HTML tags present <link> and <head>.
+4. The display pipeline/render engine for Google Chrome is ignoring several non-displayable characters.
+
+This is a widespread problem with script parsers and compilers.  They still have trouble outputting useful byte locations to assist the programmer in finding errors. More so, it points to a byte location that is not even visible to the programmer. Web browsers tend to render all non-displayable characters as nothing, not even a placeholder.  Looking at the sources for the web page, there are several problems with it. When developing software, and tools for programmers, please take into consideration non-displayable characters and optional or forced methods to display them as aids.  Also, multi-pass and not failing on the first problem unless catastrophic.  The malformed <link> element is not a catastrophic failure. The rest of the page source looks fine.  I am astonished that we are still unable as programmers to get this stuff fixed.  Regardless, C is not the only language with compilers that fail the programmer.
+
+#### Back on Main Quest - Breakdown of the Non-Displayable Characters
 
 #### NULL (0|00)
 
@@ -1423,7 +1424,7 @@ It terminates strings, can be used to start other control sequences, and acts as
 
 #### SOH (01|01)
 
-In networking and communication protocols, the SOH character is often used to mark the start of a message frame, helping the receiving system identify the beginning of data and properly interpret the message. The use of control characters like SOH is common in various communication standards, including those used in serial communication, telecommunications, and file transfer protocols.
+In networking and communication protocols, the SOH character is often used to mark the start of a message frame, helping the receiving system identify the beginning of data and properly interpret the message. The use of control characters like SOH is common in various communication standards, including those used in serial communication (RS-232), telecommunications, and file transfer protocols (FTP).
 
 
 
