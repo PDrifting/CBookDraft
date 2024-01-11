@@ -1365,8 +1365,8 @@ Unicode has largely superseded many ASCII code pages by providing a unified stan
 
 **NOTE** - This table shows non-displayable characters.
 
-|Character|Hex|Decimal|Character|Hex|Decimal|
-|:---:|:---:|:---:|:---:|:---:|:---:|
+|Character|Hex|Decimal|Description|Character|Hex|Decimal|Description|
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 |NUL|00|0|Null|DLE|11|16|Data Link Escape|
 |SOH|01|1|Start of Heading|DC1|12|17|Device Control 1|
 |STX|02|2|Start of Text|DC2|13|18|Device Control 2|
