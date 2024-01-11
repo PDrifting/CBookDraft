@@ -1153,9 +1153,9 @@ s32 main() {                                   // Start of the program.
 }
 ```
 
-Windows on the other hand has a very complex error numbering system.  You can read up more on it [here](https://learn.microsoft.com/en-us/windows/win32/debug/system-error-codes?redirectedfrom=MSDN#system-error-codes).  Neither of these operating systems share overlapping error numbers, except for 0, which is STATUS_OK or even ERROR_SUCCESS. C functions in the standard library, or otherwise generally use 0 to specify a lack of error.  There are always exceptions to this.  The functions based on alloc(), such as malloc(), calloc(), etc., return NULL (0) on a failure to allocate, and any other number to specify a pointer to the address of the allocated memory.  You are strongly advised to look up functions for your given standard library or referenced header modules of code you are using in your program.
+Windows on the other hand has a very complex error numbering system.  You can read up more on it [here](https://learn.microsoft.com/en-us/windows/win32/debug/system-error-codes?redirectedfrom=MSDN#system-error-codes).  Neither of these operating systems share overlapping error numbers, except for 0, which is STATUS_OK or even ERROR_SUCCESS. C functions in the standard library generally use 0 to specify success.  There are always exceptions to this.  The functions based on alloc(), such as malloc(), calloc(), etc., return NULL (0) on a failure to allocate, and any other number to specify a pointer to the address of the allocated memory.  You are strongly advised to look up functions for your given standard library or referenced header modules of code you are using in your program.
 
-On Linux/UNIX/FreeBSD you always have the good old MAN Pages.  For example [malloc()](https://man7.org/linux/man-pages/man3/malloc.3.html).  GCC pretty much follows the general POSIX compliance, so any MAN Page that references the POSIX standard should be valid.  Mingw does not attempt to maintain POSIX compliance on Windows, as this is not always possible.  Microsoft is not a POSIX-compliant operating system, and anyone who has coded with WinSocks over POSIX Sockets is well aware of the nightmare created by custom solutions provided inside Windows. As mentioned, trust the manual for the best advice on how to use and what to expect when you use anything from a standard library, or any 3rd party library for that matter.
+On Linux/UNIX/FreeBSD you always have the good old MAN Pages.  For example [malloc()](https://man7.org/linux/man-pages/man3/malloc.3.html).  GCC pretty much follows the general POSIX compliance, so any MAN Page that references the POSIX standard should be valid.  MinGW does not attempt to maintain POSIX compliance on Windows, as this is not always possible.  Microsoft is not a POSIX-compliant operating system, and anyone who has coded with WinSocks over POSIX Sockets is well aware of the nightmare created by custom solutions provided inside Windows. As mentioned, trust the manual for the best advice on how to use and what to expect when you use anything from a standard library, or any 3rd party library for that matter.
 
 There is also the matter of how errors are returned, the janky nature of system vs. non-system error handling, and the various methods of returning errors and where to find them.  Examples in this book follow system style code using the return for status and function arguments for returning or updating values.  
 
@@ -1340,7 +1340,18 @@ plugh [%Le]  = 9.616903e+35
 plugh [%LE]  = 9.616903E+35
 ```
 
-Based on the above we can see some janky output showing up with %c specifier formatting for uFoo, sFoo and sBaz.  This has generated symbols based on where it falls in the Code Page, then determined it could not render the character.
+Several problems are shown in the above out.  We have mojibake, but more concerning is with plugh and the %Lf output.
+
+We started with:
+```
+f80  plugh = 9.6169031625e+35;
+```
+The output shows:
+```
+961690316249999956021666669771358208.000000
+          ^   
+```
+The caret marks where the approximation of the floating point 80-bit value starts.  All the values beyond the 4 are based on rounding up to the correct significant digits specified in the variable declaration.  That 4 should be 5.  Other issues can be seen with the approximations for PI stored in corge.  There is a loss of information and truncation taking place.  It is important to remember that accuracy with floating point values is a problem.  Comparison of floating point values is also a problem because of this.  Only the integral numbers keep their accuracy for a given bit width.
 
 ### ASCII, Code Pages and UTF Standards
 
@@ -1351,6 +1362,90 @@ ASCII (American Standard Code for Information Interchange) is a 7-bit character 
 ASCII code pages are variations or extensions of the ASCII standard tailored to specific languages or regions, incorporating additional characters not covered in the basic ASCII set. For instance, the ISO-8859 series extends ASCII for Western European languages by utilizing 8 bits per character. Code Pages are more broadly used to define character encodings, encompassing ASCII, ISO-8859, and Unicode.
 
 Unicode has largely superseded many ASCII code pages by providing a unified standard for characters from all languages. UTF-8, a variable-width character encoding under Unicode, has gained popularity for its ability to efficiently represent global text with one to four bytes per character.
+
+**NOTE** - This table shows non-displayable characters.
+
+|Character|Hex|Decimal|Character|Hex|Decimal|
+|:---:|:---:|:---:|:---:|:---:|:---:|
+|NUL|00|0|Null|DLE|11|16|Data Link Escape|
+|SOH|01|1|Start of Heading|DC1|12|17|Device Control 1|
+|STX|02|2|Start of Text|DC2|13|18|Device Control 2|
+|ETX|03|3|End of Text|DC3|14|19|Device Control 3|
+|EOT|04|4|End of Transmission|DC4|15|20|Device Control 4|
+|ENQ|05|5|Enquiry|NAK|16|21|Negative Acknowledge|
+|ACK|06|6|Acknowledge|SYN|17|22|Synchronous Idle|
+|BEL|07|7|Bell|ETB|18|23|End of Transmission Block|
+|BS|08|8|Backspace|CAN|19|24|Cancel|
+|HT|09|9|Horizontal Tab|EM|10|25|End of Medium|
+|LF|0A|10|NL Line Feed, New Line|SUB|1A|26|Substitute|
+|VT|0B|11|Vertical Tab|ESC|1B|27|Escape|
+|FF|0C|12|NP Form Feed, New Page|FS|1C|28|File Separator|
+|CR|0D|13|Carriage Return|GS|1D|29|Group Separator|
+|SO|0E|14|Shift Out|RS|1E|30|Record Separator|
+|SI|0F|15|Shift In|US|1F|31|Unit Separator|
+
+The 32 non-displayable characters are most likely to display mojibake.  We will break down and discuss each of the non-display characters in detail.  When this portion of the ASCII table was created, computer users were largely connected to a mainframe and used a video terminal to connect to it.  This is why the VT standards such as VT100 or VT200 were created.  They are base standard that all terminals, virtual or otherwise need to emulate.  Even though there are very few out in the wild anymore, you will still run into them.  Other standards were derived from these control characters and combined with other ASCII character combinations to develop the ANSI Colour Terminal Standard.  This colour standard was established under ISO/IEC 6429.  As terminals evolved from monochrome to CGA, EGA, and VGA displays more colours became available.  After some explanations, basic code examples will break down how most of this is done.
+
+#### Temporary Side-Quest
+
+While conducting research for this section, I [hit](https://www.vt100.net/) the VT 100 archive site. It errored out on line 14 at token 95. The problem with the 95th character it is the new line. A non-displayable character.  Generally follows character 10 (NL).  The error is actually on the 87th character.
+
+```
+<link rel="stylesheet" href="/nordsec-crmsa_d1Tj34djkJ/stylesheet?id=4QS2oGR4puwSP9VX"></head>(NL)
+                                                                                              ^
+```
+
+I would hope the site is fixed when you get around to reading this. It just seemed fitting to explain several issues with this.
+
+1. The parser for the HTML incorrectly reported error location.
+2. This was likely .PHP or some other script assembling the page with common elements.
+3. There are two HTML tags present <link> and <head>.
+
+This is a problem with script parsers and compilers.  They still have trouble outputting useful byte locations to assist the programmer in finding errors. More so, that it points to a byte location that is not even visible to the programmer. Web browsers tend to render all non-displayable characters as nothing, not even a placeholder.  Looking at the sources for the web page, there are a number of problems with it. When developing software, and tools for programmers please take into consideration for non-displayable characters and optional or forced methods to display them as aids.
+
+
+The specific error reads:
+
+```
+This page contains the following errors:
+error on line 14 at column 95: Opening and ending tag mismatch: link line 14 and head
+Below is a rendering of the page up to the first error.
+```
+
+
+
+
+
+
+#### NULL (0|00)
+
+It terminates strings, can be used to start other control sequences, and acts as a marker for other purposes.  Strings in C require a NULL charter to demarcate where they end.  Functions in C may return NULL to denote status.  Generally, NULL is considered to equal 0.
+
+#### SOH (01|01)
+
+In networking and communication protocols, the SOH character is often used to mark the start of a message frame, helping the receiving system identify the beginning of data and properly interpret the message. The use of control characters like SOH is common in various communication standards, including those used in serial communication, telecommunications, and file transfer protocols.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 **NOTE** - This table shows only printable characters.
 
@@ -1389,7 +1484,7 @@ Unicode has largely superseded many ASCII code pages by providing a unified stan
 |>|3E|62|^|5E|94|~|7E|126|
 |?|3F|63|-|5F|95|Delete|7F|127|
 
-Code Page standards can get a little janky.  As mentioned, ASCII-67, is only 7-bits, the 8-bit characters are generally what the different ASCII standards change.  Since a single byte can hold 0 to 255, means the characters from 128 to 255 make up another section of potential displayable characters.  There are vendor, language, regional, and operating system specific Code Pages. There are [hundreds of them](https://en.wikipedia.org/wiki/Code_page). The variations in the UTF standards from 8-bit, 16-bit, or 32-bit Code Pages add to the complexity.  Microsoft Windows terminals are notorious for butchering output, defaulting to legacy support, outright refusing to display proper conversions from other standard Code Pages. Linux, Unix and Mac OS are not without their quirks either, however, they tend to offer moderately to better support dealing with conversion, display, and formatting of UTF-encoded information.
+Code Page standards can get a little janky.  As mentioned, ASCII-67, is only 7-bits, the 8-bit characters are generally what the different ASCII standards change.  Since a single byte can hold 0 to 255, means the characters from 128 to 255 make up another section of potential displayable characters.  There are vendor, language, regional, and operating system specific Code Pages. There are [hundreds of them](https://en.wikipedia.org/wiki/Code_page). The variations in the UTF standards from 8-bit, 16-bit, or 32-bit Code Pages add to the complexity.  Microsoft Windows terminals are notorious for butchering output, defaulting to legacy support, and outright refusing to display proper conversions from other standard Code Pages. Linux, Unix and Mac OS are not without their quirks either, however, they tend to offer moderately to better support dealing with conversion, display, and formatting of UTF-encoded information.
 
 Conversion from the following Code Pages is dysfunctional at best while executing under Microsoft Windows terminals.
 
@@ -1447,7 +1542,7 @@ Hello World!
 
 The spacing and general glyph rendering even on Windows Terminal (Microsoft Store App) using Code Page 65001 butchers the output.  Notepad which I wrote the code in is not capable of rendering Arabic in the correct order (right to left) and has less than adequate capabilities for other glyphs and languages.
 
-If you get mojibake, or characters that look like "Σ╜áσÑ╜", this requires executing a command to change the Code Page.  You can use the following command in the terminal.
+If you get mojibake or characters that look like "Σ╜áσÑ╜", this requires executing a command to change the Code Page.  You can use the following command in the terminal.
 
 > chcp 65001
 
