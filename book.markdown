@@ -1405,20 +1405,22 @@ Pulling line 14 from the sources.
                                                                                               ^
 ```
 
-I would hope the site is fixed when you get around to reading this. It just seemed fitting to explain several issues with this.  Teaching HTML back in the early 1990s as an early adopter of the internet the problem could be fixed by adding a </link> tag or taking ...SP9VX"/> would fix it also.  I spend more time as a programmer looking at other programmers' code and knowing full well it is one of the most demanding and difficult skills to learn, but a skill anyone with time, patience, and persistence can adapt to and learn well. 
+I would hope the site is fixed when you get around to reading this. It seems fitting to explain several issues with this.  Teaching HTML back in the early 1990s as an early adopter of the internet the problem could be fixed by adding a </link> tag or taking ...SP9VX"/> would fix it also.  I spend more time as a programmer looking at other programmers' code and knowing full well it is one of the most demanding and difficult skills to learn, but it is a skill anyone with time, patience, and persistence can adapt to and learn well. 
 
 Regardless, a few things we can glean from the error presented on this page at the time of writing this section...
 
 1. The parser for the HTML incorrectly reported the error location.
 2. This was likely .PHP or some other script assembling the page with common elements.
-3. There are two HTML tags present <link> and <head>.
+3. There are two HTML tags present \<link\> and \<head\>.
 4. The display pipeline/render engine for Google Chrome is ignoring several non-displayable characters.
 
-This is a widespread problem with script parsers and compilers.  They still have trouble outputting useful byte locations to assist the programmer in finding errors. More so, it points to a byte location that is not even visible to the programmer. Web browsers tend to render all non-displayable characters as nothing, not even a placeholder.  Looking at the sources for the web page, there are several problems with it. When developing software, and tools for programmers, please take into consideration non-displayable characters and optional or forced methods to display them as aids.  Also, multi-pass and not failing on the first problem unless catastrophic.  The malformed <link> element is not a catastrophic failure. The rest of the page source looks fine.  I am astonished that we are still unable as programmers to get this stuff fixed.  Regardless, C is not the only language with compilers that fail the programmer.
+This is a widespread problem with script parsers and compilers.  They still have trouble outputting useful byte locations to assist the programmer in finding errors. More so, it points to a byte location that is not even visible to the programmer. Web browsers tend to render all non-displayable characters as nothing, not even a placeholder.  Looking at the sources for the web page, there are several problems with it. When developing software, and tools for programmers, please take into consideration non-displayable characters and optional or forced methods to display them as aids.  Also, multi-pass and not failing on the first problem unless catastrophic.  The malformed \<link\> element is not a catastrophic failure. The rest of the page source looks fine.  I am astonished that we are still unable as programmers to get this stuff fixed.  Regardless, C is not the only language with compilers that fail the programmer.
 
 #### Back on Main Quest - Breakdown of the Non-Displayable Characters
 
-#### NULL (0|00)
+
+
+#### NULL (00|00)
 
 It terminates strings, can be used to start other control sequences, and acts as a marker for other purposes.  Strings in C require a NULL charter to demarcate where they end.  Functions in C may return NULL to denote status.  Generally, NULL is considered to equal 0.
 
@@ -1426,8 +1428,17 @@ It terminates strings, can be used to start other control sequences, and acts as
 
 In networking and communication protocols, the SOH character is often used to mark the start of a message frame, helping the receiving system identify the beginning of data and properly interpret the message. The use of control characters like SOH is common in various communication standards, including those used in serial communication (RS-232), telecommunications, and file transfer protocols (FTP).
 
+#### STX (02|02)
 
+This is a control character used to indicate the start of a text or message in communication protocols. In practical terms, it serves as a signal to mark the beginning of a sequence of characters or data within a stream.
 
+#### ETX (03|03)
+
+The control character is used in communication protocols to indicate the end of a text or message. It is the signal to mark the conclusion of a sequence of characters or data within a stream. 
+
+#### EOT (04|04)
+
+Marks the end of a transmission or communication session. It is typically employed to signal that the data transmission has been completed, and no more data will be sent.
 
 
 
