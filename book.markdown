@@ -1405,7 +1405,18 @@ Pulling line 14 from the sources.
                                                                                               ^
 ```
 
-I would hope the site is fixed when you get around to reading this. It seems fitting to explain several issues with this.  Teaching HTML back in the early 1990s as an early adopter of the internet the problem could be fixed by adding a </link> tag or taking ...SP9VX"/> would fix it also.  I spend more time as a programmer looking at other programmers' code and knowing full well it is one of the most demanding and difficult skills to learn, but it is a skill anyone with time, patience, and persistence can adapt to and learn well. 
+I would hope the site is fixed when you get around to reading this. It seems fitting to explain several issues with this.  Teaching HTML back in the early 1990s as an early adopter of the internet the problem could be fixed by adding a \</link\> tag or modifying to include a terminating /\> (...SP9VX"/>) would fix it also.  I spend more time as a programmer looking at other programmers' code and knowing full well it is one of the most demanding and difficult skills to learn, but it is a skill anyone with time, patience, and persistence can adapt to and learn well. 
+
+Two possible ways of correcting the error:
+
+```
+<link rel="stylesheet" href="/nordsec-crmsa_d1Tj34djkJ/stylesheet?id=4QS2oGR4puwSP9VX"></link></head>
+```
+or
+
+```
+<link rel="stylesheet" href="/nordsec-crmsa_d1Tj34djkJ/stylesheet?id=4QS2oGR4puwSP9VX"/></head>
+```
 
 Regardless, a few things we can glean from the error presented on this page at the time of writing this section...
 
@@ -1440,11 +1451,33 @@ The control character is used in communication protocols to indicate the end of 
 
 Marks the end of a transmission or communication session. It is typically employed to signal that the data transmission has been completed, and no more data will be sent.
 
+#### ENQ (05|05)
 
+Used to request a response from the receiving device, essentially asking "Are you there?" or "Are you ready?" The receiving terminal is expected to reply with an ACK character, indicating it is ready to receive further data.
 
+#### ACK (06|06)
 
+Acknowledges a successful receipt of a message or data packet. When a device receives an ACK, it indicates that the previous transmission was received correctly and that the sender can proceed with sending the next piece of data.
 
+#### BEL (07|07)
 
+It prompts the terminal to produce a sound, drawing the user's attention to an event or alert. This character is particularly useful for signaling errors, warnings, or the need for user input in text-based interfaces.
+
+#### BS (08|08)
+
+Signals to move the cursor one position backward, effectively deleting the previous character in a text stream. When the BS character is encountered in a terminal, it instructs the terminal to erase the character immediately to the left of the cursor position. If at the beginning of a line, nothing happens, and the cursor remains at the current position.
+
+#### HT (09|09)
+
+Jumps the cursor to the next tab stop, which is a predefined horizontal position in the text. The specific positions of tab stops can vary depending on the terminal or application settings, but they are commonly set at intervals of every 8 characters.
+
+#### LF (0A|10)
+
+Moves the cursor down to the next line without returning to the beginning of the current line. It is commonly used in Unix-based systems to signify the end of a line of text.
+
+#### VT (0B|11)
+
+Tells the cursor to move to the next vertical tab stop.  It can be used in terminals to align text in columns or to create space between lines, to advance to the end of a page, or even to tab between fields depending on how it is established in settings. This control character has been used for various functions depending on if it is sent to a printing device, used in software, or a terminal for a specific, but not always clear purpose.  The medical community, for instance, with several protocols has used it as a record terminator.
 
 
 
@@ -1515,7 +1548,7 @@ Conversion from the following Code Pages is dysfunctional at best while executin
 
 The difficulty with converting to and from certain fonts and glyphs is exacerbated when digging through pages like [this](https://ltrc.iiit.ac.in/showfile.php?filename=downloads/FC-1.0/fc.html).  It outlines the various converters and methods required to create search engines, display, and processing or modify information to and from the Devanagari family of languages.  This will also be a problem with the different dialects of Chinese and Arabic.  Code Page 936 for instance is a simplified and heavily modified version of the Chinese language.  It provides minimal support.
 
-Compiling and executing the following code under Microsoft Power Shell or Command Prompt should display the Chinese characters embedded in the syntax correctly.
+Compiling and executing the following code under Microsoft Power Shell or Command Prompt should display most of the characters embedded in the syntax correctly.  The editor for Github, that I'm using to create this document is completely incapable of showing the Arabic and displays a blank line.
 
 #### Example 22: Outputting Glytphs for Different Languages
 
