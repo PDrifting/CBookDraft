@@ -1367,16 +1367,16 @@ Unicode has largely superseded many ASCII code pages by providing a unified stan
 
 |Character|Hex|Decimal|Description|Character|Hex|Decimal|Description|
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-|NUL|00|0|Null|DLE|11|16|Data Link Escape|
-|SOH|01|1|Start of Heading|DC1|12|17|Device Control 1|
-|STX|02|2|Start of Text|DC2|13|18|Device Control 2|
-|ETX|03|3|End of Text|DC3|14|19|Device Control 3|
-|EOT|04|4|End of Transmission|DC4|15|20|Device Control 4|
-|ENQ|05|5|Enquiry|NAK|16|21|Negative Acknowledge|
-|ACK|06|6|Acknowledge|SYN|17|22|Synchronous Idle|
-|BEL|07|7|Bell|ETB|18|23|End of Transmission Block|
-|BS|08|8|Backspace|CAN|19|24|Cancel|
-|HT|09|9|Horizontal Tab|EM|10|25|End of Medium|
+|NUL|00|0|Null|DLE|10|16|Data Link Escape|
+|SOH|01|1|Start of Heading|DC1|11|17|Device Control 1|
+|STX|02|2|Start of Text|DC2|12|18|Device Control 2|
+|ETX|03|3|End of Text|DC3|13|19|Device Control 3|
+|EOT|04|4|End of Transmission|DC4|14|20|Device Control 4|
+|ENQ|05|5|Enquiry|NAK|15|21|Negative Acknowledge|
+|ACK|06|6|Acknowledge|SYN|16|22|Synchronous Idle|
+|BEL|07|7|Bell|ETB|17|23|End of Transmission Block|
+|BS|08|8|Backspace|CAN|18|24|Cancel|
+|HT|09|9|Horizontal Tab|EM|19|25|End of Medium|
 |LF|0A|10|NL Line Feed, New Line|SUB|1A|26|Substitute|
 |VT|0B|11|Vertical Tab|ESC|1B|27|Escape|
 |FF|0C|12|NP Form Feed, New Page|FS|1C|28|File Separator|
@@ -1479,17 +1479,85 @@ Moves the cursor down to the next line without returning to the beginning of the
 
 Tells the cursor to move to the next vertical tab stop.  It can be used in terminals to align text in columns or to create space between lines, to advance to the end of a page, or even to tab between fields depending on how it is established in settings. This control character has been used for various functions depending on if it is sent to a printing device, used in software, or a terminal for a specific, but not always clear purpose.  The medical community, for instance, with several protocols has used it as a record terminator.
 
+#### FF (0C|12)
 
+When the form feed character is encountered, it causes the text output to move to a new page, effectively clearing the current page or screen. This character is typically used in printing to ensure that content starts on a new page, but in some terminal emulators, it may clear the screen.
 
+#### CR (0D|13)
 
+Puts the cursor back at the beginning of the current line without advancing to the next line. When the carriage return character is encountered in a terminal, it returns the cursor to the start of the line, allowing subsequent characters to overwrite any existing characters on that line. In combination with the line feed character, the carriage return is used as the end of a line of text in Windows and DOS operating systems (CR+LF).
 
+#### SO (0E|14)
 
+The shift out character is used to switch to an alternate character set. When encountered in a terminal, it signals that subsequent characters should be interpreted using a different set of graphical representations. This functionality is part of early character encoding systems that supported multiple character sets within the same data stream.
 
+#### SI (0F|15)
 
+Revert to the standard character set after a shift out character has been used. When the shift in character is encountered in a terminal, it signals that subsequent characters should be interpreted using the default character set.
 
+#### DLE (10|16)
 
+When the data link escape character is encountered in a terminal, it signals that the subsequent characters have special significance, such as commands or data that should be handled differently from regular text.
 
+#### DC1 (11|17)
 
+Device control 1 is used to resume device operations, often referred to as XON in the context of software flow control. When encountered in a terminal, it signals the device to start or continue transmitting data, essentially unpausing the data flow. This character is part of a pair with device control 3 (XOFF).
+
+#### DC2 (12|18)
+
+Device control 2 is a protocol or device defined operated.  It typically instructs the device to perform a specific predetermined operation that is different from the other device control characters.
+
+#### DC3 (13|19)
+
+Device control 3 is used to stop transmission of data, often referred to as XOFF in the context of software flow control. This character is part of a pair with device control 1 (XON).
+
+#### DC4 (14|20)
+
+Device control 4 is another protocol or device defined operation similar to device control 2.
+
+#### NAK (15|21)
+
+The negative acknowledge character indicates that a received message or data packet is incorrect or corrupted. When encountered in a terminal, it signals the sending device that the transmission was not successfully received and should be retransmitted.
+
+#### SYN (16|22)
+
+Used to maintain synchronization between devices in a communication system. When the synchronous idle character is encountered, it signals the receiving device to prepare for the start of data transmission or to synchronize its timing with the sending device. This character helps ensure that data is transmitted and received in order, especially in systems requiring precise timing and alignment.
+
+#### ETB (17|23)
+
+Indicate the end of a block of data in a communication stream. When the end of trasmission block character is encountered, it signals that the current block of data has been completely transmitted and that any further data should be treated as part of a new block.
+
+#### CAN (18|24)
+
+Transmiting a cancel character should trigger an abort on the current data transmission or operation.  The current data or command should be discarded and that any ongoing processes should be halted. This character is useful for handling errors or interruptions in communication by allowing the system to reset or recover from incomplete operations.
+
+#### EM (19|25)
+
+In the event you run out of storage space, the end of medium character indicates that the data stream has reached the end of the storage and that the data stream should cease.
+
+#### SUB (1A|26)
+
+This is the general character not available generic substition. This character is useful for error handling and data integrity by providing a placeholder in cases where the original data cannot be properly represented.
+
+#### ESC (1B|27)
+
+The escape character is used to introduce an escape sequence that modifies the interpretation of subsequent characters. This character is commonly used in terminal emulators and communication protocols to perform actions like changing text attributes or controlling device behavior.
+
+#### FS (1C|28)
+
+Separation of data streams within a text stream or data file are done with the file sperator character. This character is particularly useful in data processing and file management systems for structuring and separating content within a file.
+
+#### GS (1D|29)
+
+Further seperation of data within a text stream or data file can be done with the group seperator character. It indicates that the following data belongs to a different group, helping to organize and structure data into distinct sections or categories.
+
+#### RS (1E|30)
+
+This character is useful for data management and processing tasks where records need to be clearly delineated within a file or communication stream. When the record seperator character is encountered, it signifies that the following data represents a new record.
+
+#### US (1F|31)
+
+The unit seperator is used to structure data by defining boundaries between individual units. When encountered, it indicates that the following data should be considered as a separate unit within a larger record. 
 
 
 **NOTE** - This table shows only printable characters.
